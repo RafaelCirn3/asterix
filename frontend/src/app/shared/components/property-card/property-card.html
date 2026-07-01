@@ -1,0 +1,18 @@
+<article class="property-card">
+  <img [src]="imageUrl" [alt]="property.nome" />
+  <div class="property-card__content">
+    <span class="property-card__status">{{ property.status }}</span>
+    <h3>{{ property.nome }}</h3>
+    <p class="property-card__location">{{ property.bairro }}, {{ property.cidade }}</p>
+    <p>{{ property.descricao_curta }}</p>
+    <div class="property-card__meta">
+      <span>{{ property.area }} m2</span>
+      <span>{{ property.quartos }} quartos</span>
+      <span>{{ property.garagem }} vagas</span>
+    </div>
+    <div class="property-card__footer">
+      <strong>{{ property.preco | currency: 'BRL' }}</strong>
+      <a [routerLink]="['/imoveis', property.id]">Ver detalhes</a>
+    </div>
+  </div>
+</article>

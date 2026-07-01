@@ -1,0 +1,37 @@
+<header class="simple-header">
+  <a routerLink="/" class="brand">Asterix</a>
+  <nav>
+    <a routerLink="/imoveis">Imoveis</a>
+    <a routerLink="/sobre">Sobre</a>
+    <a routerLink="/contato">Contato</a>
+  </nav>
+</header>
+
+<main class="contact-page">
+  <section>
+    <p>Contato</p>
+    <h1>Converse com a nossa consultoria.</h1>
+    <div class="info">
+      <span>contato@asterix.com.br</span>
+      <span>(83) 99999-9999</span>
+      <span>Joao Pessoa, PB</span>
+    </div>
+  </section>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <input formControlName="nome" placeholder="Nome" />
+    <input formControlName="email" type="email" placeholder="Email" />
+    <input formControlName="telefone" placeholder="Telefone" />
+    <textarea formControlName="mensagem" placeholder="Mensagem"></textarea>
+    <button type="submit">Enviar mensagem</button>
+    @if (sent()) {
+      <strong>Mensagem recebida. Retornaremos em breve.</strong>
+    }
+  </form>
+
+  <iframe
+    title="Mapa Asterix"
+    loading="lazy"
+    src="https://maps.google.com/maps?q=Joao%20Pessoa%20PB&t=&z=12&ie=UTF8&iwloc=&output=embed"
+  ></iframe>
+</main>

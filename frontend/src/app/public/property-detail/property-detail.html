@@ -1,0 +1,57 @@
+<header class="simple-header">
+  <a routerLink="/" class="brand">Asterix</a>
+  <nav>
+    <a routerLink="/imoveis">Imoveis</a>
+    <a routerLink="/sobre">Sobre</a>
+    <a routerLink="/contato">Contato</a>
+  </nav>
+</header>
+
+@if (property(); as item) {
+  <main class="detail">
+    <section class="gallery">
+      <img [src]="coverImage()" [alt]="item.nome" />
+      <div>
+        @for (image of item.imagens.slice(1, 4); track image.id) {
+          <img [src]="'http://localhost:8000' + image.url" [alt]="item.nome" />
+        }
+      </div>
+    </section>
+
+    <section class="content">
+      <article>
+        <p class="eyebrow">{{ item.tipo }} em {{ item.bairro }}</p>
+        <h1>{{ item.nome }}</h1>
+        <strong class="price">{{ item.preco | currency: 'BRL' }}</strong>
+        <p class="address">{{ item.endereco }}, {{ item.bairro }}, {{ item.cidade }}</p>
+        <p>{{ item.descricao }}</p>
+        <div class="features">
+          <span>{{ item.area }} m2</span>
+          <span>{{ item.quartos }} quartos</span>
+          <span>{{ item.banheiros }} banheiros</span>
+          <span>{{ item.garagem }} vagas</span>
+          <span>{{ item.status }}</span>
+        </div>
+        <a class="whatsapp" [href]="whatsappLink(item)" target="_blank" rel="noreferrer">Contato via WhatsApp</a>
+      </article>
+
+      <aside>
+        <h2>Localizacao</h2>
+        <iframe
+          title="Mapa"
+          loading="lazy"
+          [src]="mapUrl()"
+        ></iframe>
+      </aside>
+    </section>
+
+    <section class="related">
+      <h2>Imoveis relacionados</h2>
+      <div class="property-grid">
+        @for (item of related(); track item.id) {
+          <app-property-card [property]="item" />
+        }
+      </div>
+    </section>
+  </main>
+}

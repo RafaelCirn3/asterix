@@ -1,0 +1,74 @@
+@use '../home/home.scss';
+
+.contact-page {
+  display: grid;
+  grid-template-columns: 0.8fr 1fr;
+  gap: 28px;
+  padding: 56px clamp(18px, 5vw, 70px) 70px;
+
+  h1 {
+    margin: 0 0 22px;
+    color: var(--text);
+    font-size: clamp(2rem, 5vw, 3.4rem);
+  }
+
+  section > p {
+    color: var(--secondary);
+    font-weight: 800;
+  }
+
+  form {
+    display: grid;
+    gap: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--white);
+    padding: 22px;
+  }
+
+  input,
+  textarea,
+  button {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 13px 14px;
+    font: inherit;
+  }
+
+  textarea {
+    min-height: 140px;
+    resize: vertical;
+  }
+
+  button {
+    border: 0;
+    background: var(--primary);
+    color: var(--white);
+    font-weight: 800;
+  }
+
+  iframe {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-height: 330px;
+    border: 0;
+    border-radius: 8px;
+  }
+}
+
+.info {
+  display: grid;
+  gap: 10px;
+
+  span {
+    color: var(--muted);
+    font-weight: 700;
+  }
+}
+
+@media (max-width: 860px) {
+  .contact-page {
+    grid-template-columns: 1fr;
+  }
+}
+

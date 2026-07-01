@@ -1,0 +1,124 @@
+<div class="admin-shell">
+  <header>
+    <a routerLink="/admin/dashboard">Asterix Admin</a>
+    <nav>
+      <a routerLink="/admin/imoveis">Imoveis</a>
+      <a routerLink="/">Site</a>
+      <button mat-button (click)="auth.logout()">Sair</button>
+    </nav>
+  </header>
+  <main>
+    <div class="admin-title">
+      <h1>{{ editing() ? 'Editar imovel' : 'Cadastrar imovel' }}</h1>
+      <a mat-stroked-button routerLink="/admin/imoveis">Voltar</a>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="save()" class="admin-card form-grid">
+      <label>
+        Nome
+        <input formControlName="nome" />
+      </label>
+      <label>
+        Preco
+        <input formControlName="preco" type="number" />
+      </label>
+      <label>
+        Cidade
+        <input formControlName="cidade" />
+      </label>
+      <label>
+        Bairro
+        <input formControlName="bairro" />
+      </label>
+      <label class="wide">
+        Endereco
+        <input formControlName="endereco" />
+      </label>
+      <label>
+        Tipo do imovel
+        <select formControlName="tipo">
+          <option>Apartamento</option>
+          <option>Casa</option>
+          <option>Studio</option>
+          <option>Terreno</option>
+          <option>Comercial</option>
+        </select>
+      </label>
+      <label>
+        Status
+        <select formControlName="status">
+          <option>Disponivel</option>
+          <option>Vendido</option>
+          <option>Alugado</option>
+        </select>
+      </label>
+      <label>
+        Area
+        <input formControlName="area" type="number" />
+      </label>
+      <label>
+        Quartos
+        <input formControlName="quartos" type="number" />
+      </label>
+      <label>
+        Banheiros
+        <input formControlName="banheiros" type="number" />
+      </label>
+      <label>
+        Garagem
+        <input formControlName="garagem" type="number" />
+      </label>
+      <label class="wide">
+        Descricao curta
+        <input formControlName="descricao_curta" />
+      </label>
+      <label class="wide">
+        Descricao completa
+        <textarea formControlName="descricao"></textarea>
+      </label>
+      <label class="wide upload">
+        Galeria de imagens
+        <input type="file" multiple accept="image/png,image/jpeg,image/webp" (change)="onFilesSelected($event)" />
+      </label>
+      @if (previews().length) {
+        <div class="wide preview-grid">
+          @for (preview of previews(); track preview) {
+            <img [src]="preview" alt="Preview" />
+          }
+        </div>
+      }
+      <div class="wide actions">
+        <button mat-flat-button color="primary" type="submit">Salvar</button>
+      </div>
+    </form>
+
+    @if (property()?.imagens?.length) {
+      <section class="admin-card images">
+        <h2>Imagens cadastradas</h2>
+        <div class="preview-grid">
+          @for (image of property()!.imagens; track image.id) {
+            <article>
+              <img [src]="imageUrl(image)" alt="Imagem do imovel" />
+              <strong>{{ image.principal ? 'Principal' : 'Galeria' }}</strong>
+              <div>
+                <button mat-icon-button (click)="setMain(image)" aria-label="Imagem principal">
+                  <mat-icon>star</mat-icon>
+                </button>
+                <button mat-icon-button (click)="move(image, -1)" aria-label="Subir ordem">
+                  <mat-icon>arrow_upward</mat-icon>
+                </button>
+                <button mat-icon-button (click)="move(image, 1)" aria-label="Descer ordem">
+                  <mat-icon>arrow_downward</mat-icon>
+                </button>
+                <button mat-icon-button (click)="removeImage(image)" aria-label="Excluir imagem">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      </section>
+    }
+  </main>
+</div>
+

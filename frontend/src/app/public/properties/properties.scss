@@ -1,0 +1,61 @@
+@use '../home/home.scss';
+
+.page {
+  padding: 44px clamp(18px, 5vw, 70px) 70px;
+}
+
+.intro {
+  max-width: 760px;
+  margin-bottom: 26px;
+
+  p {
+    margin: 0 0 8px;
+    color: var(--secondary);
+    font-weight: 800;
+  }
+
+  h1 {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    line-height: 1.05;
+  }
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 22px;
+
+  input,
+  select,
+  button {
+    min-height: 46px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--white);
+    padding: 0 12px;
+    font: inherit;
+  }
+
+  button {
+    border: 0;
+    background: var(--primary);
+    color: var(--white);
+    font-weight: 800;
+  }
+}
+
+.result-count {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+@media (max-width: 920px) {
+  .filters,
+  .property-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

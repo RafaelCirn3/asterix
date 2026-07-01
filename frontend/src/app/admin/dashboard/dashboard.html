@@ -1,0 +1,43 @@
+<div class="admin-shell">
+  <header>
+    <a routerLink="/admin/dashboard">Asterix Admin</a>
+    <nav>
+      <a routerLink="/admin/imoveis">Imoveis</a>
+      <a routerLink="/">Site</a>
+      <button mat-button (click)="auth.logout()">Sair</button>
+    </nav>
+  </header>
+  <main>
+    <div class="admin-title">
+      <h1>Dashboard</h1>
+      <a mat-flat-button color="primary" routerLink="/admin/imoveis/novo">
+        <mat-icon>add</mat-icon>
+        Novo imovel
+      </a>
+    </div>
+
+    <section class="metrics">
+      <mat-card>
+        <mat-card-title>{{ data().quantidade_imoveis }}</mat-card-title>
+        <mat-card-subtitle>Imoveis cadastrados</mat-card-subtitle>
+      </mat-card>
+      <mat-card>
+        <mat-card-title>{{ data().quantidade_acessos }}</mat-card-title>
+        <mat-card-subtitle>Acessos registrados</mat-card-subtitle>
+      </mat-card>
+    </section>
+
+    <section class="admin-card">
+      <h2>Ultimos imoveis</h2>
+      @for (item of data().ultimos_imoveis; track item.id) {
+        <div class="recent">
+          <span>{{ item.nome }} - {{ item.cidade }}</span>
+          <strong>{{ item.preco | currency: 'BRL' }}</strong>
+        </div>
+      } @empty {
+        <p>Nenhum imovel cadastrado ainda.</p>
+      }
+    </section>
+  </main>
+</div>
+

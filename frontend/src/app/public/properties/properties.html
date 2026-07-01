@@ -1,0 +1,40 @@
+<header class="simple-header">
+  <a routerLink="/" class="brand">Asterix</a>
+  <nav>
+    <a routerLink="/imoveis">Imoveis</a>
+    <a routerLink="/sobre">Sobre</a>
+    <a routerLink="/contato">Contato</a>
+  </nav>
+</header>
+
+<main class="page">
+  <section class="intro">
+    <p>Busca inteligente</p>
+    <h1>Imoveis selecionados para comprar, investir ou morar melhor.</h1>
+  </section>
+
+  <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="filters">
+    <input formControlName="cidade" placeholder="Cidade" />
+    <input formControlName="bairro" placeholder="Bairro" />
+    <select formControlName="tipo" aria-label="Tipo">
+      <option value="">Tipo</option>
+      <option>Apartamento</option>
+      <option>Casa</option>
+      <option>Studio</option>
+      <option>Terreno</option>
+      <option>Comercial</option>
+    </select>
+    <input formControlName="preco_min" type="number" placeholder="Preco minimo" />
+    <input formControlName="preco_max" type="number" placeholder="Preco maximo" />
+    <button type="submit">Filtrar</button>
+  </form>
+
+  <p class="result-count">{{ total() }} imoveis encontrados</p>
+
+  <div class="property-grid">
+    @for (property of properties(); track property.id) {
+      <app-property-card [property]="property" />
+    }
+  </div>
+</main>
+

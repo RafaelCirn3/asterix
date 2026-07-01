@@ -1,0 +1,27 @@
+.login-page {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  background: linear-gradient(135deg, #eff6ff, #ffffff);
+  padding: 20px;
+
+  mat-card {
+    width: min(420px, 100%);
+  }
+
+  form {
+    display: grid;
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  button {
+    min-height: 44px;
+  }
+}
+
+.error {
+  color: var(--error);
+  font-weight: 700;
+}
+

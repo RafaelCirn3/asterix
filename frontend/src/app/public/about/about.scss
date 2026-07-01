@@ -1,0 +1,47 @@
+@use '../home/home.scss';
+
+.about {
+  padding: 56px clamp(18px, 5vw, 70px) 70px;
+
+  > section {
+    max-width: 860px;
+    margin-bottom: 34px;
+  }
+
+  p {
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  > section p {
+    color: var(--secondary);
+    font-weight: 800;
+  }
+
+  h1 {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    line-height: 1.06;
+  }
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+
+  article {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--white);
+    padding: 22px;
+  }
+}
+
+@media (max-width: 900px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

@@ -1,0 +1,63 @@
+<header class="site-header">
+  <a class="brand" routerLink="/">Asterix</a>
+  <nav>
+    <a routerLink="/imoveis">Imoveis</a>
+    <a routerLink="/sobre">Sobre</a>
+    <a routerLink="/contato">Contato</a>
+  </nav>
+  <a class="contact" routerLink="/contato">Fale conosco</a>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero__content">
+      <p>Consultoria imobiliaria em alto padrao</p>
+      <h1>Encontre o imovel certo com clareza, curadoria e confianca.</h1>
+      <form [formGroup]="searchForm" (ngSubmit)="search()" class="search-box">
+        <input formControlName="cidade" placeholder="Cidade" />
+        <input formControlName="bairro" placeholder="Bairro" />
+        <select formControlName="tipo" aria-label="Tipo de imovel">
+          <option value="">Tipo</option>
+          <option>Apartamento</option>
+          <option>Casa</option>
+          <option>Studio</option>
+          <option>Terreno</option>
+          <option>Comercial</option>
+        </select>
+        <input formControlName="preco_max" type="number" placeholder="Preco maximo" />
+        <button type="submit">Pesquisar</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section__title">
+      <div>
+        <p>Selecao Asterix</p>
+        <h2>Imoveis em destaque</h2>
+      </div>
+      <a routerLink="/imoveis">Ver todos</a>
+    </div>
+    <div class="property-grid">
+      @for (property of featured(); track property.id) {
+        <app-property-card [property]="property" />
+      }
+    </div>
+  </section>
+
+  <section class="trust-band">
+    <div>
+      <strong>+12 anos</strong>
+      <span>de experiencia consultiva</span>
+    </div>
+    <div>
+      <strong>360 graus</strong>
+      <span>analise comercial e documental</span>
+    </div>
+    <div>
+      <strong>Atendimento</strong>
+      <span>humano, rapido e objetivo</span>
+    </div>
+  </section>
+</main>
+
