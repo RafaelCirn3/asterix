@@ -1,6 +1,6 @@
 # Asterix Consultoria Imobiliaria
 
-Aplicacao web imobiliaria com experiencia inspirada na fluidez do Booking.com, identidade propria da Asterix e arquitetura separada entre frontend Angular e backend FastAPI.
+Aplicacao web imobiliaria com experiencia inspirada na fluidez de imobiliárias, identidade propria da Asterix e arquitetura separada entre frontend Angular e backend FastAPI.
 
 ## Stack
 
