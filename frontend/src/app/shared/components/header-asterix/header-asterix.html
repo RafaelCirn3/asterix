@@ -1,0 +1,194 @@
+<header class="header">
+
+    <!-- ========================================================= -->
+    <!-- LOGO -->
+    <!-- ========================================================= -->
+
+    <a class="header__brand" routerLink="/" aria-label="Página inicial da Asterix">
+
+        <span class="header__brand-mark">
+
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                <path d="M12 2L14.8 8L21 9L16.5 13.2L17.8 20L12 16.8L6.2 20L7.5 13.2L3 9L9.2 8L12 2Z"
+                    fill="currentColor" />
+
+            </svg>
+
+        </span>
+
+        <span class="header__brand-text">
+
+            Asterix
+
+        </span>
+
+    </a>
+
+    <!-- ========================================================= -->
+    <!-- MENU DESKTOP -->
+    <!-- ========================================================= -->
+
+    <nav class="header__nav" aria-label="Menu principal">
+
+        <a routerLink="/imoveis" routerLinkActive="is-active">
+
+            Imóveis
+
+        </a>
+
+        <a routerLink="/parceiros" routerLinkActive="is-active">
+
+            Parceiros
+
+        </a>
+
+        <a routerLink="/sobre" routerLinkActive="is-active">
+
+            Sobre
+
+        </a>
+
+        <a routerLink="/contato" routerLinkActive="is-active">
+
+            Contato
+
+        </a>
+
+    </nav>
+
+    <!-- ========================================================= -->
+    <!-- CTA -->
+    <!-- ========================================================= -->
+
+    <a class="header__cta" routerLink="/contato">
+
+        Fale conosco
+
+    </a>
+
+    <!-- ========================================================= -->
+    <!-- BOTÃO MOBILE -->
+    <!-- ========================================================= -->
+
+    <button type="button" class="header__menu-button" (click)="toggleMenu()" aria-label="Abrir menu"
+        aria-expanded="{{ menuOpen() }}">
+
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+
+            <path d="M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+
+            <path d="M4 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+
+            <path d="M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+
+        </svg>
+
+    </button>
+
+</header>
+
+<!-- ========================================================= -->
+<!-- SIDEBAR MOBILE -->
+<!-- ========================================================= -->
+
+@if(menuOpen()){
+
+<div class="header-overlay" (click)="closeMenu()">
+
+    <aside #menuDrawer class="header-sidebar" role="dialog" aria-modal="true" aria-labelledby="menu-title"
+        (click)="$event.stopPropagation()">
+
+        <!-- ============================================= -->
+        <!-- TOPO -->
+        <!-- ============================================= -->
+
+        <header class="header-sidebar__top">
+
+            <h2 id="menu-title">
+
+                Menu
+
+            </h2>
+
+            <button type="button" class="header-sidebar__close" (click)="closeMenu()" aria-label="Fechar menu">
+
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                    <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+
+                    <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+
+                </svg>
+
+            </button>
+
+        </header>
+
+        <!-- ============================================= -->
+        <!-- LINKS -->
+        <!-- ============================================= -->
+
+        <nav class="header-sidebar__nav" aria-label="Menu mobile">
+
+            <a routerLink="/imoveis" routerLinkActive="is-active" (click)="closeMenu()">
+
+                Imóveis
+
+            </a>
+
+            <a routerLink="/parceiros" routerLinkActive="is-active" (click)="closeMenu()">
+
+                Parceiros
+
+            </a>
+
+            <a routerLink="/sobre" routerLinkActive="is-active" (click)="closeMenu()">
+
+                Sobre
+
+            </a>
+
+            <a routerLink="/contato" routerLinkActive="is-active" (click)="closeMenu()">
+
+                Contato
+
+            </a>
+
+        </nav>
+
+        <!-- ============================================= -->
+        <!-- CTA -->
+        <!-- ============================================= -->
+
+        <a class="header-sidebar__cta" routerLink="/contato" (click)="closeMenu()">
+
+            Fale conosco
+
+        </a>
+
+        <!-- ============================================= -->
+        <!-- FOOTER -->
+        <!-- ============================================= -->
+
+        <footer class="header-sidebar__footer">
+
+            <span>
+
+                Asterix Busca Imobiliária
+
+            </span>
+
+            <small>
+
+                Encontre seu próximo imóvel com segurança e confiança.
+
+            </small>
+
+        </footer>
+
+    </aside>
+
+</div>
+
+}

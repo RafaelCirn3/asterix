@@ -1,74 +1,604 @@
 @use '../home/home.scss';
 
+
 .contact-page {
-  display: grid;
-  grid-template-columns: 0.8fr 1fr;
-  gap: 28px;
-  padding: 56px clamp(18px, 5vw, 70px) 70px;
+
+  padding:
+    56px clamp(18px, 5vw, 70px) 90px;
+
+}
+
+
+/* ==========================================================
+   HERO
+   ========================================================== */
+
+
+.contact-hero {
+
+  max-width:
+    850px;
+
+  margin-bottom:
+    60px;
+
+
+  p {
+
+    color:
+      var(--secondary);
+
+    font-weight:
+      800;
+
+  }
+
 
   h1 {
-    margin: 0 0 22px;
-    color: var(--text);
-    font-size: clamp(2rem, 5vw, 3.4rem);
+
+    margin:
+      12px 0 20px;
+
+    color:
+      var(--text);
+
+    font-size:
+      clamp(2rem, 5vw, 3.4rem);
+
+    line-height:
+      1.06;
+
   }
 
-  section > p {
-    color: var(--secondary);
-    font-weight: 800;
-  }
-
-  form {
-    display: grid;
-    gap: 12px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--white);
-    padding: 22px;
-  }
-
-  input,
-  textarea,
-  button {
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 13px 14px;
-    font: inherit;
-  }
-
-  textarea {
-    min-height: 140px;
-    resize: vertical;
-  }
-
-  button {
-    border: 0;
-    background: var(--primary);
-    color: var(--white);
-    font-weight: 800;
-  }
-
-  iframe {
-    grid-column: 1 / -1;
-    width: 100%;
-    min-height: 330px;
-    border: 0;
-    border-radius: 8px;
-  }
-}
-
-.info {
-  display: grid;
-  gap: 10px;
 
   span {
-    color: var(--muted);
-    font-weight: 700;
+
+    color:
+      var(--muted);
+
+    line-height:
+      1.8;
+
   }
+
 }
 
-@media (max-width: 860px) {
-  .contact-page {
-    grid-template-columns: 1fr;
-  }
+
+
+
+
+/* ==========================================================
+   GRID
+   ========================================================== */
+
+
+.contact-grid {
+
+  display:
+
+    grid;
+
+
+  grid-template-columns:
+
+    .85fr 1fr;
+
+
+  gap:
+
+    28px;
+
+
 }
 
+
+
+
+
+/* ==========================================================
+   CARD INFORMAÇÕES
+   ========================================================== */
+
+
+.contact-info,
+.contact-form {
+
+
+  border:
+
+    1px solid var(--border);
+
+
+  border-radius:
+
+    8px;
+
+
+  background:
+
+    var(--white);
+
+
+  padding:
+
+    28px;
+
+
+}
+
+
+
+.contact-info h2,
+.contact-form h2 {
+
+  margin-top:
+
+    0;
+
+
+  margin-bottom:
+
+    28px;
+
+
+  color:
+
+    var(--text);
+
+
+}
+
+
+
+
+
+.info-item {
+
+
+  display:
+
+    flex;
+
+
+  align-items:
+
+    center;
+
+
+  gap:
+
+    16px;
+
+
+  padding:
+
+    16px 0;
+
+
+  border-bottom:
+
+    1px solid var(--border);
+
+
+}
+
+
+
+.info-item:last-child {
+
+  border-bottom:
+
+    0;
+
+}
+
+
+
+.info-item svg {
+
+  width:
+
+    22px;
+
+
+  height:
+
+    22px;
+
+
+  color:
+
+    var(--primary);
+
+}
+
+
+
+
+.info-item small {
+
+  display:
+
+    block;
+
+
+  color:
+
+    var(--muted);
+
+
+  margin-bottom:
+
+    4px;
+
+}
+
+
+
+.info-item strong {
+
+  color:
+
+    var(--text);
+
+}
+
+
+
+
+
+/* ==========================================================
+   FORM
+   ========================================================== */
+
+
+.contact-form {
+
+
+  display:
+
+    flex;
+
+
+  flex-direction:
+
+    column;
+
+
+  gap:
+
+    20px;
+
+
+}
+
+
+
+.field {
+
+  display:
+
+    flex;
+
+
+  flex-direction:
+
+    column;
+
+
+  gap:
+
+    8px;
+
+
+}
+
+
+
+.field label {
+
+  font-size:
+
+    .86rem;
+
+
+  font-weight:
+
+    800;
+
+
+  color:
+
+    var(--text);
+
+}
+
+
+
+
+input,
+textarea {
+
+
+  width:
+
+    100%;
+
+
+  border:
+
+    1px solid var(--border);
+
+
+  border-radius:
+
+    12px;
+
+
+  padding:
+
+    14px;
+
+
+  font:
+
+    inherit;
+
+
+  outline:
+
+    none;
+
+
+}
+
+
+
+input:focus,
+textarea:focus {
+
+
+  border-color:
+
+    var(--primary);
+
+
+  box-shadow:
+
+    0 0 0 4px rgba(31, 94, 255, .10);
+
+
+}
+
+
+
+
+textarea {
+
+
+  min-height:
+
+    150px;
+
+
+  resize:
+
+    vertical;
+
+
+}
+
+
+
+button {
+
+
+  height:
+
+    58px;
+
+
+  border:
+
+    0;
+
+
+  border-radius:
+
+    18px;
+
+
+  background:
+
+    var(--primary);
+
+
+  color:
+
+    var(--white);
+
+
+  font-weight:
+
+    800;
+
+
+  cursor:
+
+    pointer;
+
+
+  transition:
+
+    .3s ease;
+
+
+}
+
+
+
+button:hover {
+
+  transform:
+
+    translateY(-2px);
+
+}
+
+
+
+
+
+/* ==========================================================
+   SUCESSO
+   ========================================================== */
+
+
+.success-message {
+
+
+  display:
+
+    flex;
+
+
+  align-items:
+
+    center;
+
+
+  gap:
+
+    10px;
+
+
+  padding:
+
+    14px;
+
+
+  border-radius:
+
+    12px;
+
+
+  background:
+
+    rgba(34, 197, 94, .12);
+
+
+  color:
+
+    #15803d;
+
+
+  font-weight:
+
+    700;
+
+
+}
+
+
+
+.success-message svg {
+
+  width:
+
+    20px;
+
+
+}
+
+
+
+
+
+/* ==========================================================
+   MAPA
+   ========================================================== */
+
+
+.location {
+
+
+  margin-top:
+
+    40px;
+
+
+}
+
+
+
+.location h2 {
+
+  margin-bottom:
+
+    20px;
+
+}
+
+
+
+.location iframe {
+
+
+  width:
+
+    100%;
+
+
+  min-height:
+
+    420px;
+
+
+  border:
+
+    0;
+
+
+  border-radius:
+
+    18px;
+
+
+}
+
+
+
+
+
+/* ==========================================================
+   RESPONSIVO
+   ========================================================== */
+
+
+@media(max-width:860px) {
+
+
+  .contact-grid {
+
+
+    grid-template-columns:
+
+      1fr;
+
+
+  }
+
+
+
+  .location iframe {
+
+
+    min-height:
+
+      320px;
+
+
+  }
+
+
+}

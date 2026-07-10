@@ -1,40 +1,249 @@
-<header class="simple-header">
-  <a routerLink="/" class="brand">Asterix</a>
-  <nav>
-    <a routerLink="/imoveis">Imoveis</a>
-    <a routerLink="/sobre">Sobre</a>
-    <a routerLink="/contato">Contato</a>
-  </nav>
-</header>
+<main class="properties">
 
-<main class="page">
-  <section class="intro">
-    <p>Busca inteligente</p>
-    <h1>Imoveis selecionados para comprar, investir ou morar melhor.</h1>
+  <!-- ===================================================== -->
+  <!-- HERO -->
+  <!-- ===================================================== -->
+
+  <section class="properties-hero">
+    <p>Encontre o imóvel ideal</p>
+
+    <h1>
+      Imóveis selecionados para você
+    </h1>
+
+    <p class="hero-description">
+      Explore imóveis anunciados por nossos parceiros e utilize os filtros
+      para encontrar exatamente o que procura.
+    </p>
   </section>
 
-  <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="filters">
-    <input formControlName="cidade" placeholder="Cidade" />
-    <input formControlName="bairro" placeholder="Bairro" />
-    <select formControlName="tipo" aria-label="Tipo">
-      <option value="">Tipo</option>
-      <option>Apartamento</option>
-      <option>Casa</option>
-      <option>Studio</option>
-      <option>Terreno</option>
-      <option>Comercial</option>
-    </select>
-    <input formControlName="preco_min" type="number" placeholder="Preco minimo" />
-    <input formControlName="preco_max" type="number" placeholder="Preco maximo" />
-    <button type="submit">Filtrar</button>
-  </form>
+  <!-- ===================================================== -->
+  <!-- CONTEÚDO -->
+  <!-- ===================================================== -->
 
-  <p class="result-count">{{ total() }} imoveis encontrados</p>
+  <section class="properties-content">
 
-  <div class="property-grid">
-    @for (property of properties(); track property.id) {
-      <app-property-card [property]="property" />
-    }
-  </div>
+    <!-- ================================================ -->
+    <!-- SIDEBAR -->
+    <!-- ================================================ -->
+
+    <aside class="filters">
+
+      <h2>Filtros</h2>
+
+      <!-- Cidade -->
+
+      <div class="filter-group">
+
+        <label for="cidade">
+          Cidade
+        </label>
+
+        <input id="cidade" type="text" placeholder="Ex.: João Pessoa" />
+
+      </div>
+
+      <!-- Bairro -->
+
+      <div class="filter-group">
+
+        <label for="bairro">
+          Bairro
+        </label>
+
+        <input id="bairro" type="text" placeholder="Ex.: Manaíra" />
+
+      </div>
+
+      <!-- Tipo -->
+
+      <div class="filter-group">
+
+        <h3>Tipo de imóvel</h3>
+
+        <label>
+          <input type="checkbox">
+          Apartamento
+        </label>
+
+        <label>
+          <input type="checkbox">
+          Casa
+        </label>
+
+        <label>
+          <input type="checkbox">
+          Cobertura
+        </label>
+
+        <label>
+          <input type="checkbox">
+          Terreno
+        </label>
+
+        <label>
+          <input type="checkbox">
+          Comercial
+        </label>
+
+      </div>
+
+      <!-- Quartos -->
+
+      <div class="filter-group">
+
+        <h3>Quartos</h3>
+
+        <div class="chips">
+
+          <button type="button">1+</button>
+          <button type="button">2+</button>
+          <button type="button">3+</button>
+          <button type="button">4+</button>
+
+        </div>
+
+      </div>
+
+      <!-- Banheiros -->
+
+      <div class="filter-group">
+
+        <h3>Banheiros</h3>
+
+        <div class="chips">
+
+          <button type="button">1+</button>
+          <button type="button">2+</button>
+          <button type="button">3+</button>
+          <button type="button">4+</button>
+
+        </div>
+
+      </div>
+
+      <!-- Vagas -->
+
+      <div class="filter-group">
+
+        <h3>Vagas</h3>
+
+        <div class="chips">
+
+          <button type="button">1+</button>
+          <button type="button">2+</button>
+          <button type="button">3+</button>
+          <button type="button">4+</button>
+
+        </div>
+
+      </div>
+
+      <!-- Área -->
+
+      <div class="filter-group">
+
+        <h3>Área (m²)</h3>
+
+        <div class="range">
+
+          <input type="number" placeholder="Mín.">
+
+          <input type="number" placeholder="Máx.">
+
+        </div>
+
+      </div>
+
+      <!-- Preço -->
+
+      <div class="filter-group">
+
+        <h3>Preço (R$)</h3>
+
+        <div class="range">
+
+          <input type="number" placeholder="Mín.">
+
+          <input type="number" placeholder="Máx.">
+
+        </div>
+
+      </div>
+
+      <button class="apply-filters">
+        Buscar imóveis
+      </button>
+
+    </aside>
+
+    <!-- ================================================ -->
+    <!-- GRID -->
+    <!-- ================================================ -->
+
+    <section class="properties-grid">
+
+      @for (property of properties(); track property.id) {
+
+      <app-property-card [property]="property">
+      </app-property-card>
+
+      }
+
+      @empty {
+
+      <div class="empty-state">
+
+        <h3>Nenhum imóvel encontrado.</h3>
+
+        <p>
+          Tente alterar os filtros para ampliar sua busca.
+        </p>
+
+      </div>
+
+      }
+
+    </section>
+
+  </section>
+
+  <!-- ===================================================== -->
+  <!-- PAGINAÇÃO -->
+  <!-- ===================================================== -->
+
+  <nav class="pagination">
+
+    <button type="button">
+      Anterior
+    </button>
+
+    <button class="active">
+      1
+    </button>
+
+    <button>
+      2
+    </button>
+
+    <button>
+      3
+    </button>
+
+    <button>
+      4
+    </button>
+
+    <button>
+      5
+    </button>
+
+    <span>...</span>
+
+    <button>
+      Próxima
+    </button>
+
+  </nav>
+
 </main>
-

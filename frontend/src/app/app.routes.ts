@@ -9,7 +9,7 @@ export const routes: Routes = [
   },
   {
     path: 'imoveis',
-    loadComponent: () => import('./public/properties/properties').then((m) => m.Properties),
+    loadComponent: () => import('./public/properties/properties').then((m: any) => m.Properties),
   },
   {
     path: 'imoveis/:id',

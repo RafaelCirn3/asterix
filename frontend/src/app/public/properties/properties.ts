@@ -1,79 +1,280 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { catchError, of } from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  signal,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
-import { Property } from '../../core/models/property.model';
-import { MOCK_PROPERTIES } from '../../core/services/mock-properties';
-import { PropertyService } from '../../core/services/property.service';
-import { PropertyCard } from '../../shared/components/property-card/property-card';
+interface Property {
+  id: number;
+  title: string;
+  address: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+
+  type: string;
+
+  bedrooms: number;
+  bathrooms: number;
+  parkingSpaces: number;
+
+  area: number;
+
+  price: number;
+  condominium?: number;
+  iptu?: number;
+
+  image: string;
+
+  featured?: boolean;
+}
 
 @Component({
-  selector: 'app-properties',
-  imports: [PropertyCard, ReactiveFormsModule, RouterLink],
-  templateUrl: './properties.html',
-  styleUrl: './properties.scss',
+  selector: 'app-search',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+  ],
+  templateUrl: './search.html',
+  styleUrl: './search.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Properties implements OnInit {
-  private readonly fb = inject(FormBuilder);
-  readonly properties = signal<Property[]>([]);
-  readonly total = signal(0);
-  readonly filterForm = this.fb.nonNullable.group({
-    cidade: [''],
-    bairro: [''],
-    tipo: [''],
-    preco_min: [''],
-    preco_max: [''],
+export class Search {
+
+  // ==========================================================
+  // ESTADO
+  // ==========================================================
+
+  readonly currentPage = signal(1);
+
+  readonly totalPages = signal(23);
+
+  readonly visiblePages = signal(5);
+
+  readonly pageWindow = computed(() => {
+
+    const current = this.currentPage();
+    const visible = this.visiblePages();
+    const total = this.totalPages();
+
+    const block = Math.floor((current - 1) / visible);
+
+    const start = block * visible + 1;
+
+    const end = Math.min(start + visible - 1, total);
+
+    return Array.from(
+      { length: end - start + 1 },
+      (_, index) => start + index
+    );
+
   });
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly propertyService: PropertyService,
-  ) {}
+  readonly showEllipsis = computed(() => {
 
-  ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.filterForm.patchValue({
-        cidade: params['cidade'] ?? '',
-        bairro: params['bairro'] ?? '',
-        tipo: params['tipo'] ?? '',
-        preco_min: params['preco_min'] ?? '',
-        preco_max: params['preco_max'] ?? '',
-      });
-      this.load();
+    return this.pageWindow().at(-1)! < this.totalPages();
+
+  });
+
+  // ==========================================================
+  // FILTROS
+  // ==========================================================
+
+  readonly selectedTransaction = signal<'Comprar' | 'Alugar' | 'Lançamentos'>(
+    'Alugar'
+  );
+
+  readonly propertyTypes = signal<string[]>([
+    'Apartamento',
+  ]);
+
+  readonly bedrooms = signal<number | null>(null);
+
+  readonly bathrooms = signal<number | null>(null);
+
+  readonly parkingSpaces = signal<number | null>(null);
+
+  // ==========================================================
+  // DADOS (Mock)
+  // ==========================================================
+
+  readonly properties = signal<Property[]>([
+    {
+      id: 1,
+      title: 'Apartamento para alugar com 2 quartos',
+      address: 'Rua Bom Pastor',
+      neighborhood: 'Tijuca',
+      city: 'Rio de Janeiro',
+      state: 'RJ',
+      type: 'Apartamento',
+      bedrooms: 2,
+      bathrooms: 2,
+      parkingSpaces: 1,
+      area: 89,
+      price: 2500,
+      condominium: 869,
+      iptu: 156,
+      image: 'assets/images/property-1.jpg',
+      featured: true,
+    },
+
+    {
+      id: 2,
+      title: 'Apartamento para alugar com 3 quartos',
+      address: 'Rua José Higino',
+      neighborhood: 'Tijuca',
+      city: 'Rio de Janeiro',
+      state: 'RJ',
+      type: 'Apartamento',
+      bedrooms: 3,
+      bathrooms: 3,
+      parkingSpaces: 1,
+      area: 110,
+      price: 2800,
+      condominium: 2061,
+      iptu: 318,
+      image: 'assets/images/property-2.jpg',
+    },
+
+    {
+      id: 3,
+      title: 'Cobertura para alugar',
+      address: 'Rua Bom Pastor',
+      neighborhood: 'Tijuca',
+      city: 'Rio de Janeiro',
+      state: 'RJ',
+      type: 'Cobertura',
+      bedrooms: 2,
+      bathrooms: 3,
+      parkingSpaces: 3,
+      area: 168,
+      price: 3600,
+      condominium: 2100,
+      iptu: 318,
+      image: 'assets/images/property-3.jpg',
+    },
+  ]);
+
+  // ==========================================================
+  // PAGINAÇÃO
+  // ==========================================================
+
+  goToPage(page: number): void {
+
+    if (page < 1 || page > this.totalPages()) {
+      return;
+    }
+
+    this.currentPage.set(page);
+
+  }
+
+  nextPage(): void {
+
+    if (this.currentPage() < this.totalPages()) {
+
+      this.currentPage.update(value => value + 1);
+
+    }
+
+  }
+
+  previousPage(): void {
+
+    if (this.currentPage() > 1) {
+
+      this.currentPage.update(value => value - 1);
+
+    }
+
+  }
+
+  // ==========================================================
+  // FILTROS
+  // ==========================================================
+
+  togglePropertyType(type: string): void {
+
+    const selected = this.propertyTypes();
+
+    if (selected.includes(type)) {
+
+      this.propertyTypes.set(
+        selected.filter(item => item !== type)
+      );
+
+      return;
+    }
+
+    this.propertyTypes.set([
+      ...selected,
+      type,
+    ]);
+
+  }
+
+  selectBedrooms(value: number): void {
+
+    this.bedrooms.set(value);
+
+  }
+
+  selectBathrooms(value: number): void {
+
+    this.bathrooms.set(value);
+
+  }
+
+  selectParkingSpaces(value: number): void {
+
+    this.parkingSpaces.set(value);
+
+  }
+
+  clearFilters(): void {
+
+    this.propertyTypes.set([]);
+
+    this.bedrooms.set(null);
+
+    this.bathrooms.set(null);
+
+    this.parkingSpaces.set(null);
+
+  }
+
+  search(): void {
+
+    console.log('Buscar imóveis');
+
+    console.log({
+
+      transaction: this.selectedTransaction(),
+
+      propertyTypes: this.propertyTypes(),
+
+      bedrooms: this.bedrooms(),
+
+      bathrooms: this.bathrooms(),
+
+      parkingSpaces: this.parkingSpaces(),
+
     });
+
   }
 
-  load(): void {
-    const raw = this.filterForm.getRawValue();
-    this.propertyService
-      .list({
-        cidade: raw.cidade,
-        bairro: raw.bairro,
-        tipo: raw.tipo,
-        preco_min: raw.preco_min ? Number(raw.preco_min) : undefined,
-        preco_max: raw.preco_max ? Number(raw.preco_max) : undefined,
-        size: 12,
-      })
-      .pipe(catchError(() => of({ items: MOCK_PROPERTIES, total: MOCK_PROPERTIES.length, page: 1, size: 12 })))
-      .subscribe((response) => {
-        this.properties.set(response.items);
-        this.total.set(response.total);
-      });
+  // ==========================================================
+  // UTILITÁRIOS
+  // ==========================================================
+
+  trackByProperty(_: number, property: Property): number {
+
+    return property.id;
+
   }
 
-  applyFilters(): void {
-    const values = this.filterForm.getRawValue();
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        cidade: values.cidade || null,
-        bairro: values.bairro || null,
-        tipo: values.tipo || null,
-        preco_min: values.preco_min || null,
-        preco_max: values.preco_max || null,
-      },
-    });
-  }
 }

@@ -1,0 +1,629 @@
+/* ==========================================================
+   FOOTER ASTERIX
+   ========================================================== */
+
+
+$primary: #1F5EFF;
+
+$footer-bg: #101828;
+
+$footer-text: #98A2B3;
+
+$footer-title: #FFFFFF;
+
+$border: rgba(255, 255, 255, .10);
+
+
+$transition: .30s cubic-bezier(.4, 0, .2, 1);
+
+
+
+
+@mixin transition {
+
+    transition:
+
+        all $transition;
+
+}
+
+
+
+
+.footer {
+
+
+    background:
+
+        $footer-bg;
+
+
+    color:
+
+        $footer-text;
+
+
+    padding:
+
+        80px clamp(24px, 5vw, 80px) 30px;
+
+
+
+}
+
+
+
+
+
+.footer__container {
+
+
+    max-width:
+
+        1440px;
+
+
+    margin:
+
+        auto;
+
+
+    display:
+
+        grid;
+
+
+    grid-template-columns:
+
+        1.8fr repeat(3, 1fr);
+
+
+    gap:
+
+        50px;
+
+
+}
+
+
+
+
+
+/* ==========================================================
+   MARCA
+   ========================================================== */
+
+
+.footer__logo {
+
+
+    display:
+
+        inline-block;
+
+
+    margin-bottom:
+
+        20px;
+
+
+    color:
+
+        #fff;
+
+
+    font-size:
+
+        2rem;
+
+
+    font-weight:
+
+        800;
+
+
+    text-decoration:
+
+        none;
+
+
+    letter-spacing:
+
+        -1px;
+
+
+}
+
+
+
+.footer__brand p {
+
+
+    max-width:
+
+        360px;
+
+
+    line-height:
+
+        1.7;
+
+
+}
+
+
+
+
+
+/* ==========================================================
+   SOCIAL
+   ========================================================== */
+
+
+.footer__social {
+
+
+    display:
+
+        flex;
+
+
+    gap:
+
+        12px;
+
+
+    margin-top:
+
+        28px;
+
+
+}
+
+
+.footer__social a {
+
+
+    width:
+
+        42px;
+
+
+    height:
+
+        42px;
+
+
+    display:
+
+        grid;
+
+
+    place-items:
+
+        center;
+
+
+    border-radius:
+
+        50%;
+
+
+    color:
+
+        #fff;
+
+
+    background:
+
+        rgba(255, 255, 255, .08);
+
+
+    @include transition;
+
+
+}
+
+
+.footer__social svg {
+
+
+    width:
+
+        20px;
+
+
+    height:
+
+        20px;
+
+
+}
+
+
+
+.footer__social a:hover {
+
+
+    color:
+
+        $primary;
+
+
+    transform:
+
+        translateY(-3px);
+
+
+}
+
+
+
+
+
+/* ==========================================================
+   COLUNAS
+   ========================================================== */
+
+
+.footer__column {
+
+
+    display:
+
+        flex;
+
+
+    flex-direction:
+
+        column;
+
+
+    gap:
+
+        14px;
+
+
+}
+
+
+
+.footer__column h3 {
+
+
+    margin:
+
+        0 0 12px;
+
+
+    color:
+
+        $footer-title;
+
+
+    font-size:
+
+        1rem;
+
+
+}
+
+
+
+.footer__column a,
+.footer__column span {
+
+
+    color:
+
+        $footer-text;
+
+
+    text-decoration:
+
+        none;
+
+
+    font-size:
+
+        .92rem;
+
+
+    @include transition;
+
+
+}
+
+
+
+.footer__column a:hover {
+
+
+    color:
+
+        #fff;
+
+
+}
+
+
+
+
+
+/* ==========================================================
+   BOTTOM
+   ========================================================== */
+
+
+.footer__bottom {
+
+
+    max-width:
+
+        1440px;
+
+
+    margin:
+
+        60px auto 0;
+
+
+    padding-top:
+
+        24px;
+
+
+    border-top:
+
+        1px solid $border;
+
+
+    display:
+
+        flex;
+
+
+    justify-content:
+
+        space-between;
+
+
+    gap:
+
+        20px;
+
+
+}
+
+
+
+.footer__bottom p {
+
+
+    margin:
+
+        0;
+
+
+    font-size:
+
+        .85rem;
+
+
+}
+
+
+
+.footer__bottom nav {
+
+
+    display:
+
+        flex;
+
+
+    gap:
+
+        24px;
+
+
+}
+
+
+
+.footer__bottom a {
+
+
+    color:
+
+        $footer-text;
+
+
+    font-size:
+
+        .85rem;
+
+
+    text-decoration:
+
+        none;
+
+
+}
+
+
+
+
+
+/* ==========================================================
+   TABLET
+   1024px
+   ========================================================== */
+
+
+@media(max-width:1024px) {
+
+
+    .footer__container {
+
+
+        grid-template-columns:
+
+            repeat(2, 1fr);
+
+
+    }
+
+
+
+}
+
+
+
+
+
+/* ==========================================================
+   MOBILE
+   768px
+   ========================================================== */
+
+
+@media(max-width:768px) {
+
+
+    .footer {
+
+
+        text-align:
+
+            center;
+
+
+    }
+
+
+
+    .footer__container {
+
+
+        grid-template-columns:
+
+            1fr;
+
+
+        gap:
+
+            40px;
+
+
+    }
+
+
+
+    .footer__brand p {
+
+
+        margin:
+
+            auto;
+
+
+    }
+
+
+
+    .footer__social {
+
+
+        justify-content:
+
+            center;
+
+
+    }
+
+
+
+    .footer__column {
+
+
+        align-items:
+
+            center;
+
+
+    }
+
+
+
+    .footer__bottom {
+
+
+        flex-direction:
+
+            column;
+
+
+        align-items:
+
+            center;
+
+
+    }
+
+
+
+    .footer__bottom nav {
+
+
+        flex-direction:
+
+            column;
+
+
+        gap:
+
+            12px;
+
+
+    }
+
+
+}
+
+
+
+
+
+/* ==========================================================
+   MOBILE SMALL
+   480px
+   ========================================================== */
+
+
+@media(max-width:480px) {
+
+
+    .footer {
+
+
+        padding-top:
+
+            60px;
+
+
+    }
+
+
+    .footer__bottom {
+
+
+        margin-top:
+
+            40px;
+
+
+    }
+
+
+}

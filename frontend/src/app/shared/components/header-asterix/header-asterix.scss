@@ -1,0 +1,947 @@
+/* ==========================================================
+   HEADER ASTERIX
+   PARTE 1
+   Desktop • Logo • Navegação • CTA
+   ========================================================== */
+
+/* ==========================================================
+   TOKENS
+   ========================================================== */
+
+$primary: #1f5eff;
+$primary-dark: #194cd6;
+
+$text: #172033;
+$text-light: #667085;
+
+$white: #ffffff;
+
+$border: rgba(15, 23, 42, .08);
+
+$transition: .28s cubic-bezier(.4, 0, .2, 1);
+
+/* ==========================================================
+   MIXINS
+   ========================================================== */
+
+@mixin shadow-soft {
+
+    box-shadow:
+        0 2px 8px rgba(15, 23, 42, .03),
+        0 10px 25px rgba(15, 23, 42, .05),
+        0 30px 60px rgba(15, 23, 42, .08);
+
+}
+
+@mixin transition {
+
+    transition:
+        all $transition;
+
+}
+
+@mixin glass {
+
+    background: rgba(255, 255, 255, .86);
+
+    backdrop-filter: blur(18px);
+
+    -webkit-backdrop-filter: blur(18px);
+
+    border-bottom: 1px solid rgba(255, 255, 255, .4);
+
+}
+
+/* ==========================================================
+   HEADER
+   ========================================================== */
+
+.header {
+
+    position: sticky;
+
+    top: 0;
+
+    left: 0;
+
+    z-index: 1000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 48px;
+
+    width: 100%;
+
+    height: 82px;
+
+    padding-inline: clamp(24px, 5vw, 80px);
+
+    @include glass;
+
+    @include shadow-soft;
+
+}
+
+/* ==========================================================
+   LOGO
+   ========================================================== */
+
+.header__brand {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    flex-shrink: 0;
+
+    color: $text;
+
+    text-decoration: none;
+
+}
+
+.header__brand-mark {
+
+    display: grid;
+
+    place-items: center;
+
+    width: 46px;
+
+    height: 46px;
+
+    border-radius: 14px;
+
+    background:
+
+        linear-gradient(135deg,
+            $primary,
+            $primary-dark );
+
+    color: white;
+
+    @include transition;
+
+}
+
+.header__brand-mark svg {
+
+    width: 22px;
+
+    height: 22px;
+
+}
+
+.header__brand:hover .header__brand-mark {
+
+    transform: rotate(-8deg) scale(1.05);
+
+}
+
+.header__brand-text {
+
+    font-size: 1.45rem;
+
+    font-weight: 800;
+
+    color: $text;
+
+    letter-spacing: -.5px;
+
+}
+
+/* ==========================================================
+   MENU
+   ========================================================== */
+
+.header__nav {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 34px;
+
+    margin-left: auto;
+
+}
+
+.header__nav a {
+
+    position: relative;
+
+    color: $text-light;
+
+    text-decoration: none;
+
+    font-size: .96rem;
+
+    font-weight: 600;
+
+    @include transition;
+
+}
+
+.header__nav a:hover {
+
+    color: $primary;
+
+}
+
+.header__nav a::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    bottom: -8px;
+
+    width: 0;
+
+    height: 2px;
+
+    border-radius: 20px;
+
+    background: $primary;
+
+    transition: width .25s ease;
+
+}
+
+.header__nav a:hover::after,
+
+.header__nav a.is-active::after {
+
+    width: 100%;
+
+}
+
+.header__nav a.is-active {
+
+    color: $text;
+
+}
+
+/* ==========================================================
+   CTA
+   ========================================================== */
+
+.header__cta {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    height: 48px;
+
+    padding: 0 22px;
+
+    border-radius: 999px;
+
+    background:
+
+        linear-gradient(135deg,
+            $primary,
+            $primary-dark );
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: .92rem;
+
+    font-weight: 700;
+
+    letter-spacing: .02em;
+
+    @include transition;
+
+    box-shadow:
+
+        0 12px 24px rgba(31, 94, 255, .18);
+
+}
+
+.header__cta:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+
+        0 18px 35px rgba(31, 94, 255, .25);
+
+}
+
+.header__cta:active {
+
+    transform: translateY(0);
+
+}
+
+/* ==========================================================
+   BOTÃO MOBILE
+   (Parte 2)
+   ========================================================== */
+
+.header__menu-button {
+
+    display: none;
+
+}
+
+/* ==========================================================
+   HEADER ASTERIX
+   PARTE 2
+   Menu Mobile • Sidebar • Overlay • Animações
+   ========================================================== */
+
+/* ==========================================================
+   BOTÃO HAMBÚRGUER
+   ========================================================== */
+
+.header__menu-button {
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: rgba(31, 94, 255, .08);
+
+    color: $primary;
+
+    cursor: pointer;
+
+    @include transition;
+
+}
+
+.header__menu-button svg {
+
+    width: 24px;
+    height: 24px;
+
+}
+
+.header__menu-button:hover {
+
+    background: rgba(31, 94, 255, .14);
+
+    transform: translateY(-1px);
+
+}
+
+.header__menu-button:active {
+
+    transform: translateY(0);
+
+}
+
+.header__menu-button:focus-visible {
+
+    outline: none;
+
+    box-shadow:
+        0 0 0 4px rgba(31, 94, 255, .14);
+
+}
+
+/* ==========================================================
+   OVERLAY
+   ========================================================== */
+
+.header-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 5000;
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    background: rgba(15, 23, 42, .55);
+
+    backdrop-filter: blur(6px);
+
+    -webkit-backdrop-filter: blur(6px);
+
+    animation: overlayFade .28s ease;
+
+}
+
+/* ==========================================================
+   SIDEBAR
+   ========================================================== */
+
+.header-sidebar {
+
+    width: min(420px, 90vw);
+
+    height: 100vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    background: rgba(255, 255, 255, .96);
+
+    backdrop-filter: blur(24px);
+
+    -webkit-backdrop-filter: blur(24px);
+
+    border-left: 1px solid rgba(255, 255, 255, .45);
+
+    box-shadow:
+        -12px 0 40px rgba(15, 23, 42, .10),
+        -25px 0 80px rgba(15, 23, 42, .12);
+
+    animation: sidebarEnter .32s cubic-bezier(.2, .8, .2, 1);
+
+}
+
+/* ==========================================================
+   TOPO
+   ========================================================== */
+
+.header-sidebar__top {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 26px;
+
+    border-bottom: 1px solid $border;
+
+}
+
+.header-sidebar__top h2 {
+
+    margin: 0;
+
+    font-size: 1.25rem;
+
+    font-weight: 700;
+
+    color: $text;
+
+}
+
+.header-sidebar__close {
+
+    display: grid;
+
+    place-items: center;
+
+    width: 44px;
+
+    height: 44px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: rgba(31, 94, 255, .08);
+
+    color: $primary;
+
+    cursor: pointer;
+
+    @include transition;
+
+}
+
+.header-sidebar__close svg {
+
+    width: 18px;
+
+    height: 18px;
+
+}
+
+.header-sidebar__close:hover {
+
+    background: rgba(31, 94, 255, .16);
+
+    transform: rotate(90deg);
+
+}
+
+/* ==========================================================
+   LINKS
+   ========================================================== */
+
+.header-sidebar__nav {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    padding: 30px 22px;
+
+}
+
+.header-sidebar__nav a {
+
+    display: flex;
+
+    align-items: center;
+
+    height: 56px;
+
+    padding: 0 18px;
+
+    border-radius: 16px;
+
+    color: $text;
+
+    text-decoration: none;
+
+    font-size: 1rem;
+
+    font-weight: 600;
+
+    @include transition;
+
+}
+
+.header-sidebar__nav a:hover {
+
+    background: rgba(31, 94, 255, .06);
+
+    color: $primary;
+
+    transform: translateX(4px);
+
+}
+
+.header-sidebar__nav a.is-active {
+
+    background: rgba(31, 94, 255, .10);
+
+    color: $primary;
+
+}
+
+/* ==========================================================
+   CTA
+   ========================================================== */
+
+.header-sidebar__cta {
+
+    margin: 18px 22px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    height: 56px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(135deg,
+            $primary,
+            $primary-dark );
+
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: 700;
+
+    letter-spacing: .02em;
+
+    @include transition;
+
+    box-shadow:
+        0 15px 35px rgba(31, 94, 255, .18);
+
+}
+
+.header-sidebar__cta:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 22px 45px rgba(31, 94, 255, .24);
+
+}
+
+/* ==========================================================
+   FOOTER
+   ========================================================== */
+
+.header-sidebar__footer {
+
+    margin-top: auto;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    padding: 28px;
+
+    border-top: 1px solid $border;
+
+}
+
+.header-sidebar__footer span {
+
+    color: $text;
+
+    font-weight: 700;
+
+}
+
+.header-sidebar__footer small {
+
+    color: $text-light;
+
+    line-height: 1.6;
+
+}
+
+/* ==========================================================
+   ANIMAÇÕES
+   ========================================================== */
+
+@keyframes sidebarEnter {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateX(100%);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateX(0);
+
+    }
+
+}
+
+@keyframes overlayFade {
+
+    from {
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        opacity: 1;
+
+    }
+
+}
+
+/* ==========================================================
+   HEADER ASTERIX
+   PARTE 3
+   Responsividade • Acessibilidade • Estados
+   ========================================================== */
+
+/* ==========================================================
+   DESKTOP LARGE
+   ========================================================== */
+
+@media (max-width:1200px) {
+
+    .header {
+
+        padding-inline: 40px;
+
+        gap: 32px;
+
+    }
+
+    .header__nav {
+
+        gap: 26px;
+
+    }
+
+}
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width:992px) {
+
+    .header {
+
+        height: 76px;
+
+        padding-inline: 24px;
+
+    }
+
+    .header__nav {
+
+        gap: 20px;
+
+    }
+
+    .header__brand-text {
+
+        font-size: 1.3rem;
+
+    }
+
+}
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width:768px) {
+
+    .header {
+
+        height: 72px;
+
+        padding-inline: 18px;
+
+    }
+
+    .header__nav {
+
+        display: none;
+
+    }
+
+    .header__cta {
+
+        display: none;
+
+    }
+
+    .header__menu-button {
+
+        display: flex;
+
+    }
+
+    .header__brand-mark {
+
+        width: 42px;
+
+        height: 42px;
+
+    }
+
+    .header__brand-mark svg {
+
+        width: 20px;
+
+        height: 20px;
+
+    }
+
+    .header__brand-text {
+
+        font-size: 1.2rem;
+
+    }
+
+}
+
+/* ==========================================================
+   MOBILE PEQUENO
+   ========================================================== */
+
+@media (max-width:480px) {
+
+    .header {
+
+        padding-inline: 16px;
+
+    }
+
+    .header-sidebar {
+
+        width: 100%;
+
+    }
+
+    .header-sidebar__top {
+
+        padding: 20px;
+
+    }
+
+    .header-sidebar__nav {
+
+        padding: 22px 16px;
+
+    }
+
+    .header-sidebar__cta {
+
+        margin: 16px;
+
+    }
+
+    .header-sidebar__footer {
+
+        padding: 20px 16px;
+
+    }
+
+}
+
+/* ==========================================================
+   FOCUS
+   ========================================================== */
+
+.header a:focus-visible,
+.header button:focus-visible,
+.header-sidebar a:focus-visible,
+.header-sidebar button:focus-visible {
+
+    outline: none;
+
+    box-shadow:
+        0 0 0 4px rgba(31, 94, 255, .15);
+
+    border-radius: 14px;
+
+}
+
+/* ==========================================================
+   HOVER SUAVE
+   ========================================================== */
+
+.header__brand,
+.header__nav a,
+.header__cta,
+.header__menu-button,
+.header-sidebar__nav a,
+.header-sidebar__cta,
+.header-sidebar__close {
+
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        color .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+
+}
+
+/* ==========================================================
+   SHADOW AO ROLAR
+   ========================================================== */
+
+.header {
+
+    transition:
+        box-shadow .3s ease,
+        background .3s ease;
+
+}
+
+/* ==========================================================
+   SCROLLBAR SIDEBAR
+   ========================================================== */
+
+.header-sidebar {
+
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(31, 94, 255, .35) transparent;
+
+}
+
+.header-sidebar::-webkit-scrollbar {
+
+    width: 6px;
+
+}
+
+.header-sidebar::-webkit-scrollbar-track {
+
+    background: transparent;
+
+}
+
+.header-sidebar::-webkit-scrollbar-thumb {
+
+    background: rgba(31, 94, 255, .30);
+
+    border-radius: 999px;
+
+}
+
+/* ==========================================================
+   REDUZIR ANIMAÇÕES
+   ========================================================== */
+
+@media (prefers-reduced-motion:reduce) {
+
+    * {
+
+        animation: none !important;
+
+        transition: none !important;
+
+        scroll-behavior: auto !important;
+
+    }
+
+}
+
+/* ==========================================================
+   SAFE AREA (iPhone)
+   ========================================================== */
+
+.header {
+
+    padding-top: max(0px, env(safe-area-inset-top));
+
+}
+
+.header-sidebar {
+
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+
+}

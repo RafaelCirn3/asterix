@@ -1,63 +1,535 @@
-<header class="site-header">
-  <a class="brand" routerLink="/">Asterix</a>
-  <nav>
-    <a routerLink="/imoveis">Imoveis</a>
-    <a routerLink="/sobre">Sobre</a>
-    <a routerLink="/contato">Contato</a>
-  </nav>
-  <a class="contact" routerLink="/contato">Fale conosco</a>
-</header>
-
 <main>
+
+  <!-- ========================================================= -->
+  <!-- HERO -->
+  <!-- ========================================================= -->
+
   <section class="hero">
+
+    <!-- ========================================================= -->
+    <!-- CONTEÚDO -->
+    <!-- ========================================================= -->
+
     <div class="hero__content">
-      <p>Consultoria imobiliaria em alto padrao</p>
-      <h1>Encontre o imovel certo com clareza, curadoria e confianca.</h1>
-      <form [formGroup]="searchForm" (ngSubmit)="search()" class="search-box">
-        <input formControlName="cidade" placeholder="Cidade" />
-        <input formControlName="bairro" placeholder="Bairro" />
-        <select formControlName="tipo" aria-label="Tipo de imovel">
-          <option value="">Tipo</option>
-          <option>Apartamento</option>
-          <option>Casa</option>
-          <option>Studio</option>
-          <option>Terreno</option>
-          <option>Comercial</option>
-        </select>
-        <input formControlName="preco_max" type="number" placeholder="Preco maximo" />
-        <button type="submit">Pesquisar</button>
-      </form>
+
+
+      <h1>
+
+        O imóvel ideal começa com a busca certa.
+
+      </h1>
+
+      <p class="hero__subtitle">
+
+        Descubra imóveis anunciados por parceiros confiáveis,
+        compare oportunidades em um único portal e conte com
+        uma consultoria especializada para tomar a melhor decisão.
+
+      </p>
+
+      <!-- ============================================== -->
+      <!-- CARD DE BUSCA -->
+      <!-- ============================================== -->
+
+      <article class="search-card">
+
+        <form class="search-form" [formGroup]="searchForm" (ngSubmit)="search()">
+
+          <!-- Cidade -->
+
+          <div class="field">
+
+            <label for="cidade">
+
+              Cidade
+
+            </label>
+
+            <div class="field__control">
+
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                <path d="M12 21s6-6.3 6-11a6 6 0 10-12 0c0 4.7 6 11 6 11z" fill="none" stroke="currentColor"
+                  stroke-width="2" />
+
+                <circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="2" />
+
+              </svg>
+
+              <input id="cidade" type="text" formControlName="cidade" placeholder="Ex.: João Pessoa">
+
+            </div>
+
+          </div>
+
+          <!-- Bairro -->
+
+          <div class="field">
+
+            <label for="bairro">
+
+              Bairro
+
+            </label>
+
+            <div class="field__control">
+
+              <svg viewBox="0 0 24 24">
+
+                <path d="M3 10L12 3L21 10" fill="none" stroke="currentColor" stroke-width="2" />
+
+                <path d="M5 10V20H19V10" fill="none" stroke="currentColor" stroke-width="2" />
+
+              </svg>
+
+              <input id="bairro" type="text" formControlName="bairro" placeholder="Ex.: Manaíra">
+
+            </div>
+
+          </div>
+
+          <!-- Tipo -->
+
+          <div class="field">
+
+            <label for="tipo">
+
+              Tipo do imóvel
+
+            </label>
+
+            <div class="field__control">
+
+              <svg viewBox="0 0 24 24">
+
+                <path d="M4 20V9L12 3L20 9V20" fill="none" stroke="currentColor" stroke-width="2" />
+
+              </svg>
+
+              <select id="tipo" formControlName="tipo" aria-label="Tipo do imóvel">
+
+                <option value="">
+
+                  Todos
+
+                </option>
+
+                <option>
+
+                  Apartamento
+
+                </option>
+
+                <option>
+
+                  Casa
+
+                </option>
+
+                <option>
+
+                  Studio
+
+                </option>
+
+                <option>
+
+                  Terreno
+
+                </option>
+
+                <option>
+
+                  Comercial
+
+                </option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+          <!-- BOTÃO -->
+
+          <button class="search-button" type="submit">
+
+            <svg viewBox="0 0 24 24">
+
+              <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+
+              <path d="M20 20L17 17" stroke="currentColor" stroke-width="2" />
+
+            </svg>
+
+            Buscar imóveis
+
+          </button>
+
+        </form>
+
+      </article>
+
+      <!-- ============================================== -->
+      <!-- BOTÃO MOBILE -->
+      <!-- ============================================== -->
+
+      <button class="mobile-trigger" type="button" (click)="openDrawer()" aria-label="Abrir busca de imóveis">
+
+        <svg viewBox="0 0 24 24">
+
+          <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+
+          <path d="M20 20L17 17" stroke="currentColor" stroke-width="2" />
+
+        </svg>
+
+        Buscar imóveis
+
+      </button>
+
     </div>
+
+    <!-- ========================================================= -->
+    <!-- VISUAL -->
+    <!-- ========================================================= -->
+
+    <div class="hero__visual">
+
+      <div class="hero__image">
+
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=80"
+          alt="Residência moderna de alto padrão">
+
+        <div class="hero__glass">
+
+          <small>
+
+            Asterix
+
+          </small>
+
+          <strong>
+
+            Milhares de imóveis reunidos em um único portal.
+
+          </strong>
+
+          <span>
+
+            Compra • Venda • Locação
+
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </section>
+
+  <!-- ========================================================= -->
+  <!-- DRAWER DE BUSCA (MOBILE) -->
+  <!-- ========================================================= -->
+
+  @if (drawerOpen()) {
+
+  <div class="mobile-overlay" (click)="closeDrawer()">
+
+    <aside #drawer class="mobile-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title"
+      (click)="$event.stopPropagation()">
+
+      <!-- ============================================== -->
+      <!-- HEADER -->
+      <!-- ============================================== -->
+
+      <header class="drawer-header">
+
+        <div>
+
+          <small>
+
+            Busca Inteligente
+
+          </small>
+
+          <h2 id="drawer-title">
+
+            Buscar imóveis
+
+          </h2>
+
+        </div>
+
+        <button type="button" class="drawer-close" (click)="closeDrawer()" aria-label="Fechar busca">
+
+          <svg viewBox="0 0 24 24">
+
+            <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+
+            <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+
+          </svg>
+
+        </button>
+
+      </header>
+
+      <!-- ============================================== -->
+      <!-- FORM -->
+      <!-- ============================================== -->
+
+      <form class="drawer-form" [formGroup]="searchForm" (ngSubmit)="search()">
+
+        <!-- Cidade -->
+
+        <div class="field">
+
+          <label for="drawer-cidade">
+
+            Cidade
+
+          </label>
+
+          <div class="field__control">
+
+            <svg viewBox="0 0 24 24">
+
+              <path d="M12 21s6-6.3 6-11a6 6 0 10-12 0c0 4.7 6 11 6 11z" fill="none" stroke="currentColor"
+                stroke-width="2" />
+
+              <circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="2" />
+
+            </svg>
+
+            <input id="drawer-cidade" type="text" formControlName="cidade" placeholder="Digite a cidade">
+
+          </div>
+
+        </div>
+
+        <!-- Bairro -->
+
+        <div class="field">
+
+          <label for="drawer-bairro">
+
+            Bairro
+
+          </label>
+
+          <div class="field__control">
+
+            <svg viewBox="0 0 24 24">
+
+              <path d="M3 10L12 3L21 10" fill="none" stroke="currentColor" stroke-width="2" />
+
+              <path d="M5 10V20H19V10" fill="none" stroke="currentColor" stroke-width="2" />
+
+            </svg>
+
+            <input id="drawer-bairro" type="text" formControlName="bairro" placeholder="Digite o bairro">
+
+          </div>
+
+        </div>
+
+        <!-- Tipo -->
+
+        <div class="field">
+
+          <label for="drawer-tipo">
+
+            Tipo do imóvel
+
+          </label>
+
+          <div class="field__control">
+
+            <svg viewBox="0 0 24 24">
+
+              <path d="M4 20V9L12 3L20 9V20" fill="none" stroke="currentColor" stroke-width="2" />
+
+            </svg>
+
+            <select id="drawer-tipo" formControlName="tipo">
+
+              <option value="">
+
+                Todos
+
+              </option>
+
+              <option>
+
+                Apartamento
+
+              </option>
+
+              <option>
+
+                Casa
+
+              </option>
+
+              <option>
+
+                Studio
+
+              </option>
+
+              <option>
+
+                Terreno
+
+              </option>
+
+              <option>
+
+                Comercial
+
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+        <!-- CTA -->
+
+        <button class="search-button" type="submit">
+
+          <svg viewBox="0 0 24 24">
+
+            <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+
+            <path d="M20 20L17 17" stroke="currentColor" stroke-width="2" />
+
+          </svg>
+
+          Buscar imóveis
+
+        </button>
+
+      </form>
+
+    </aside>
+
+  </div>
+
+  }
+
+  <!-- ========================================================= -->
+  <!-- IMÓVEIS EM DESTAQUE -->
+  <!-- ========================================================= -->
 
   <section class="section">
+
     <div class="section__title">
+
       <div>
-        <p>Selecao Asterix</p>
-        <h2>Imoveis em destaque</h2>
+
+        <h2>
+
+          Imóveis em destaque
+
+        </h2>
+
       </div>
-      <a routerLink="/imoveis">Ver todos</a>
+
+      <a routerLink="/imoveis">
+
+        Ver todos
+
+      </a>
+
     </div>
+
     <div class="property-grid">
+
       @for (property of featured(); track property.id) {
-        <app-property-card [property]="property" />
+
+      <app-property-card [property]="property">
+      </app-property-card>
+
       }
+
     </div>
+
   </section>
+
+  <!-- ========================================================= -->
+  <!-- TRUST BAND -->
+  <!-- ========================================================= -->
 
   <section class="trust-band">
-    <div>
-      <strong>+12 anos</strong>
-      <span>de experiencia consultiva</span>
-    </div>
-    <div>
-      <strong>360 graus</strong>
-      <span>analise comercial e documental</span>
-    </div>
-    <div>
-      <strong>Atendimento</strong>
-      <span>humano, rapido e objetivo</span>
-    </div>
-  </section>
-</main>
 
+    <article class="trust-item">
+
+      <strong>
+
+        +12 anos
+
+      </strong>
+
+      <span>
+
+        de experiência em consultoria imobiliária.
+
+      </span>
+
+    </article>
+
+    <article class="trust-item">
+
+      <strong>
+
+        +5.000 imóveis
+
+      </strong>
+
+      <span>
+
+        reunidos em um único portal para facilitar sua busca.
+
+      </span>
+
+    </article>
+
+    <article class="trust-item">
+
+      <strong>
+
+        Parceiros certificados
+
+      </strong>
+
+      <span>
+
+        imobiliárias e corretores selecionados pela Asterix.
+
+      </span>
+
+    </article>
+
+    <article class="trust-item">
+
+      <strong>
+
+        Atendimento Premium
+
+      </strong>
+
+      <span>
+
+        suporte consultivo antes, durante e após a negociação.
+
+      </span>
+
+    </article>
+
+  </section>
+
+</main>

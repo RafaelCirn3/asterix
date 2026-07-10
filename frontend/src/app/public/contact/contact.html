@@ -1,37 +1,371 @@
-<header class="simple-header">
-  <a routerLink="/" class="brand">Asterix</a>
-  <nav>
-    <a routerLink="/imoveis">Imoveis</a>
-    <a routerLink="/sobre">Sobre</a>
-    <a routerLink="/contato">Contato</a>
-  </nav>
-</header>
-
 <main class="contact-page">
-  <section>
-    <p>Contato</p>
-    <h1>Converse com a nossa consultoria.</h1>
-    <div class="info">
-      <span>contato@asterix.com.br</span>
-      <span>(83) 99999-9999</span>
-      <span>Joao Pessoa, PB</span>
-    </div>
+
+
+  <!-- ========================================================= -->
+  <!-- HERO -->
+  <!-- ========================================================= -->
+
+
+  <section class="contact-hero">
+
+    <p>
+
+      Contato
+
+    </p>
+
+
+    <h1>
+
+      Converse com a Asterix e encontre o caminho ideal.
+
+    </h1>
+
+
+    <span>
+
+      Nossa equipe está preparada para conectar você às melhores
+      oportunidades imobiliárias e soluções de consultoria.
+
+    </span>
+
+
   </section>
 
-  <form [formGroup]="form" (ngSubmit)="submit()">
-    <input formControlName="nome" placeholder="Nome" />
-    <input formControlName="email" type="email" placeholder="Email" />
-    <input formControlName="telefone" placeholder="Telefone" />
-    <textarea formControlName="mensagem" placeholder="Mensagem"></textarea>
-    <button type="submit">Enviar mensagem</button>
-    @if (sent()) {
-      <strong>Mensagem recebida. Retornaremos em breve.</strong>
-    }
-  </form>
 
-  <iframe
-    title="Mapa Asterix"
-    loading="lazy"
-    src="https://maps.google.com/maps?q=Joao%20Pessoa%20PB&t=&z=12&ie=UTF8&iwloc=&output=embed"
-  ></iframe>
+
+  <!-- ========================================================= -->
+  <!-- GRID PRINCIPAL -->
+  <!-- ========================================================= -->
+
+
+  <section class="contact-grid">
+
+
+
+    <!-- ========================================================= -->
+    <!-- INFORMAÇÕES -->
+    <!-- ========================================================= -->
+
+
+    <article class="contact-info">
+
+
+      <h2>
+
+        Fale conosco
+
+      </h2>
+
+
+
+      <div class="info-item">
+
+
+        <svg viewBox="0 0 24 24">
+
+          <path d="M4 4H20V20H4V4Z" fill="none" stroke="currentColor" stroke-width="2" />
+
+          <path d="M4 6L12 13L20 6" fill="none" stroke="currentColor" stroke-width="2" />
+
+        </svg>
+
+
+        <div>
+
+          <small>
+
+            E-mail
+
+          </small>
+
+
+          <strong>
+
+            contato@asterix.com.br
+
+          </strong>
+
+
+        </div>
+
+
+      </div>
+
+
+
+
+      <div class="info-item">
+
+
+        <svg viewBox="0 0 24 24">
+
+          <path
+            d="M6 3H10L12 8L9 10C10.5 13 12 14.5 15 16L17 13L21 15V19C21 20 20 21 19 21C10 20.5 3.5 14 3 5C3 4 4 3 5 3H6Z"
+            fill="none" stroke="currentColor" stroke-width="2" />
+
+        </svg>
+
+
+        <div>
+
+          <small>
+
+            Telefone
+
+          </small>
+
+
+          <strong>
+
+            (83) 99999-9999
+
+          </strong>
+
+
+        </div>
+
+
+      </div>
+
+
+
+
+      <div class="info-item">
+
+
+        <svg viewBox="0 0 24 24">
+
+          <path d="M12 21C12 21 19 14 19 9A7 7 0 0 0 5 9C5 14 12 21 12 21Z" fill="none" stroke="currentColor"
+            stroke-width="2" />
+
+          <circle cx="12" cy="9" r="2" fill="none" stroke="currentColor" stroke-width="2" />
+
+        </svg>
+
+
+        <div>
+
+          <small>
+
+            Localização
+
+          </small>
+
+
+          <strong>
+
+            João Pessoa - PB
+
+          </strong>
+
+
+        </div>
+
+
+      </div>
+
+
+
+
+      <div class="info-item">
+
+
+        <svg viewBox="0 0 24 24">
+
+          <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" />
+
+          <path d="M12 7V12L15 14" fill="none" stroke="currentColor" stroke-width="2" />
+
+        </svg>
+
+
+        <div>
+
+          <small>
+
+            Atendimento
+
+          </small>
+
+
+          <strong>
+
+            Segunda a sexta, 9h às 18h
+
+          </strong>
+
+
+        </div>
+
+
+      </div>
+
+
+    </article>
+
+
+
+
+
+    <!-- ========================================================= -->
+    <!-- FORMULÁRIO -->
+    <!-- ========================================================= -->
+
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="contact-form">
+
+
+      <h2>
+
+        Envie uma mensagem
+
+      </h2>
+
+
+
+      <div class="field">
+
+
+        <label for="nome">
+
+          Nome
+
+        </label>
+
+
+        <input id="nome" formControlName="nome" placeholder="Digite seu nome" />
+
+
+      </div>
+
+
+
+
+      <div class="field">
+
+
+        <label for="email">
+
+          E-mail
+
+        </label>
+
+
+        <input id="email" formControlName="email" type="email" placeholder="Digite seu e-mail" />
+
+
+      </div>
+
+
+
+
+      <div class="field">
+
+
+        <label for="telefone">
+
+          Telefone
+
+        </label>
+
+
+        <input id="telefone" formControlName="telefone" placeholder="(83) 99999-9999" />
+
+
+      </div>
+
+
+
+
+      <div class="field">
+
+
+        <label for="mensagem">
+
+          Mensagem
+
+        </label>
+
+
+        <textarea id="mensagem" formControlName="mensagem" placeholder="Como podemos ajudar?"></textarea>
+
+
+      </div>
+
+
+
+
+      <button type="submit">
+
+        Enviar mensagem
+
+      </button>
+
+
+
+
+      @if (sent()) {
+
+
+      <div class="success-message">
+
+
+        <svg viewBox="0 0 24 24">
+
+          <path d="M20 6L9 17L4 12" fill="none" stroke="currentColor" stroke-width="3" />
+
+        </svg>
+
+
+        <span>
+
+          Mensagem recebida. Retornaremos em breve.
+
+        </span>
+
+
+      </div>
+
+
+      }
+
+
+    </form>
+
+
+  </section>
+
+
+
+
+
+  <!-- ========================================================= -->
+  <!-- MAPA -->
+  <!-- ========================================================= -->
+
+
+  <section class="location">
+
+
+    <h2>
+
+      Nossa localização
+
+    </h2>
+
+
+    <!--
+      Substituir futuramente pelo endereço comercial real.
+    -->
+
+
+    <iframe title="Mapa Asterix" loading="lazy"
+      src="https://maps.google.com/maps?q=Av.%20Epitacio%20Pessoa%20Joao%20Pessoa%20PB&t=&z=16&ie=UTF8&iwloc=&output=embed">
+    </iframe>
+
+
+  </section>
+
+
 </main>
