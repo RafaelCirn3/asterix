@@ -4,50 +4,30 @@ import {
   computed,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { PropertyCard } from '../../shared/components/property-card/property-card';
+import { Property } from '../../core/models/property.model';
 
-interface Property {
-  id: number;
-  title: string;
-  address: string;
-  neighborhood: string;
-  city: string;
-  state: string;
 
-  type: string;
-
-  bedrooms: number;
-  bathrooms: number;
-  parkingSpaces: number;
-
-  area: number;
-
-  price: number;
-  condominium?: number;
-  iptu?: number;
-
-  image: string;
-
-  featured?: boolean;
-}
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-properties',
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
+    PropertyCard
   ],
-  templateUrl: './search.html',
-  styleUrl: './search.scss',
+  templateUrl: './properties.html',
+  styleUrls: ['./properties.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Search {
+export class Properties {
 
   // ==========================================================
   // ESTADO
   // ==========================================================
+  readonly total = computed(() => this.properties().length);
 
   readonly currentPage = signal(1);
 
@@ -105,58 +85,42 @@ export class Search {
   readonly properties = signal<Property[]>([
     {
       id: 1,
-      title: 'Apartamento para alugar com 2 quartos',
-      address: 'Rua Bom Pastor',
-      neighborhood: 'Tijuca',
-      city: 'Rio de Janeiro',
-      state: 'RJ',
-      type: 'Apartamento',
-      bedrooms: 2,
-      bathrooms: 2,
-      parkingSpaces: 1,
+      nome: 'Apartamento na Tijuca',
+      descricao_curta: 'Apartamento amplo e iluminado',
+      descricao: '',
+      preco: 2500,
+      cidade: 'Rio de Janeiro',
+      bairro: 'Tijuca',
+      endereco: 'Rua Bom Pastor',
+      tipo: 'Apartamento',
       area: 89,
-      price: 2500,
-      condominium: 869,
-      iptu: 156,
-      image: 'assets/images/property-1.jpg',
-      featured: true,
+      quartos: 2,
+      banheiros: 2,
+      garagem: 1,
+      status: 'Disponivel',
+      created_at: '',
+      updated_at: '',
+      imagens: []
     },
-
     {
       id: 2,
-      title: 'Apartamento para alugar com 3 quartos',
-      address: 'Rua José Higino',
-      neighborhood: 'Tijuca',
-      city: 'Rio de Janeiro',
-      state: 'RJ',
-      type: 'Apartamento',
-      bedrooms: 3,
-      bathrooms: 3,
-      parkingSpaces: 1,
+      nome: 'Apartamento com suíte',
+      descricao_curta: 'Ótima localização',
+      descricao: '',
+      preco: 2800,
+      cidade: 'Rio de Janeiro',
+      bairro: 'Tijuca',
+      endereco: 'Rua José Higino',
+      tipo: 'Apartamento',
       area: 110,
-      price: 2800,
-      condominium: 2061,
-      iptu: 318,
-      image: 'assets/images/property-2.jpg',
-    },
-
-    {
-      id: 3,
-      title: 'Cobertura para alugar',
-      address: 'Rua Bom Pastor',
-      neighborhood: 'Tijuca',
-      city: 'Rio de Janeiro',
-      state: 'RJ',
-      type: 'Cobertura',
-      bedrooms: 2,
-      bathrooms: 3,
-      parkingSpaces: 3,
-      area: 168,
-      price: 3600,
-      condominium: 2100,
-      iptu: 318,
-      image: 'assets/images/property-3.jpg',
-    },
+      quartos: 3,
+      banheiros: 3,
+      garagem: 1,
+      status: 'Disponivel',
+      created_at: '',
+      updated_at: '',
+      imagens: []
+    }
   ]);
 
   // ==========================================================

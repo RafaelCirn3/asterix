@@ -1,12 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 
 import { ContactService } from '../../core/services/contact.service';
 
 @Component({
   selector: 'app-contact',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule],
   templateUrl: './contact.html',
   styleUrl: './contact.scss',
 })
@@ -22,7 +21,7 @@ export class Contact {
 
   constructor(
     private readonly contactService: ContactService,
-  ) {}
+  ) { }
 
   submit(): void {
     if (this.form.invalid) {
