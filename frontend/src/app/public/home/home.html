@@ -6,231 +6,92 @@
 
   <section class="hero">
 
-    <!-- ========================================================= -->
-    <!-- CONTEÚDO -->
-    <!-- ========================================================= -->
+    <img class="hero__bg"
+      src="https://t4.ftcdn.net/jpg/04/84/51/15/360_F_484511562_S34UIvxkz7XvHxPxvDDeITIBAaHmHYKk.jpg"
+      alt="Residência moderna de alto padrão">
+
+    <div class="hero__overlay"></div>
 
     <div class="hero__content">
 
-
-      <h1>
-
-        O imóvel ideal começa com a busca certa.
-
-      </h1>
+      <h1>Encontre o imóvel ideal com quem conecta oportunidades.</h1>
 
       <p class="hero__subtitle">
-
-        Descubra imóveis anunciados por parceiros confiáveis,
-        compare oportunidades em um único portal e conte com
-        uma consultoria especializada para tomar a melhor decisão.
-
+        Busque imóveis anunciados por corretores, imobiliárias,
+        construtoras e proprietários em um único lugar.
       </p>
 
-      <!-- ============================================== -->
-      <!-- CARD DE BUSCA -->
-      <!-- ============================================== -->
 
-      <article class="search-card">
 
-        <form class="search-form" [formGroup]="searchForm" (ngSubmit)="search()">
-
-          <!-- Cidade -->
-
-          <div class="field">
-
-            <label for="cidade">
-
-              Cidade
-
-            </label>
-
-            <div class="field__control">
-
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-
-                <path d="M12 21s6-6.3 6-11a6 6 0 10-12 0c0 4.7 6 11 6 11z" fill="none" stroke="currentColor"
-                  stroke-width="2" />
-
-                <circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="2" />
-
-              </svg>
-
-              <input id="cidade" type="text" formControlName="cidade" placeholder="Ex.: João Pessoa">
-
-            </div>
-
-          </div>
-
-          <!-- Bairro -->
-
-          <div class="field">
-
-            <label for="bairro">
-
-              Bairro
-
-            </label>
-
-            <div class="field__control">
-
-              <svg viewBox="0 0 24 24">
-
-                <path d="M3 10L12 3L21 10" fill="none" stroke="currentColor" stroke-width="2" />
-
-                <path d="M5 10V20H19V10" fill="none" stroke="currentColor" stroke-width="2" />
-
-              </svg>
-
-              <input id="bairro" type="text" formControlName="bairro" placeholder="Ex.: Manaíra">
-
-            </div>
-
-          </div>
-
-          <!-- Tipo -->
-
-          <div class="field">
-
-            <label for="tipo">
-
-              Tipo do imóvel
-
-            </label>
-
-            <div class="field__control">
-
-              <svg viewBox="0 0 24 24">
-
-                <path d="M4 20V9L12 3L20 9V20" fill="none" stroke="currentColor" stroke-width="2" />
-
-              </svg>
-
-              <select id="tipo" formControlName="tipo" aria-label="Tipo do imóvel">
-
-                <option value="">
-
-                  Todos
-
-                </option>
-
-                <option>
-
-                  Apartamento
-
-                </option>
-
-                <option>
-
-                  Casa
-
-                </option>
-
-                <option>
-
-                  Studio
-
-                </option>
-
-                <option>
-
-                  Terreno
-
-                </option>
-
-                <option>
-
-                  Comercial
-
-                </option>
-
-              </select>
-
-            </div>
-
-          </div>
-
-          <!-- BOTÃO -->
-
-          <button class="search-button" type="submit">
-
-            <svg viewBox="0 0 24 24">
-
-              <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
-
-              <path d="M20 20L17 17" stroke="currentColor" stroke-width="2" />
-
-            </svg>
-
-            Buscar imóveis
-
-          </button>
-
-        </form>
-
-      </article>
-
-      <!-- ============================================== -->
-      <!-- BOTÃO MOBILE -->
-      <!-- ============================================== -->
 
       <button class="mobile-trigger" type="button" (click)="openDrawer()" aria-label="Abrir busca de imóveis">
-
-        <svg viewBox="0 0 24 24">
-
-          <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
-
-          <path d="M20 20L17 17" stroke="currentColor" stroke-width="2" />
-
-        </svg>
-
-        Buscar imóveis
-
+        Filtrar imóveis
       </button>
 
     </div>
 
-    <!-- ========================================================= -->
-    <!-- VISUAL -->
-    <!-- ========================================================= -->
+    <article class="hero__filterbar">
 
-    <div class="hero__visual">
+      <form class="search-form" [formGroup]="searchForm" (ngSubmit)="search()">
 
-      <div class="hero__image">
-
-        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=80"
-          alt="Residência moderna de alto padrão">
-
-        <div class="hero__glass">
-
-          <small>
-
-            Asterix
-
-          </small>
-
-          <strong>
-
-            Milhares de imóveis reunidos em um único portal.
-
-          </strong>
-
-          <span>
-
-            Compra • Venda • Locação
-
-          </span>
-
+        <div class="field">
+          <label for="cidade">Cidade</label>
+          <div class="field__control">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 21s6-6.3 6-11a6 6 0 10-12 0c0 4.7 6 11 6 11z" fill="none" stroke="currentColor"
+                stroke-width="2" />
+              <circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+            <input id="cidade" type="text" formControlName="cidade" placeholder="Ex.: João Pessoa">
+          </div>
         </div>
 
-      </div>
+        <div class="field">
+          <label for="bairro">Bairro</label>
+          <div class="field__control">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 10L12 3L21 10" fill="none" stroke="currentColor" stroke-width="2" />
+              <path d="M5 10V20H19V10" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+            <input id="bairro" type="text" formControlName="bairro" placeholder="Ex.: Manaíra">
+          </div>
+        </div>
 
-    </div>
+        <div class="field">
+          <label for="tipo">Tipo do imóvel</label>
+          <div class="field__control">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 20V9L12 3L20 9V20" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+            <select id="tipo" formControlName="tipo" aria-label="Tipo do imóvel">
+              <option value="">Todos</option>
+              <option>Apartamento</option>
+              <option>Casa</option>
+              <option>Studio</option>
+              <option>Terreno</option>
+              <option>Comercial</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="search-button" type="submit">
+
+          Buscar imóveis
+
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+            <path d="M20 20L17 17" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </button>
+
+      </form>
+
+    </article>
 
   </section>
 
   <!-- ========================================================= -->
-  <!-- DRAWER DE BUSCA (MOBILE) -->
+  <!-- DRAWER DE BUSCA (MOBILE) — inalterado -->
   <!-- ========================================================= -->
 
   @if (drawerOpen()) {
@@ -240,177 +101,67 @@
     <aside #drawer class="mobile-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title"
       (click)="$event.stopPropagation()">
 
-      <!-- ============================================== -->
-      <!-- HEADER -->
-      <!-- ============================================== -->
-
       <header class="drawer-header">
-
         <div>
-
-          <small>
-
-            Busca Inteligente
-
-          </small>
-
-          <h2 id="drawer-title">
-
-            Buscar imóveis
-
-          </h2>
-
+          <small>Busca Inteligente</small>
+          <h2 id="drawer-title">Buscar imóveis</h2>
         </div>
-
         <button type="button" class="drawer-close" (click)="closeDrawer()" aria-label="Fechar busca">
-
           <svg viewBox="0 0 24 24">
-
             <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-
             <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-
           </svg>
-
         </button>
-
       </header>
-
-      <!-- ============================================== -->
-      <!-- FORM -->
-      <!-- ============================================== -->
 
       <form class="drawer-form" [formGroup]="searchForm" (ngSubmit)="search()">
 
-        <!-- Cidade -->
-
         <div class="field">
-
-          <label for="drawer-cidade">
-
-            Cidade
-
-          </label>
-
+          <label for="drawer-cidade">Cidade</label>
           <div class="field__control">
-
             <svg viewBox="0 0 24 24">
-
               <path d="M12 21s6-6.3 6-11a6 6 0 10-12 0c0 4.7 6 11 6 11z" fill="none" stroke="currentColor"
                 stroke-width="2" />
-
               <circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="2" />
-
             </svg>
-
             <input id="drawer-cidade" type="text" formControlName="cidade" placeholder="Digite a cidade">
-
           </div>
-
         </div>
 
-        <!-- Bairro -->
-
         <div class="field">
-
-          <label for="drawer-bairro">
-
-            Bairro
-
-          </label>
-
+          <label for="drawer-bairro">Bairro</label>
           <div class="field__control">
-
             <svg viewBox="0 0 24 24">
-
               <path d="M3 10L12 3L21 10" fill="none" stroke="currentColor" stroke-width="2" />
-
               <path d="M5 10V20H19V10" fill="none" stroke="currentColor" stroke-width="2" />
-
             </svg>
-
             <input id="drawer-bairro" type="text" formControlName="bairro" placeholder="Digite o bairro">
-
           </div>
-
         </div>
-
-        <!-- Tipo -->
 
         <div class="field">
-
-          <label for="drawer-tipo">
-
-            Tipo do imóvel
-
-          </label>
-
+          <label for="drawer-tipo">Tipo do imóvel</label>
           <div class="field__control">
-
             <svg viewBox="0 0 24 24">
-
               <path d="M4 20V9L12 3L20 9V20" fill="none" stroke="currentColor" stroke-width="2" />
-
             </svg>
-
             <select id="drawer-tipo" formControlName="tipo">
-
-              <option value="">
-
-                Todos
-
-              </option>
-
-              <option>
-
-                Apartamento
-
-              </option>
-
-              <option>
-
-                Casa
-
-              </option>
-
-              <option>
-
-                Studio
-
-              </option>
-
-              <option>
-
-                Terreno
-
-              </option>
-
-              <option>
-
-                Comercial
-
-              </option>
-
+              <option value="">Todos</option>
+              <option>Apartamento</option>
+              <option>Casa</option>
+              <option>Studio</option>
+              <option>Terreno</option>
+              <option>Comercial</option>
             </select>
-
           </div>
-
         </div>
-
-        <!-- CTA -->
 
         <button class="search-button" type="submit">
-
           <svg viewBox="0 0 24 24">
-
             <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
-
             <path d="M20 20L17 17" stroke="currentColor" stroke-width="2" />
-
           </svg>
-
           Buscar imóveis
-
         </button>
 
       </form>
@@ -429,19 +180,26 @@
 
     <div class="section__title">
 
-      <div>
+      <div class="section__heading">
 
-        <h2>
+        <span class="section__line"></span>
 
-          Imóveis em destaque
-
-        </h2>
+        <div>
+          <h2>Imóveis em destaque</h2>
+        </div>
 
       </div>
 
       <a routerLink="/imoveis">
 
         Ver todos
+
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-2">
+          <path fill-rule="evenodd"
+            d="M4.22 11.78a.75.75 0 0 1 0-1.06L9.44 5.5H5.75a.75.75 0 0 1 0-1.5h5.5a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 1-1.5 0V6.56l-5.22 5.22a.75.75 0 0 1-1.06 0Z"
+            clip-rule="evenodd" />
+        </svg>
+
 
       </a>
 
@@ -471,6 +229,8 @@
       <strong>
 
         +12 anos
+
+
 
       </strong>
 
@@ -504,7 +264,11 @@
 
         Parceiros certificados
 
+
+
+
       </strong>
+
 
       <span>
 
