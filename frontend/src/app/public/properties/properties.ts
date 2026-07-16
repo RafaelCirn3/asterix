@@ -4,6 +4,7 @@ import {
   computed,
   signal,
 } from '@angular/core';
+
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { PropertyCard } from '../../shared/components/property-card/property-card';
@@ -30,6 +31,9 @@ export class Properties {
   readonly total = computed(() => this.properties().length);
 
   readonly currentPage = signal(1);
+
+  readonly drawerOpen = signal(false);
+
 
   readonly totalPages = signal(23);
 
@@ -59,6 +63,22 @@ export class Properties {
     return this.pageWindow().at(-1)! < this.totalPages();
 
   });
+
+  openDrawer(): void {
+
+    this.drawerOpen.set(true);
+
+    document.body.style.overflow = 'hidden';
+
+  }
+
+  closeDrawer(): void {
+
+    this.drawerOpen.set(false);
+
+    document.body.style.overflow = '';
+
+  }
 
   // ==========================================================
   // FILTROS
@@ -183,19 +203,25 @@ export class Properties {
 
   selectBedrooms(value: number): void {
 
-    this.bedrooms.set(value);
+    this.bedrooms.update(current =>
+      current === value ? null : value
+    );
 
   }
 
   selectBathrooms(value: number): void {
 
-    this.bathrooms.set(value);
+    this.bathrooms.update(current =>
+      current === value ? null : value
+    );
 
   }
 
   selectParkingSpaces(value: number): void {
 
-    this.parkingSpaces.set(value);
+    this.parkingSpaces.update(current =>
+      current === value ? null : value
+    );
 
   }
 
@@ -216,18 +242,18 @@ export class Properties {
     console.log('Buscar imóveis');
 
     console.log({
-
       transaction: this.selectedTransaction(),
-
       propertyTypes: this.propertyTypes(),
-
       bedrooms: this.bedrooms(),
-
       bathrooms: this.bathrooms(),
-
       parkingSpaces: this.parkingSpaces(),
-
     });
+
+    if (this.drawerOpen()) {
+
+      this.closeDrawer();
+
+    }
 
   }
 

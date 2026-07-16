@@ -92,8 +92,7 @@ main {
 /* Botão mobile — só texto, sem ícone */
 .mobile-trigger {
   display: none;
-  align-items: center;
-  justify-content: center;
+
   width: 100%;
   margin-top: 12px;
   margin-bottom: 14px;
@@ -103,6 +102,11 @@ main {
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 18px 40px rgba(31, 94, 255, .25);
+}
+
+.mobile-trigger svg {
+  width: 20px;
+  height: 20px;
 }
 
 
@@ -612,6 +616,9 @@ main {
 
   .mobile-trigger {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .8rem;
     background: #fff;
     color: #0f172a;
 

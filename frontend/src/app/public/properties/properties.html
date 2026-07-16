@@ -5,6 +5,7 @@
   <!-- ===================================================== -->
 
   <section class="properties-hero">
+
     <p>Encontre o imóvel ideal</p>
 
     <h1>
@@ -15,7 +16,23 @@
       Explore imóveis anunciados por nossos parceiros e utilize os filtros
       para encontrar exatamente o que procura.
     </p>
+
   </section>
+
+  <!-- ===================================================== -->
+  <!-- BOTÃO MOBILE -->
+  <!-- ===================================================== -->
+
+  <button class="mobile-filter-trigger" type="button" (click)="openDrawer()">
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+      <path
+        d="M6.5 2.25a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0V4.5h6.75a.75.75 0 0 0 0-1.5H6.5v-.75ZM11 6.5a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0v-.75h2.25a.75.75 0 0 0 0-1.5H11V6.5ZM5.75 10a.75.75 0 0 1 .75.75v.75h6.75a.75.75 0 0 1 0 1.5H6.5v.75a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75ZM2.75 7.25H8.5v1.5H2.75a.75.75 0 0 1 0-1.5ZM4 3H2.75a.75.75 0 0 0 0 1.5H4V3ZM2.75 11.5H4V13H2.75a.75.75 0 0 1 0-1.5Z" />
+    </svg>
+
+    Filtro avançado
+
+  </button>
 
   <!-- ===================================================== -->
   <!-- CONTEÚDO -->
@@ -24,7 +41,7 @@
   <section class="properties-content">
 
     <!-- ================================================ -->
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR (DESKTOP) -->
     <!-- ================================================ -->
 
     <aside class="filters">
@@ -39,7 +56,7 @@
           Cidade
         </label>
 
-        <input id="cidade" type="text" placeholder="Ex.: João Pessoa" />
+        <input id="cidade" type="text" placeholder="Ex.: João Pessoa">
 
       </div>
 
@@ -51,7 +68,7 @@
           Bairro
         </label>
 
-        <input id="bairro" type="text" placeholder="Ex.: Manaíra" />
+        <input id="bairro" type="text" placeholder="Ex.: Manaíra">
 
       </div>
 
@@ -171,8 +188,15 @@
 
       </div>
 
-      <button class="apply-filters">
+      <button type="button" class="apply-filters" (click)="search()">
+
         Buscar imóveis
+
+        <svg viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+          <path d="M20 20L17 17" stroke="currentColor" stroke-width="2" />
+        </svg>
+
       </button>
 
     </aside>
@@ -207,6 +231,224 @@
     </section>
 
   </section>
+
+  <!-- ===================================================== -->
+  <!-- DRAWER MOBILE -->
+  <!-- ===================================================== -->
+
+  @if (drawerOpen()) {
+
+  <div class="mobile-overlay" (click)="closeDrawer()">
+
+    <aside #drawer class="mobile-drawer" (click)="$event.stopPropagation()">
+
+      <header class="drawer-header">
+
+        <div>
+
+          <small>Busca inteligente</small>
+
+          <h2>Filtro avançado</h2>
+
+        </div>
+
+        <button class="drawer-close" type="button" (click)="closeDrawer()">
+
+          ✕
+
+        </button>
+
+      </header>
+
+      <div class="drawer-form">
+
+        <!-- Cidade -->
+
+        <div class="filter-group">
+
+          <label for="cidade-mobile">Cidade</label>
+
+          <input id="cidade-mobile" type="text" placeholder="Ex.: João Pessoa">
+
+        </div>
+
+        <!-- Bairro -->
+
+        <div class="filter-group">
+
+          <label for="bairro-mobile">Bairro</label>
+
+          <input id="bairro-mobile" type="text" placeholder="Ex.: Manaíra">
+
+        </div>
+
+        <!-- Tipo -->
+
+        <div class="filter-group">
+
+          <h3>Tipo de imóvel</h3>
+
+          <label>
+            <input type="checkbox">
+            Apartamento
+          </label>
+
+          <label>
+            <input type="checkbox">
+            Casa
+          </label>
+
+          <label>
+            <input type="checkbox">
+            Cobertura
+          </label>
+
+          <label>
+            <input type="checkbox">
+            Terreno
+          </label>
+
+          <label>
+            <input type="checkbox">
+            Comercial
+          </label>
+
+        </div>
+
+        <!-- Quartos -->
+
+        <div class="filter-group">
+
+          <h3>Quartos</h3>
+
+          <div class="chips">
+
+            <button type="button" [class.active]="bedrooms() === 1" (click)="selectBedrooms(1)">
+              1+
+            </button>
+
+            <button type="button" [class.active]="bedrooms() === 2" (click)="selectBedrooms(2)">
+              2+
+            </button>
+
+            <button type="button" [class.active]="bedrooms() === 3" (click)="selectBedrooms(3)">
+              3+
+            </button>
+
+            <button type="button" [class.active]="bedrooms() === 4" (click)="selectBedrooms(4)">
+              4+
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- Banheiros -->
+
+        <div class="filter-group">
+
+          <h3>Banheiros</h3>
+
+          <div class="chips">
+
+            <button type="button" [class.active]="bathrooms() === 1" (click)="selectBathrooms(1)">
+              1+
+            </button>
+
+            <button type="button" [class.active]="bathrooms() === 2" (click)="selectBathrooms(2)">
+              2+
+            </button>
+
+            <button type="button" [class.active]="bathrooms() === 3" (click)="selectBathrooms(3)">
+              3+
+            </button>
+
+            <button type="button" [class.active]="bathrooms() === 4" (click)="selectBathrooms(4)">
+              4+
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- Vagas -->
+
+        <div class="filter-group">
+
+          <h3>Vagas</h3>
+
+          <div class="chips">
+
+            <button type="button" [class.active]="parkingSpaces() === 1" (click)="selectParkingSpaces(1)">
+              1+
+            </button>
+
+            <button type="button" [class.active]="parkingSpaces() === 2" (click)="selectParkingSpaces(2)">
+              2+
+            </button>
+
+            <button type="button" [class.active]="parkingSpaces() === 3" (click)="selectParkingSpaces(3)">
+              3+
+            </button>
+
+            <button type="button" [class.active]="parkingSpaces() === 4" (click)="selectParkingSpaces(4)">
+              4+
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- Área -->
+
+        <div class="filter-group">
+
+          <h3>Área (m²)</h3>
+
+          <div class="range">
+
+            <input type="number" placeholder="Mín.">
+
+            <input type="number" placeholder="Máx.">
+
+          </div>
+
+        </div>
+
+        <!-- Preço -->
+
+        <div class="filter-group">
+
+          <h3>Preço (R$)</h3>
+
+          <div class="range">
+
+            <input type="number" placeholder="Mín.">
+
+            <input type="number" placeholder="Máx.">
+
+          </div>
+
+        </div>
+
+        <button type="button" class="apply-filters" (click)="search()">
+
+          Buscar imóveis
+
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+            <path d="M20 20L17 17" stroke="currentColor" stroke-width="2" />
+          </svg>
+
+        </button>
+
+      </div>
+
+    </aside>
+
+  </div>
+
+  }
 
   <!-- ===================================================== -->
   <!-- PAGINAÇÃO -->

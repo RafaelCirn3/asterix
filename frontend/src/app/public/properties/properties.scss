@@ -113,31 +113,23 @@
 ========================================================== */
 
 .filters input[type="text"],
-.filters input[type="number"] {
+.filters input[type="number"],
+.drawer-form input[type="text"],
+.drawer-form input[type="number"] {
 
   width: 100%;
-
-  padding: 13px 14px;
-
-  border-radius: 8px;
+  padding: 14px 16px;
   border: 1px solid var(--border);
-
-  background: var(--white);
-
+  border-radius: 12px;
+  background: #fff;
   font: inherit;
-
   transition: .25s;
 
   &:focus {
-
     outline: none;
-
     border-color: var(--primary);
-
     box-shadow: 0 0 0 4px rgba(31, 94, 255, .08);
-
   }
-
 }
 
 .range {
@@ -149,6 +141,231 @@
   gap: 12px;
 
 }
+
+/* Filtro avançado - mobile */
+.mobile-filter-trigger {
+
+  display: none;
+
+  width: 100%;
+
+  height: 56px;
+
+  border: none;
+
+  border-radius: 16px;
+
+  background: var(--primary);
+
+  color: #fff;
+
+  font-weight: 700;
+
+  font-size: 1rem;
+
+  cursor: pointer;
+
+  margin-bottom: 32px;
+
+  transition: .25s;
+
+}
+
+.mobile-filter-trigger:hover {
+
+  transform: translateY(-2px);
+
+}
+
+
+.mobile-filter-trigger svg {
+  width: 20px;
+  height: 20px;
+}
+
+/*Drawer*/
+.mobile-overlay {
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: flex-end;
+
+  background: rgba(15, 23, 42, .55);
+
+  backdrop-filter: blur(8px);
+
+}
+
+.mobile-drawer {
+
+  width: 100%;
+
+  max-width: 640px;
+
+  max-height: 92vh;
+
+  display: flex;
+  flex-direction: column;
+
+  background: white;
+
+  border-radius: 28px 28px 0 0;
+
+  padding-bottom: env(safe-area-inset-bottom);
+
+  animation: drawerUp .3s ease;
+
+}
+
+/*Cabeçalho do drawer*/
+.drawer-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 28px;
+
+  border-bottom: 1px solid var(--border);
+
+}
+
+.drawer-header h2 {
+
+  margin: 4px 0 0;
+
+}
+
+.drawer-header small {
+
+  color: var(--primary);
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: .08em;
+
+  font-size: .75rem;
+
+}
+
+.drawer-close {
+
+  width: 46px;
+
+  height: 46px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #eef4ff;
+
+  cursor: pointer;
+
+  font-size: 20px;
+
+}
+
+/*formulário do drawer*/
+.drawer-form {
+  overflow-y: auto;
+
+  flex: 1;
+
+  padding: 28px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 30px;
+
+}
+
+.drawer-form input {
+
+  height: 56px;
+
+  padding: 0 18px;
+
+  font-size: 1rem;
+
+  border-radius: 14px;
+
+}
+
+.drawer-form input[type="checkbox"] {
+
+  width: 22px;
+
+  height: 22px;
+
+  cursor: pointer;
+
+}
+
+.drawer-form label {
+
+  gap: 16px;
+
+  padding: 6px 0;
+
+  font-size: .98rem;
+
+}
+
+.drawer-form .chips {
+
+  gap: 14px;
+
+}
+
+.drawer-form .chips button {
+
+  padding: 14px 22px;
+
+  font-size: .95rem;
+
+}
+
+.drawer-form .apply-filters {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: .8rem;
+
+  margin-top: 12px;
+
+  height: 56px;
+
+  font-size: 1rem;
+
+  border-radius: 14px;
+
+}
+
+.drawer-form .apply-filters svg {
+  width: 20px;
+  height: 20px;
+}
+
+
 
 /* ==========================================================
    CHIPS
@@ -208,6 +425,14 @@
 
 .apply-filters {
 
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: .8rem;
+
   width: 100%;
 
   padding: 15px;
@@ -236,6 +461,11 @@
 
   }
 
+}
+
+.apply-filters svg {
+  width: 20px;
+  height: 20px;
 }
 
 /* ==========================================================
@@ -397,14 +627,26 @@
   }
 
   .filters {
+    display: none;
 
-    position: static;
+  }
+
+  .mobile-filter-trigger {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: .8rem;
 
   }
 
   .properties-grid {
 
     grid-template-columns: 1fr;
+    gap: 28px;
 
   }
 
@@ -418,6 +660,27 @@
       height: 38px;
 
     }
+
+  }
+
+}
+
+/*Animação ao aparecer o drawer*/
+@keyframes drawerUp {
+
+  from {
+
+    transform: translateY(100%);
+
+    opacity: 0;
+
+  }
+
+  to {
+
+    transform: translateY(0);
+
+    opacity: 1;
 
   }
 
