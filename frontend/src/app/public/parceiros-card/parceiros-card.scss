@@ -1,0 +1,51 @@
+.partner-card {
+
+
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    aspect-ratio: 16 / 8;
+
+    padding: 2rem;
+
+    border-radius: 24px;
+
+    background: #091321;
+
+    overflow: hidden;
+
+
+
+    &:hover {
+
+        transform: translateY(-6px);
+
+        box-shadow: 0 20px 45px rgba(7, 19, 35, .18);
+
+    }
+
+    img {
+
+        display: block;
+
+        max-width: 80%;
+        max-height: 70%;
+
+        width: auto;
+        height: auto;
+
+        object-fit: contain;
+        object-position: center;
+
+    }
+
+    &:hover img {
+
+        transform: scale(1.05);
+
+    }
+
+}

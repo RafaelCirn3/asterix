@@ -1,0 +1,153 @@
+@use '../home/home.scss';
+
+.partners {
+
+    padding:
+        56px clamp(24px, 5vw, 72px) 80px;
+
+}
+
+/*==================================================
+HERO
+==================================================*/
+
+.partners-hero {
+
+    max-width: 760px;
+
+    margin-bottom: clamp(48px, 6vw, 72px);
+
+}
+
+.partners-hero>p:first-child {
+
+    margin-bottom: 12px;
+
+    color: var(--secondary);
+
+    font-weight: 700;
+
+}
+
+.partners-hero h1 {
+
+    margin: 0 0 20px;
+
+    max-width: 720px;
+
+    color: var(--text);
+
+    font-size: clamp(2rem, 4vw, 3.5rem);
+
+    line-height: 1.1;
+
+}
+
+.hero-description {
+
+    max-width: 650px;
+
+    color: var(--muted);
+
+    line-height: 1.7;
+
+}
+
+/*==================================================
+GRID
+==================================================*/
+
+.partners-list {
+
+    display: flex;
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: 36px;
+
+}
+
+.partners-list app-parceiros-card {
+
+    flex: 0 1 280px;
+    max-width: 280px;
+
+}
+
+/*==================================================
+SKELETON
+==================================================*/
+
+.partner-card-skeleton {
+
+    flex: 1 1 clamp(230px, 22%, 300px);
+
+    aspect-ratio: 16 / 8;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    position: relative;
+
+    background: #edf1f5;
+
+}
+
+.partner-card-skeleton::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    transform: translateX(-100%);
+
+    background:
+
+        linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, .75),
+            transparent);
+
+    animation: shimmer 1.2s linear infinite;
+
+}
+
+@keyframes shimmer {
+
+    100% {
+
+        transform: translateX(100%);
+
+    }
+
+}
+
+/*==================================================
+MOBILE
+==================================================*/
+
+@media (max-width:768px) {
+
+    .partners {
+
+        padding-inline: 20px;
+
+    }
+
+    .partners-hero {
+
+        margin-bottom: 48px;
+
+    }
+
+    .partners-list {
+
+        gap: 20px;
+
+    }
+
+}

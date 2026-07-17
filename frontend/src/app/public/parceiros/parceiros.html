@@ -1,0 +1,47 @@
+<main class="partners">
+
+    <section class="partners-hero">
+
+        <p>
+            Conexões de confiança
+        </p>
+
+        <h1>
+            Parceiros certificados que fazem acontecer
+        </h1>
+
+        <p class="hero-description">
+            Conheça parceiros selecionados pela Asterix para garantir total
+            segurança e transparência na sua negociação.
+        </p>
+
+    </section>
+
+    @if (loading()) {
+
+    <section class="partners-list">
+
+        @for (item of [1,2,3,4,5,6,7,8]; track item) {
+
+        <div class="partner-card-skeleton"></div>
+
+        }
+
+    </section>
+
+    } @else {
+
+    <section class="partners-list">
+
+        @for (partner of partners(); track partner.id) {
+
+        <app-parceiros-card [partner]="partner">
+        </app-parceiros-card>
+
+        }
+
+    </section>
+
+    }
+
+</main>
