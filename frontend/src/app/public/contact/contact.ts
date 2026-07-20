@@ -12,12 +12,14 @@ import { ContactService } from '../../core/services/contact.service';
 export class Contact {
   private readonly fb = inject(FormBuilder);
   readonly sent = signal(false);
+  readonly submitting = signal(false);
   readonly form = this.fb.nonNullable.group({
     nome: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     telefone: ['', Validators.required],
     mensagem: ['', Validators.required],
   });
+
 
   constructor(
     private readonly contactService: ContactService,
@@ -28,9 +30,18 @@ export class Contact {
       this.form.markAllAsTouched();
       return;
     }
-    this.contactService.send(this.form.getRawValue()).subscribe(() => {
-      this.sent.set(true);
-      this.form.reset();
+
+    this.submitting.set(true);
+
+    this.contactService.send(this.form.getRawValue()).subscribe({
+      next: () => {
+        this.submitting.set(false);
+        this.sent.set(true);
+        this.form.reset();
+      },
+      error: () => {
+        this.submitting.set(false);
+      },
     });
   }
 }

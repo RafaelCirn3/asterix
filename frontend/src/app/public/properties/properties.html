@@ -207,24 +207,25 @@
 
     <section class="properties-grid">
 
+
+      @if (loading()) {
+
+      @for (item of [1,2,3,4,5,6,7,8,9]; track item) {
+      <div class="property-card-skeleton"></div>
+      }
+
+      } @else {
+
       @for (property of properties(); track property.id) {
-
-      <app-property-card [property]="property">
-      </app-property-card>
-
+      <app-property-card [property]="property"></app-property-card>
       }
 
       @empty {
-
       <div class="empty-state">
-
         <h3>Nenhum imóvel encontrado.</h3>
-
-        <p>
-          Tente alterar os filtros para ampliar sua busca.
-        </p>
-
+        <p>Tente alterar os filtros para ampliar sua busca.</p>
       </div>
+      }
 
       }
 
@@ -454,35 +455,27 @@
   <!-- PAGINAÇÃO -->
   <!-- ===================================================== -->
 
-  <nav class="pagination">
+  <nav class="pagination" *ngIf="totalPages() > 1">
 
-    <button type="button">
+    <button type="button" [disabled]="currentPage() === 1" (click)="previousPage()">
       Anterior
     </button>
 
-    <button class="active">
-      1
+    @for (p of pageWindow(); track p) {
+
+    <button type="button" [class.active]="p === currentPage()" (click)="goToPage(p)">
+      {{ p }}
     </button>
 
-    <button>
-      2
-    </button>
+    }
 
-    <button>
-      3
-    </button>
-
-    <button>
-      4
-    </button>
-
-    <button>
-      5
-    </button>
+    @if (showEllipsis()) {
 
     <span>...</span>
 
-    <button>
+    }
+
+    <button type="button" [disabled]="currentPage() === totalPages()" (click)="nextPage()">
       Próxima
     </button>
 

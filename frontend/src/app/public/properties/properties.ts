@@ -3,14 +3,13 @@ import {
   Component,
   computed,
   signal,
+  OnInit,
 } from '@angular/core';
 
-import { CommonModule, DecimalPipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { PropertyCard } from '../../shared/components/property-card/property-card';
 import { Property } from '../../core/models/property.model';
-
-
+import { ImovelService } from '../../core/services/imovel.service';
 
 @Component({
   selector: 'app-properties',
@@ -23,19 +22,33 @@ import { Property } from '../../core/models/property.model';
   styleUrls: ['./properties.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Properties {
+export class Properties implements OnInit {
+
+  constructor(private imovelService: ImovelService) { }
+
+  ngOnInit(): void {
+    this.buscar();
+  }
 
   // ==========================================================
   // ESTADO
   // ==========================================================
-  readonly total = computed(() => this.properties().length);
+
+  readonly properties = signal<Property[]>([]);
+
+  readonly loading = signal(true);
+
+  readonly total = signal(0);
+
+  readonly size = signal(9); // mesmo default do backend (ver app/routes/imoveis.py)
 
   readonly currentPage = signal(1);
 
   readonly drawerOpen = signal(false);
 
-
-  readonly totalPages = signal(23);
+  readonly totalPages = computed(() =>
+    Math.ceil(this.total() / this.size()) || 0
+  );
 
   readonly visiblePages = signal(5);
 
@@ -52,7 +65,7 @@ export class Properties {
     const end = Math.min(start + visible - 1, total);
 
     return Array.from(
-      { length: end - start + 1 },
+      { length: Math.max(end - start + 1, 0) },
       (_, index) => start + index
     );
 
@@ -97,89 +110,6 @@ export class Properties {
   readonly bathrooms = signal<number | null>(null);
 
   readonly parkingSpaces = signal<number | null>(null);
-
-  // ==========================================================
-  // DADOS (Mock)
-  // ==========================================================
-
-  readonly properties = signal<Property[]>([
-    {
-      id: 1,
-      nome: 'Apartamento na Tijuca',
-      descricao_curta: 'Apartamento amplo e iluminado',
-      descricao: '',
-      preco: 2500,
-      cidade: 'Rio de Janeiro',
-      bairro: 'Tijuca',
-      endereco: 'Rua Bom Pastor',
-      tipo: 'Apartamento',
-      area: 89,
-      quartos: 2,
-      banheiros: 2,
-      garagem: 1,
-      status: 'Disponivel',
-      created_at: '',
-      updated_at: '',
-      imagens: []
-    },
-    {
-      id: 2,
-      nome: 'Apartamento com suíte',
-      descricao_curta: 'Ótima localização',
-      descricao: '',
-      preco: 2800,
-      cidade: 'Rio de Janeiro',
-      bairro: 'Tijuca',
-      endereco: 'Rua José Higino',
-      tipo: 'Apartamento',
-      area: 110,
-      quartos: 3,
-      banheiros: 3,
-      garagem: 1,
-      status: 'Disponivel',
-      created_at: '',
-      updated_at: '',
-      imagens: []
-    }
-  ]);
-
-  // ==========================================================
-  // PAGINAÇÃO
-  // ==========================================================
-
-  goToPage(page: number): void {
-
-    if (page < 1 || page > this.totalPages()) {
-      return;
-    }
-
-    this.currentPage.set(page);
-
-  }
-
-  nextPage(): void {
-
-    if (this.currentPage() < this.totalPages()) {
-
-      this.currentPage.update(value => value + 1);
-
-    }
-
-  }
-
-  previousPage(): void {
-
-    if (this.currentPage() > 1) {
-
-      this.currentPage.update(value => value - 1);
-
-    }
-
-  }
-
-  // ==========================================================
-  // FILTROS
-  // ==========================================================
 
   togglePropertyType(type: string): void {
 
@@ -239,19 +169,80 @@ export class Properties {
 
   search(): void {
 
-    console.log('Buscar imóveis');
+    this.currentPage.set(1);
 
-    console.log({
-      transaction: this.selectedTransaction(),
-      propertyTypes: this.propertyTypes(),
-      bedrooms: this.bedrooms(),
-      bathrooms: this.bathrooms(),
-      parkingSpaces: this.parkingSpaces(),
-    });
+    this.buscar();
 
     if (this.drawerOpen()) {
 
       this.closeDrawer();
+
+    }
+
+  }
+
+  // ==========================================================
+  // BUSCA (API real)
+  // ==========================================================
+
+  private buscar(): void {
+
+    this.loading.set(true);
+
+    const tipo = this.propertyTypes()[0] ?? null; // backend aceita 1 tipo por vez; ajuste se quiser múltiplos
+
+    this.imovelService.listar(this.currentPage(), this.size(), {
+      tipo,
+      // cidade/bairro/search/preco_min/preco_max: plugue aqui se/quando existirem inputs de texto no filtro
+    }).subscribe({
+      next: (res) => {
+        this.properties.set(res.items);
+        this.total.set(res.total);
+        this.size.set(res.size);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+      }
+    });
+
+  }
+
+  // ==========================================================
+  // PAGINAÇÃO
+  // ==========================================================
+
+  goToPage(page: number): void {
+
+    if (page < 1 || page > this.totalPages()) {
+      return;
+    }
+
+    this.currentPage.set(page);
+
+    this.buscar();
+
+  }
+
+  nextPage(): void {
+
+    if (this.currentPage() < this.totalPages()) {
+
+      this.currentPage.update(value => value + 1);
+
+      this.buscar();
+
+    }
+
+  }
+
+  previousPage(): void {
+
+    if (this.currentPage() > 1) {
+
+      this.currentPage.update(value => value - 1);
+
+      this.buscar();
 
     }
 
