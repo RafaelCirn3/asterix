@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     jwt_secret_key: str = Field(default="change-me-in-production")
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 120
-    backend_cors_origins: str = "http://localhost:4200"
+    backend_cors_origins: str = "http://localhost:4200,http://127.0.0.1:4200"
     upload_dir: str = "uploads/imoveis"
     admin_name: str = "Administrador"
     admin_email: str = "admin@asterix.com.br"

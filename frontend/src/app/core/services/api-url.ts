@@ -1,2 +1,4 @@
-export const API_URL = 'http://localhost:8001/api';
-export const STATIC_URL = 'http://localhost:8001';
+import { environment } from '../../../environments/environment';
+
+export const API_URL = environment.apiUrl;
+export const STATIC_URL = environment.staticUrl;

@@ -1,0 +1,16 @@
+.env
+*.env
+.env.production
+backend/.env
+backend/asterix_local.db
+backend/uploads/
+backend/__pycache__/
+backend/**/*.pyc
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.cache/
+frontend/coverage/
+*.log
+
+__pycache__/

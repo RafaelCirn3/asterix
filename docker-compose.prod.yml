@@ -1,0 +1,59 @@
+services:
+  db:
+    image: postgres:17-alpine
+    env_file:
+      - ./.env.production
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - app_internal
+
+  backend:
+    build:
+      context: ./backend
+    env_file:
+      - ./.env.production
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8001:8000"
+    volumes:
+      - uploads_data:/app/uploads
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/docs', timeout=5)\"",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+    networks:
+      - app_internal
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "127.0.0.1:8080:80"
+    restart: unless-stopped
+    networks:
+      - app_internal
+
+volumes:
+  postgres_data:
+  uploads_data:
+
+networks:
+  app_internal:
+    driver: bridge

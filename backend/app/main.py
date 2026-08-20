@@ -14,7 +14,12 @@ from app.models.imovel import Imovel
 from app.models.usuario import Usuario
 from app.services.files import ensure_upload_dir
 
-app = FastAPI(title=settings.project_name)
+app = FastAPI(
+    title=settings.project_name,
+    docs_url="/api/docs",
+    openapi_url="/api/openapi.json",
+    redoc_url=None,
+)
 
 app.add_middleware(
     CORSMiddleware,

@@ -1,75 +1,72 @@
 # Asterix Consultoria Imobiliaria
 
-Aplicacao web imobiliaria com experiencia inspirada na fluidez de imobiliárias, identidade propria da Asterix e arquitetura separada entre frontend Angular e backend FastAPI.
+Aplicacao web imobiliaria com frontend Angular, backend FastAPI, PostgreSQL e deploy via Docker Compose.
 
 ## Stack
 
-- Frontend: Angular 21, TypeScript, Angular Router, Signals, RXJS, SCSS e Angular Material no painel administrativo.
-- Backend: FastAPI, SQLAlchemy, PostgreSQL, Alembic, Pydantic, JWT, CORS e upload local.
-- Imagens: salvas em `backend/uploads/imoveis/` e servidas por `/uploads/imoveis/{arquivo}`.
+- Frontend: Angular 21, TypeScript e SCSS.
+- Backend: FastAPI, SQLAlchemy, PostgreSQL, Alembic, JWT e upload local.
+- Banco: PostgreSQL em container.
+- Deploy: Docker Compose com separacao entre desenvolvimento e producao.
 
-> Observacao: `@angular/cli@latest` resolveu para Angular 22 neste ambiente em 01/07/2026, mas exige Node 24.15+. Como o Node instalado e o Dockerfile estao em 24.13, o projeto foi criado em Angular 21, a major estavel compativel com este runtime.
+## Desenvolvimento
 
-## Como rodar com Docker
+Crie o arquivo de ambiente local a partir do exemplo:
+
+```bash
+cp backend/.env.example backend/.env
+```
+
+Suba a stack de desenvolvimento:
 
 ```bash
 docker compose up --build
 ```
 
-- Site: http://localhost:4200
-- API: http://localhost:8001
-- Swagger: http://localhost:8001/docs
-- Admin: http://localhost:4200/admin/login
+Endpoints locais:
 
-Credenciais iniciais:
+- Frontend: `http://localhost:4200`
+- API: `http://localhost:8001/api`
+- Swagger: `http://localhost:8001/api/docs`
+- Admin: `http://localhost:4200/admin/login`
 
-- Email: `admin@asterix.com.br`
-- Senha: `admin123`
+## Produção
 
-## Como rodar localmente
-
-Backend:
+Crie o arquivo de ambiente de producao a partir do exemplo:
 
 ```bash
-cd backend
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-copy .env.example .env
-alembic upgrade head
-uvicorn app.main:app --reload
+cp .env.production.example .env.production
 ```
 
-Se a porta `8000` estiver ocupada pelo Docker Desktop no Windows, use:
+Preencha os secrets antes de subir a stack.
+
+Fluxo recomendado:
 
 ```bash
-uvicorn app.main:app --reload --port 8001
+docker compose -f docker-compose.prod.yml config
+docker compose -f docker-compose.prod.yml build
+docker compose -f docker-compose.prod.yml up -d
+docker compose -f docker-compose.prod.yml exec backend alembic upgrade head
 ```
 
-Frontend:
+Comandos uteis:
 
 ```bash
-cd frontend
-npm install
-npm start
+docker compose -f docker-compose.prod.yml ps
+docker compose -f docker-compose.prod.yml logs -f backend
+docker compose -f docker-compose.prod.yml logs -f frontend
+docker compose -f docker-compose.prod.yml logs -f db
 ```
 
-## Endpoints principais
+## Nginx Da VPS
 
-- `POST /api/auth/login`
-- `POST /api/auth/logout`
-- `GET /api/imoveis`
-- `POST /api/imoveis`
-- `GET /api/imoveis/{id}`
-- `PATCH /api/imoveis/{id}`
-- `DELETE /api/imoveis/{id}`
-- `POST /api/imoveis/{id}/imagens`
-- `PATCH /api/imoveis/{id}/imagens/{imagem_id}`
-- `DELETE /api/imoveis/{id}/imagens/{imagem_id}`
-- `GET /api/usuarios`
-- `POST /api/usuarios`
-- `POST /api/contato`
-- `GET /api/dashboard`
+Veja a configuracao sugerida em [`docs/nginx-vps.md`](/docs/nginx-vps.md).
+
+Arquitetura esperada:
+
+- `https://asterixconsultoria.com.br/` -> frontend em `127.0.0.1:8080`
+- `https://asterixconsultoria.com.br/api/` -> backend em `127.0.0.1:8001`
+- `https://asterixconsultoria.com.br/uploads/` -> backend em `127.0.0.1:8001`
 
 ## Estrutura
 
@@ -90,11 +87,13 @@ frontend/
     core/
     public/
     shared/
+docs/
 ```
 
-## Proximos passos naturais
+## Observacoes
 
-- Integrar envio real do formulario de contato.
-- Trocar o placeholder de WhatsApp pelo numero oficial.
-- Adicionar metricas reais de acesso.
-- Conectar Google Maps API com chave propria quando houver conta configurada.
+- O PostgreSQL nao publica porta no Compose de producao.
+- O backend em producao fica preso a `127.0.0.1:8001`.
+- O frontend em producao fica preso a `127.0.0.1:8080`.
+- Uploads persistem em volume nomeado fora da camada efemera do container.
+- `backend/.env` e `backend/asterix_local.db` nao devem ser versionados.
