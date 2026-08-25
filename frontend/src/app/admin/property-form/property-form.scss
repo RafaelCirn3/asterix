@@ -3,24 +3,37 @@
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 18px;
 }
 
 label {
   display: grid;
-  gap: 7px;
-  color: var(--text);
-  font-weight: 800;
+  gap: 8px;
+  color: #334155;
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
 input,
 select,
 textarea {
-  min-height: 42px;
-  border: 1px solid var(--border);
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid #cbd5e1;
   border-radius: 6px;
+  background: #ffffff;
   padding: 10px 12px;
+  color: #0f172a;
   font: inherit;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #1f5eff;
+  box-shadow: 0 0 0 3px rgba(31, 94, 255, 0.1);
 }
 
 textarea {
@@ -34,21 +47,24 @@ textarea {
 
 .upload input {
   min-height: auto;
+  padding: 12px;
+  background: #f8fafc;
 }
 
 .actions {
   display: flex;
   justify-content: flex-end;
+  padding-top: 4px;
 }
 
 .images {
-  margin-top: 18px;
+  margin-top: 22px;
 }
 
 .preview-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  gap: 14px;
 
   img {
     width: 100%;
@@ -58,8 +74,9 @@ textarea {
   }
 
   article {
-    border: 1px solid var(--border);
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
+    background: #ffffff;
     padding: 10px;
   }
 }
@@ -70,4 +87,3 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
-
