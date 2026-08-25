@@ -7,9 +7,13 @@
       <button mat-button (click)="auth.logout()">Sair</button>
     </nav>
   </header>
+
   <main>
     <div class="admin-title">
-      <h1>Dashboard</h1>
+      <div>
+        <h1>Dashboard</h1>
+        <p class="admin-subtitle">Visao geral do painel imobiliario.</p>
+      </div>
       <a mat-flat-button color="primary" routerLink="/admin/imoveis/novo">
         <mat-icon>add</mat-icon>
         Novo imovel
@@ -18,16 +22,20 @@
 
     <section class="metrics">
       <mat-card>
-        <mat-card-title>{{ data().quantidade_imoveis }}</mat-card-title>
-        <mat-card-subtitle>Imoveis cadastrados</mat-card-subtitle>
+        <div class="metric-content">
+          <mat-card-subtitle>Imoveis cadastrados</mat-card-subtitle>
+          <mat-card-title>{{ data().quantidade_imoveis }}</mat-card-title>
+        </div>
       </mat-card>
       <mat-card>
-        <mat-card-title>{{ data().quantidade_acessos }}</mat-card-title>
-        <mat-card-subtitle>Acessos registrados</mat-card-subtitle>
+        <div class="metric-content">
+          <mat-card-subtitle>Acessos registrados</mat-card-subtitle>
+          <mat-card-title>{{ data().quantidade_acessos }}</mat-card-title>
+        </div>
       </mat-card>
     </section>
 
-    <section class="admin-card">
+    <section class="admin-card recent-card">
       <h2>Ultimos imoveis</h2>
       @for (item of data().ultimos_imoveis; track item.id) {
         <div class="recent">
@@ -35,9 +43,10 @@
           <strong>{{ item.preco | currency: 'BRL' }}</strong>
         </div>
       } @empty {
-        <p>Nenhum imovel cadastrado ainda.</p>
+        <div class="empty-state">
+          <p>Nenhum imovel cadastrado ainda.</p>
+        </div>
       }
     </section>
   </main>
 </div>
-
