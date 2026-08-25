@@ -24,6 +24,7 @@ export interface Property {
   banheiros: number;
   garagem: number;
   status: PropertyStatus;
+  destacado: boolean;
   created_at: string;
   updated_at: string;
   imagens: PropertyImage[];
@@ -42,10 +43,10 @@ export interface PropertyFilters {
   cidade?: string;
   bairro?: string;
   tipo?: string;
+  destacado?: boolean;
   preco_min?: number;
   preco_max?: number;
   search?: string;
   page?: number;
   size?: number;
 }
-
