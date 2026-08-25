@@ -5,7 +5,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { catchError, of, switchMap } from 'rxjs';
 
 import { Property } from '../../core/models/property.model';
-import { MOCK_PROPERTIES } from '../../core/services/mock-properties';
 import { PropertyService } from '../../core/services/property.service';
 import { STATIC_URL } from '../../core/services/api-url';
 import { PropertyCard } from '../../shared/components/property-card/property-card';
@@ -18,7 +17,8 @@ import { PropertyCard } from '../../shared/components/property-card/property-car
 })
 export class PropertyDetail implements OnInit {
   readonly property = signal<Property | null>(null);
-  readonly related = signal<Property[]>(MOCK_PROPERTIES.slice(0, 2));
+  readonly related = signal<Property[]>([]);
+
   readonly coverImage = computed(() => {
     const item = this.property();
     const image = item?.imagens?.find((img) => img.principal) ?? item?.imagens?.[0];
@@ -26,6 +26,7 @@ export class PropertyDetail implements OnInit {
       ? `${STATIC_URL}${image.url}`
       : 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=80';
   });
+
   readonly mapUrl = computed<SafeResourceUrl>(() => {
     const item = this.property();
     const query = item ? `${item.endereco} ${item.cidade}` : 'Joao Pessoa PB';
@@ -44,7 +45,9 @@ export class PropertyDetail implements OnInit {
     this.route.paramMap
       .pipe(
         switchMap((params) =>
-          this.propertyService.get(Number(params.get('id'))).pipe(catchError(() => of(MOCK_PROPERTIES[0]))),
+          this.propertyService
+            .get(Number(params.get('id')))
+            .pipe(catchError(() => of(null))),
         ),
       )
       .subscribe((property) => this.property.set(property));
@@ -52,6 +55,6 @@ export class PropertyDetail implements OnInit {
 
   whatsappLink(property: Property): string {
     const message = encodeURIComponent(`Ola, quero mais informacoes sobre o imovel ${property.nome}.`);
-    return `https://wa.me/5583999999999?text=${message}`;
+    return `https://wa.me/556181200528?text=${message}`;
   }
 }
