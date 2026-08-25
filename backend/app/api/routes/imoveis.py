@@ -25,6 +25,7 @@ def list_imoveis(
     cidade: str | None = None,
     bairro: str | None = None,
     tipo: str | None = None,
+    destacado: bool | None = None,
     preco_min: Decimal | None = None,
     preco_max: Decimal | None = None,
     search: str | None = None,
@@ -40,6 +41,8 @@ def list_imoveis(
         filters.append(Imovel.bairro.ilike(f"%{bairro}%"))
     if tipo:
         filters.append(Imovel.tipo == tipo)
+    if destacado is not None:
+        filters.append(Imovel.destacado.is_(destacado))
     if preco_min is not None:
         filters.append(Imovel.preco >= preco_min)
     if preco_max is not None:
@@ -99,4 +102,3 @@ def delete_imovel(
         raise HTTPException(status_code=404, detail="Imovel nao encontrado")
     db.delete(imovel)
     db.commit()
-
