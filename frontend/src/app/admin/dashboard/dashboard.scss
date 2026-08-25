@@ -1,27 +1,96 @@
 @use '../admin-shell.scss';
 
+.admin-subtitle {
+  margin: 8px 0 0;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
 .metrics {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  margin-bottom: 18px;
+  gap: 18px;
+  margin-bottom: 22px;
 
   mat-card {
-    padding: 18px;
+    min-height: 128px;
+    display: flex;
+    justify-content: center;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #1f5eff;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+    padding: 22px 26px;
+  }
+
+  .metric-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  mat-card-subtitle {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.95rem;
+    font-weight: 600;
   }
 
   mat-card-title {
-    color: var(--primary);
-    font-size: 2.4rem;
+    margin: 0;
+    color: #0f3fb8;
+    font-size: 2.2rem;
+    line-height: 1;
+    font-weight: 800;
+  }
+}
+
+.recent-card {
+  padding: 0;
+  overflow: hidden;
+
+  h2 {
+    margin: 0;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #0f172a;
+    font-size: 1.2rem;
   }
 }
 
 .recent {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
-  border-top: 1px solid var(--border);
-  padding: 14px 0;
+  border-top: 1px solid #edf2f7;
+  padding: 16px 24px;
+
+  &:first-of-type {
+    border-top: 0;
+  }
+
+  span {
+    color: #334155;
+  }
+
+  strong {
+    color: #0f172a;
+  }
+}
+
+.empty-state {
+  display: grid;
+  place-items: center;
+  min-height: 180px;
+  padding: 32px 24px;
+  text-align: center;
+
+  p {
+    margin: 0;
+    color: #64748b;
+  }
 }
 
 @media (max-width: 720px) {
@@ -29,4 +98,3 @@
     grid-template-columns: 1fr;
   }
 }
-
