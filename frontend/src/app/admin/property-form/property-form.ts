@@ -1,6 +1,7 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -15,6 +16,7 @@ import { PropertyService } from '../../core/services/property.service';
   selector: 'app-property-form',
   imports: [
     MatButtonModule,
+    MatCheckboxModule,
     MatIconModule,
     MatInputModule,
     MatSelectModule,
@@ -45,6 +47,7 @@ export class PropertyForm implements OnInit {
     descricao_curta: ['', Validators.required],
     descricao: ['', Validators.required],
     status: ['Disponivel', Validators.required],
+    destacado: [false],
   });
 
   constructor(

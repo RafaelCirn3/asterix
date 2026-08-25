@@ -20,6 +20,7 @@ class ImovelBase(BaseModel):
     banheiros: int = Field(ge=0)
     garagem: int = Field(ge=0)
     status: str = "Disponivel"
+    destacado: bool = False
 
 
 class ImovelCreate(ImovelBase):
@@ -40,6 +41,7 @@ class ImovelUpdate(BaseModel):
     banheiros: int | None = Field(default=None, ge=0)
     garagem: int | None = Field(default=None, ge=0)
     status: str | None = None
+    destacado: bool | None = None
 
 
 class ImovelRead(ImovelBase):
@@ -56,4 +58,3 @@ class ImovelList(BaseModel):
     total: int
     page: int
     size: int
-

@@ -25,7 +25,6 @@ import {
 } from 'rxjs';
 
 import { Property } from '../../core/models/property.model';
-import { MOCK_PROPERTIES } from '../../core/services/mock-properties';
 import { PropertyService } from '../../core/services/property.service';
 import { PropertyCard } from '../../shared/components/property-card/property-card';
 
@@ -46,26 +45,14 @@ export class Home implements OnInit {
 
   private readonly fb = inject(FormBuilder);
 
-  readonly featured = signal<Property[]>(MOCK_PROPERTIES);
-
-  // ============================================================
-  // DRAWER
-  // ============================================================
+  readonly featured = signal<Property[]>([]);
 
   readonly drawerOpen = signal(false);
 
   @ViewChild('drawer')
   drawer!: ElementRef<HTMLDivElement>;
 
-  // ============================================================
-  // OPERAÇÃO
-  // ============================================================
-
   readonly activeTab = signal<'comprar' | 'alugar'>('comprar');
-
-  // ============================================================
-  // PREÇO
-  // ============================================================
 
   readonly price = signal(800000);
 
@@ -80,17 +67,9 @@ export class Home implements OnInit {
     )
   );
 
-  // ============================================================
-  // QUARTOS
-  // ============================================================
-
   readonly bedroomOptions = [1, 2, 3, 4];
 
   readonly bedrooms = signal<number | null>(null);
-
-  // ============================================================
-  // FORM
-  // ============================================================
 
   readonly searchForm = this.fb.nonNullable.group({
 
@@ -111,19 +90,15 @@ export class Home implements OnInit {
     private readonly router: Router
   ) { }
 
-  // ============================================================
-  // INIT
-  // ============================================================
-
   ngOnInit(): void {
 
     this.propertyService
-      .list({ size: 6 })
+      .list({ size: 6, destacado: true })
       .pipe(
         catchError(() =>
           of({
-            items: MOCK_PROPERTIES,
-            total: 3,
+            items: [],
+            total: 0,
             page: 1,
             size: 6
           })
@@ -131,19 +106,11 @@ export class Home implements OnInit {
       )
       .subscribe(response => {
 
-        this.featured.set(
-          response.items.length
-            ? response.items
-            : MOCK_PROPERTIES
-        );
+        this.featured.set(response.items);
 
       });
 
   }
-
-  // ============================================================
-  // DRAWER
-  // ============================================================
 
   openDrawer(): void {
 
@@ -177,10 +144,6 @@ export class Home implements OnInit {
 
   }
 
-  // ============================================================
-  // FECHAR COM ESC
-  // ============================================================
-
   @HostListener('document:keydown.escape')
 
   onEscape(): void {
@@ -193,10 +156,6 @@ export class Home implements OnInit {
 
   }
 
-  // ============================================================
-  // OPERAÇÃO
-  // ============================================================
-
   setTab(
     tab: 'comprar' | 'alugar'
   ): void {
@@ -204,10 +163,6 @@ export class Home implements OnInit {
     this.activeTab.set(tab);
 
   }
-
-  // ============================================================
-  // PREÇO
-  // ============================================================
 
   updatePrice(
     event: Event
@@ -228,10 +183,6 @@ export class Home implements OnInit {
     });
 
   }
-
-  // ============================================================
-  // QUARTOS
-  // ============================================================
 
   selectBedrooms(
     value: number
@@ -260,10 +211,6 @@ export class Home implements OnInit {
     });
 
   }
-
-  // ============================================================
-  // PESQUISA
-  // ============================================================
 
   search(): void {
 
