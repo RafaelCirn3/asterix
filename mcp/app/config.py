@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     # Cliente MCP -> MCP. Credencial independente da API interna.
     mcp_access_token: str
 
+    # Host publico aceito pelo mecanismo anti-DNS-rebinding do SDK MCP.
+    mcp_public_host: str = "mcp.asterixconsultoria.com.br"
+
     mcp_host: str = "0.0.0.0"
     mcp_port: int = 8000
 
