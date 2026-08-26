@@ -101,6 +101,28 @@ body .hero__content {
   padding-top: 62px !important;
 }
 
+/* Barra de pesquisa da home: proporção mais compacta e alinhada ao hero */
+body .hero__filterbar {
+  width: min(1180px, calc(100% - 120px)) !important;
+  bottom: 30px !important;
+  border-radius: 12px !important;
+}
+body .hero__filterbar .search-form {
+  padding: 8px !important;
+}
+body .hero__filterbar .search-form .field {
+  padding: 4px 14px !important;
+}
+body .hero__filterbar .field__control {
+  height: 36px !important;
+}
+body .hero__filterbar .search-button {
+  min-width: 160px !important;
+  min-height: 44px !important;
+  margin-left: 8px !important;
+  padding: 0 18px !important;
+}
+
 /* Footer */
 body .footer {
   background: linear-gradient(115deg, #064da5 0%, #073b7f 58%, #082f65 100%) !important;
@@ -117,6 +139,9 @@ body .footer {
   body .contact-hero {
     min-height: 290px !important;
     padding: 52px 24px !important;
+  }
+  body .hero__filterbar {
+    width: calc(100% - 44px) !important;
   }
 }
 
