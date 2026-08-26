@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     admin_name: str = "Administrador"
     admin_email: str = "admin@asterix.com.br"
     admin_password: str = "admin123"
+    integration_token: str | None = None
 
     @property
     def cors_origins(self) -> list[str]:
@@ -29,4 +30,3 @@ def get_settings() -> Settings:
 
 
 settings = get_settings()
-
