@@ -1,91 +1,44 @@
 <footer class="footer">
+  <div class="footer__container">
+    <section class="footer__brand">
+      <a class="footer__logo" routerLink="/" aria-label="Asterix Busca Imobiliária">
+        <img src="/asterix-logo.svg" alt="Asterix Busca Imobiliária">
+      </a>
+      <p>Conectamos pessoas às melhores oportunidades imobiliárias e a soluções complementares para uma decisão mais segura.</p>
+      <div class="footer__social">
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="7" r="1" fill="currentColor"/></svg></a>
+        <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M6 9v9M10 18v-5a3 3 0 016 0v5" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="6" cy="5" r="1.5" fill="currentColor"/></svg></a>
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v4h5v-4h3l1-4h-4V9c0-.7.3-1 1-1z" fill="currentColor"/></svg></a>
+      </div>
+    </section>
 
-    <div class="footer__container">
+    <section class="footer__column">
+      <h3>Links rápidos</h3>
+      <a routerLink="/">Início</a>
+      <a routerLink="/imoveis">Buscar imóveis</a>
+      <a routerLink="/parceiros">Parceiros</a>
+    </section>
 
-        <section class="footer__brand">
+    <section class="footer__column">
+      <h3>Institucional</h3>
+      <a routerLink="/sobre">Sobre nós</a>
+      <a routerLink="/contato">Fale conosco</a>
+    </section>
 
-            <a class="footer__logo" routerLink="/">
-                Asterix
-            </a>
+    <section class="footer__column">
+      <h3>Atendimento</h3>
+      <a href="mailto:contato@asterix.com.br">contato@asterix.com.br</a>
+      <a href="tel:+5561981200528">(61) 98120-0528</a>
+      <span>João Pessoa - PB</span>
+      <span>Seg. a sex., 9h às 18h</span>
+    </section>
+  </div>
 
-            <p>
-                Um portal premium de busca imobiliária
-                para encontrar imóveis, oportunidades
-                e parceiros confiáveis em um único lugar.
-            </p>
-
-            <div class="footer__social">
-
-                <a href="#" aria-label="Instagram">
-                    <svg viewBox="0 0 24 24">
-                        <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor"
-                            stroke-width="2" />
-                        <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2" />
-                        <circle cx="17" cy="7" r="1" fill="currentColor" />
-                    </svg>
-                </a>
-
-                <a href="#" aria-label="LinkedIn">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M6 9v9" stroke="currentColor" stroke-width="2" />
-                        <circle cx="6" cy="5" r="1.5" fill="currentColor" />
-                        <path d="M10 18v-5a3 3 0 016 0v5" fill="none" stroke="currentColor" stroke-width="2" />
-                    </svg>
-                </a>
-
-                <a href="#" aria-label="Facebook">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v4h5v-4h3l1-4h-4V9c0-.7.3-1 1-1z"
-                            fill="currentColor" />
-                    </svg>
-                </a>
-
-            </div>
-
-        </section>
-
-        <section class="footer__column">
-            <h3>Imóveis</h3>
-            <a routerLink="/imoveis">Todos os imóveis</a>
-        </section>
-
-        <section class="footer__column">
-            <h3>Empresa</h3>
-            <a routerLink="/sobre">Sobre</a>
-            <a routerLink="/parcerias">Parceiros</a>
-            <a routerLink="/contato">Contato</a>
-        </section>
-
-        <section class="footer__column">
-            <h3>Atendimento</h3>
-
-            <a href="mailto:contato@asterix.com.br">
-                contato@asterix.com.br
-            </a>
-
-            <a href="tel:+556181200528">
-                +55 61 8120-0528
-            </a>
-
-            <span>
-                João Pessoa - PB
-            </span>
-
-        </section>
-
-    </div>
-
-    <div class="footer__bottom">
-
-        <p>
-            © {{ currentYear() }} Asterix. Todos os direitos reservados.
-        </p>
-
-        <nav>
-            <a routerLink="/privacidade">Política de Privacidade</a>
-            <a routerLink="/termos">Termos de Uso</a>
-        </nav>
-
-    </div>
-
+  <div class="footer__bottom">
+    <p>© {{ currentYear() }} Asterix Busca Imobiliária. Todos os direitos reservados.</p>
+    <nav>
+      <a routerLink="/privacidade">Política de Privacidade</a>
+      <a routerLink="/termos">Termos de Uso</a>
+    </nav>
+  </div>
 </footer>
