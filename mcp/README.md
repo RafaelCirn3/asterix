@@ -45,6 +45,7 @@ INTEGRATION_TOKEN=<token-interno>
 
 # cliente externo -> MCP
 MCP_ACCESS_TOKEN=<token-externo>
+MCP_PUBLIC_HOST=mcp.asterixconsultoria.com.br
 ```
 
 `INTEGRATION_TOKEN` autentica somente o container MCP contra `/api/integrations` do FastAPI. `MCP_ACCESS_TOKEN` protege o endpoint MCP publicado externamente e deve ser fornecido somente ao cliente MCP autorizado.
@@ -56,6 +57,8 @@ Authorization: Bearer <MCP_ACCESS_TOKEN>
 ```
 
 O token e comparado no servidor MCP antes de qualquer chamada de ferramenta. Uma credencial invalida recebe HTTP 401.
+
+`MCP_PUBLIC_HOST` alimenta a allowlist de Host do mecanismo anti-DNS-rebinding do SDK MCP. Em producao, mantenha-o igual ao hostname usado pelo proxy HTTPS.
 
 ## Outras variaveis
 
