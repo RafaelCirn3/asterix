@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { Property, PropertyImage, PropertyPayload } from '../../core/models/property.model';
+import { Property, PropertyImage, PropertyPayload, PropertyStatus } from '../../core/models/property.model';
 import { AuthService } from '../../core/services/auth.service';
 import { STATIC_URL } from '../../core/services/api-url';
 import { PropertyService } from '../../core/services/property.service';
@@ -33,20 +33,20 @@ export class PropertyForm implements OnInit {
   readonly selectedFiles = signal<File[]>([]);
   readonly editing = computed(() => Boolean(this.property()));
 
-  readonly form = this.fb.nonNullable.group({
+  readonly form = this.fb.group({
     nome: ['', Validators.required],
-    preco: [0, [Validators.required, Validators.min(1)]],
-    cidade: ['', Validators.required],
-    bairro: ['', Validators.required],
-    endereco: ['', Validators.required],
-    tipo: ['Apartamento', Validators.required],
-    area: [0, [Validators.required, Validators.min(1)]],
-    quartos: [0, Validators.required],
-    banheiros: [0, Validators.required],
-    garagem: [0, Validators.required],
-    descricao_curta: ['', Validators.required],
-    descricao: ['', Validators.required],
-    status: ['Disponivel', Validators.required],
+    preco: [null as number | null, Validators.min(1)],
+    cidade: [''],
+    bairro: [''],
+    endereco: [''],
+    tipo: [''],
+    area: [null as number | null, Validators.min(1)],
+    quartos: [null as number | null, Validators.min(0)],
+    banheiros: [null as number | null, Validators.min(0)],
+    garagem: [null as number | null, Validators.min(0)],
+    descricao_curta: [''],
+    descricao: [''],
+    status: ['Disponivel' as PropertyStatus, Validators.required],
     destacado: [false],
   });
 
@@ -64,7 +64,7 @@ export class PropertyForm implements OnInit {
         this.property.set(property);
         this.form.patchValue({
           ...property,
-          preco: Number(property.preco),
+          preco: property.preco === null ? null : Number(property.preco),
         });
       });
     }
@@ -86,7 +86,25 @@ export class PropertyForm implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-    const payload = this.form.getRawValue() as PropertyPayload;
+
+    const raw = this.form.getRawValue();
+    const payload: PropertyPayload = {
+      nome: raw.nome!.trim(),
+      preco: raw.preco,
+      cidade: this.optionalText(raw.cidade),
+      bairro: this.optionalText(raw.bairro),
+      endereco: this.optionalText(raw.endereco),
+      tipo: this.optionalText(raw.tipo),
+      area: raw.area,
+      quartos: raw.quartos,
+      banheiros: raw.banheiros,
+      garagem: raw.garagem,
+      descricao_curta: this.optionalText(raw.descricao_curta),
+      descricao: this.optionalText(raw.descricao),
+      status: raw.status as PropertyStatus,
+      destacado: Boolean(raw.destacado),
+    };
+
     const request = this.property()
       ? this.service.update(this.property()!.id, payload)
       : this.service.create(payload);
@@ -125,6 +143,11 @@ export class PropertyForm implements OnInit {
       return;
     }
     this.service.deleteImage(property.id, image.id).subscribe(() => this.reload(property.id));
+  }
+
+  private optionalText(value: string | null): string | null {
+    const normalized = value?.trim() ?? '';
+    return normalized || null;
   }
 
   private reload(id: number): void {

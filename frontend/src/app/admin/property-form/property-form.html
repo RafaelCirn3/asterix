@@ -19,24 +19,25 @@
         <input formControlName="nome" />
       </label>
       <label>
-        Preco
+        Preco <small>(opcional)</small>
         <input formControlName="preco" type="number" />
       </label>
       <label>
-        Cidade
+        Cidade <small>(opcional)</small>
         <input formControlName="cidade" />
       </label>
       <label>
-        Bairro
+        Bairro <small>(opcional)</small>
         <input formControlName="bairro" />
       </label>
       <label class="wide">
-        Endereco
+        Endereco <small>(opcional)</small>
         <input formControlName="endereco" />
       </label>
       <label>
-        Tipo do imovel
+        Tipo do imovel <small>(opcional)</small>
         <select formControlName="tipo">
+          <option value="">Nao informado</option>
           <option>Apartamento</option>
           <option>Casa</option>
           <option>Studio</option>
@@ -56,27 +57,27 @@
         <mat-checkbox formControlName="destacado">Destacar este imóvel na página inicial</mat-checkbox>
       </label>
       <label>
-        Area
+        Area <small>(opcional)</small>
         <input formControlName="area" type="number" />
       </label>
       <label>
-        Quartos
+        Quartos <small>(opcional)</small>
         <input formControlName="quartos" type="number" />
       </label>
       <label>
-        Banheiros
+        Banheiros <small>(opcional)</small>
         <input formControlName="banheiros" type="number" />
       </label>
       <label>
-        Garagem
+        Garagem <small>(opcional; 0 = nao possui)</small>
         <input formControlName="garagem" type="number" />
       </label>
       <label class="wide">
-        Descricao curta
+        Descricao curta <small>(opcional)</small>
         <input formControlName="descricao_curta" />
       </label>
       <label class="wide">
-        Descricao completa
+        Descricao completa <small>(opcional)</small>
         <textarea formControlName="descricao"></textarea>
       </label>
       <label class="wide upload">
