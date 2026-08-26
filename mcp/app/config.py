@@ -6,8 +6,13 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
+    # MCP -> FastAPI. Credencial interna, nunca deve ser entregue ao cliente MCP.
     asterix_api_url: str = "http://backend:8000/api"
     integration_token: str
+
+    # Cliente MCP -> MCP. Credencial independente da API interna.
+    mcp_access_token: str
+
     mcp_host: str = "0.0.0.0"
     mcp_port: int = 8000
 
