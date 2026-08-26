@@ -1,13 +1,15 @@
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
-from sqlalchemy import select
-from sqlalchemy.orm import Session
+from decimal import Decimal
+
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
+from sqlalchemy import func, select
+from sqlalchemy.orm import Session, selectinload
 
 from app.api.deps import verify_integration_token
 from app.db.session import get_db
 from app.models.imagem import Imagem
 from app.models.imovel import Imovel
 from app.schemas.imagem import ImagemRead
-from app.schemas.imovel import ImovelCreate, ImovelRead
+from app.schemas.imovel import ImovelCreate, ImovelList, ImovelRead, ImovelUpdate
 from app.services.files import save_upload
 
 router = APIRouter(
@@ -28,10 +30,79 @@ def add_image_url(imagem: Imagem) -> Imagem:
     return imagem
 
 
+@router.get("/imoveis", response_model=ImovelList)
+def list_imoveis(
+    db: Session = Depends(get_db),
+    cidade: str | None = None,
+    bairro: str | None = None,
+    tipo: str | None = None,
+    destacado: bool | None = None,
+    preco_min: Decimal | None = None,
+    preco_max: Decimal | None = None,
+    search: str | None = None,
+    page: int = Query(default=1, ge=1),
+    size: int = Query(default=20, ge=1, le=100),
+) -> ImovelList:
+    stmt = select(Imovel).options(selectinload(Imovel.imagens)).order_by(Imovel.created_at.desc())
+    count_stmt = select(func.count(Imovel.id))
+    filters = []
+
+    if cidade:
+        filters.append(Imovel.cidade.ilike(f"%{cidade}%"))
+    if bairro:
+        filters.append(Imovel.bairro.ilike(f"%{bairro}%"))
+    if tipo:
+        filters.append(Imovel.tipo == tipo)
+    if destacado is not None:
+        filters.append(Imovel.destacado.is_(destacado))
+    if preco_min is not None:
+        filters.append(Imovel.preco >= preco_min)
+    if preco_max is not None:
+        filters.append(Imovel.preco <= preco_max)
+    if search:
+        filters.append(Imovel.nome.ilike(f"%{search}%"))
+
+    if filters:
+        stmt = stmt.where(*filters)
+        count_stmt = count_stmt.where(*filters)
+
+    total = db.scalar(count_stmt) or 0
+    items = db.scalars(stmt.offset((page - 1) * size).limit(size)).all()
+    return ImovelList(items=[with_image_urls(item) for item in items], total=total, page=page, size=size)
+
+
+@router.get("/imoveis/{imovel_id}", response_model=ImovelRead)
+def get_imovel(imovel_id: int, db: Session = Depends(get_db)) -> Imovel:
+    imovel = db.scalar(
+        select(Imovel).options(selectinload(Imovel.imagens)).where(Imovel.id == imovel_id)
+    )
+    if imovel is None:
+        raise HTTPException(status_code=404, detail="Imovel nao encontrado")
+    return with_image_urls(imovel)
+
+
 @router.post("/imoveis", response_model=ImovelRead, status_code=201)
 def create_imovel(payload: ImovelCreate, db: Session = Depends(get_db)) -> Imovel:
     imovel = Imovel(**payload.model_dump())
     db.add(imovel)
+    db.commit()
+    db.refresh(imovel)
+    return with_image_urls(imovel)
+
+
+@router.patch("/imoveis/{imovel_id}", response_model=ImovelRead)
+def update_imovel(
+    imovel_id: int,
+    payload: ImovelUpdate,
+    db: Session = Depends(get_db),
+) -> Imovel:
+    imovel = db.get(Imovel, imovel_id)
+    if imovel is None:
+        raise HTTPException(status_code=404, detail="Imovel nao encontrado")
+
+    for field, value in payload.model_dump(exclude_unset=True).items():
+        setattr(imovel, field, value)
+
     db.commit()
     db.refresh(imovel)
     return with_image_urls(imovel)
