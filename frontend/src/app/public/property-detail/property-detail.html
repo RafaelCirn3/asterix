@@ -11,16 +11,20 @@
 
     <section class="content">
       <article>
-        <p class="eyebrow">{{ item.tipo }} em {{ item.bairro }}</p>
+        <p class="eyebrow">{{ item.tipo || 'Imóvel' }} em {{ item.bairro || 'localização não informada' }}</p>
         <h1>{{ item.nome }}</h1>
-        <strong class="price">{{ item.preco | currency: 'BRL' }}</strong>
-        <p class="address">{{ item.endereco }}, {{ item.bairro }}, {{ item.cidade }}</p>
-        <p>{{ item.descricao }}</p>
+        <strong class="price">{{ item.preco !== null ? (item.preco | currency: 'BRL') : 'Preço sob consulta' }}</strong>
+        <p class="address">
+          {{ item.endereco || 'Endereço não informado' }}
+          @if (item.bairro) {, {{ item.bairro }}}
+          @if (item.cidade) {, {{ item.cidade }}}
+        </p>
+        <p>{{ item.descricao || 'Descrição não informada.' }}</p>
         <div class="features">
-          <span>{{ item.area }} m²</span>
-          <span>{{ item.quartos }} quartos</span>
-          <span>{{ item.banheiros }} banheiros</span>
-          <span>{{ item.garagem }} vagas</span>
+          <span>{{ item.area !== null ? item.area + ' m²' : 'Área não informada' }}</span>
+          <span>{{ item.quartos !== null ? item.quartos + ' quartos' : 'Quartos não informados' }}</span>
+          <span>{{ item.banheiros !== null ? item.banheiros + ' banheiros' : 'Banheiros não informados' }}</span>
+          <span>{{ item.garagem === null ? 'Garagem não informada' : item.garagem === 0 ? 'Sem garagem' : item.garagem + ' vagas' }}</span>
           <span>{{ item.status }}</span>
         </div>
         <a class="whatsapp" [href]="whatsappLink(item)" target="_blank" rel="noreferrer">Contato via WhatsApp</a>
