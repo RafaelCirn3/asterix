@@ -30,6 +30,35 @@ Endpoints locais:
 - Swagger: `http://localhost:8001/api/docs`
 - Admin: `http://localhost:4200/admin/login`
 
+## Integração externa de imóveis
+
+O backend possui uma credencial de serviço separada do login administrativo. Configure `INTEGRATION_TOKEN` no ambiente e envie o token como Bearer nas rotas de integração.
+
+Rotas disponíveis:
+
+- `POST /api/integrations/imoveis` cria um imóvel.
+- `POST /api/integrations/imoveis/{imovel_id}/imagens` envia uma ou mais imagens para o imóvel criado.
+
+Os campos de cadastro que podem não ser conhecidos no momento da publicação aceitam `null`. O campo `nome` permanece obrigatório para identificar o imóvel. Para campos quantitativos, `null` significa "não informado" e `0` pode representar explicitamente "não possui" quando aplicável, como em garagem.
+
+Exemplo de criação:
+
+```bash
+curl -X POST https://asterixconsultoria.com.br/api/integrations/imoveis \
+  -H "Authorization: Bearer $INTEGRATION_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nome": "Apartamento em Cabo Branco",
+    "cidade": "Joao Pessoa",
+    "bairro": "Cabo Branco",
+    "area": 30,
+    "quartos": 1,
+    "garagem": null,
+    "preco": null,
+    "destacado": true
+  }'
+```
+
 ## Produção
 
 Crie o arquivo de ambiente de producao a partir do exemplo:
