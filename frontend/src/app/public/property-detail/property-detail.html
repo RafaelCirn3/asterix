@@ -1,12 +1,3 @@
-<header class="simple-header">
-  <a routerLink="/" class="brand">Asterix</a>
-  <nav>
-    <a routerLink="/imoveis">Imoveis</a>
-    <a routerLink="/sobre">Sobre</a>
-    <a routerLink="/contato">Contato</a>
-  </nav>
-</header>
-
 @if (property(); as item) {
   <main class="detail">
     <section class="gallery">
@@ -26,7 +17,7 @@
         <p class="address">{{ item.endereco }}, {{ item.bairro }}, {{ item.cidade }}</p>
         <p>{{ item.descricao }}</p>
         <div class="features">
-          <span>{{ item.area }} m2</span>
+          <span>{{ item.area }} m²</span>
           <span>{{ item.quartos }} quartos</span>
           <span>{{ item.banheiros }} banheiros</span>
           <span>{{ item.garagem }} vagas</span>
@@ -36,17 +27,13 @@
       </article>
 
       <aside>
-        <h2>Localizacao</h2>
-        <iframe
-          title="Mapa"
-          loading="lazy"
-          [src]="mapUrl()"
-        ></iframe>
+        <h2>Localização</h2>
+        <iframe title="Mapa" loading="lazy" [src]="mapUrl()"></iframe>
       </aside>
     </section>
 
     <section class="related">
-      <h2>Imoveis relacionados</h2>
+      <h2>Imóveis relacionados</h2>
       <div class="property-grid">
         @for (item of related(); track item.id) {
           <app-property-card [property]="item" />
