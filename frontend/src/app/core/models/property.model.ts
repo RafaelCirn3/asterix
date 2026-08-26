@@ -12,17 +12,17 @@ export interface PropertyImage {
 export interface Property {
   id: number;
   nome: string;
-  descricao_curta: string;
-  descricao: string;
-  preco: number;
-  cidade: string;
-  bairro: string;
-  endereco: string;
-  tipo: string;
-  area: number;
-  quartos: number;
-  banheiros: number;
-  garagem: number;
+  descricao_curta: string | null;
+  descricao: string | null;
+  preco: number | null;
+  cidade: string | null;
+  bairro: string | null;
+  endereco: string | null;
+  tipo: string | null;
+  area: number | null;
+  quartos: number | null;
+  banheiros: number | null;
+  garagem: number | null;
   status: PropertyStatus;
   destacado: boolean;
   created_at: string;
