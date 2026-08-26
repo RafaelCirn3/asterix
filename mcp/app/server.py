@@ -2,6 +2,7 @@ import hmac
 from typing import Any
 
 from mcp.server import MCPServer
+from mcp.server.transport_security import TransportSecuritySettings
 
 from app.client import client
 from app.config import settings
@@ -160,5 +161,15 @@ async def editar_imovel(
     return await client.editar_imovel(imovel_id, payload)
 
 
-mcp_app = mcp.streamable_http_app()
+transport_security = TransportSecuritySettings(
+    allowed_hosts=[
+        settings.mcp_public_host,
+        f"{settings.mcp_public_host}:*",
+        "127.0.0.1:*",
+        "localhost:*",
+    ],
+    allowed_origins=[],
+)
+
+mcp_app = mcp.streamable_http_app(transport_security=transport_security)
 app = BearerAuthMiddleware(mcp_app, settings.mcp_access_token)
