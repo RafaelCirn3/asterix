@@ -18,11 +18,14 @@ Nao existem ferramentas de exclusao, usuarios ou administracao do banco nesta ve
 ```text
 Cliente MCP
     |
-    | Streamable HTTP
+    | HTTPS + Bearer MCP_ACCESS_TOKEN
     v
-Asterix MCP
+Nginx / Cloudflare
     |
-    | HTTP + INTEGRATION_TOKEN
+    v
+Asterix MCP (127.0.0.1:8002)
+    |
+    | HTTP interno + INTEGRATION_TOKEN
     v
 FastAPI (backend:8000/api)
     |
@@ -32,34 +35,59 @@ PostgreSQL
 
 O MCP nunca acessa o PostgreSQL diretamente. Toda operacao passa pela API de integracao do backend.
 
-## Variaveis
+## Separacao das credenciais
 
-O servico utiliza:
+Existem duas credenciais diferentes e elas nao devem ser reutilizadas:
 
 ```env
-INTEGRATION_TOKEN=<mesmo token configurado no backend>
+# MCP -> backend
+INTEGRATION_TOKEN=<token-interno>
+
+# cliente externo -> MCP
+MCP_ACCESS_TOKEN=<token-externo>
+```
+
+`INTEGRATION_TOKEN` autentica somente o container MCP contra `/api/integrations` do FastAPI. `MCP_ACCESS_TOKEN` protege o endpoint MCP publicado externamente e deve ser fornecido somente ao cliente MCP autorizado.
+
+O cliente envia:
+
+```http
+Authorization: Bearer <MCP_ACCESS_TOKEN>
+```
+
+O token e comparado no servidor MCP antes de qualquer chamada de ferramenta. Uma credencial invalida recebe HTTP 401.
+
+## Outras variaveis
+
+```env
 ASTERIX_API_URL=http://backend:8000/api
 ```
 
-Em producao, `ASTERIX_API_URL` ja e definido pelo `docker-compose.prod.yml`. O token deve existir apenas no ambiente e nunca ser commitado.
+Em producao, `ASTERIX_API_URL` ja e definido pelo `docker-compose.prod.yml`. Secrets devem existir apenas no ambiente e nunca ser commitados.
 
 ## Execucao em producao
 
 ```bash
-docker compose -f docker-compose.prod.yml build mcp backend
+docker compose -f docker-compose.prod.yml build backend mcp
 docker compose -f docker-compose.prod.yml up -d backend mcp
 docker compose -f docker-compose.prod.yml logs -f mcp
 ```
 
-O container MCP fica disponivel apenas no loopback da VPS em `127.0.0.1:8002`, e o endpoint MCP e `/mcp`.
+O container MCP permanece publicado apenas no loopback da VPS em `127.0.0.1:8002`. A porta 8002 nunca deve ser aberta diretamente no firewall/security group.
 
-Para testar da propria VPS:
+O endpoint local e:
 
 ```text
 http://127.0.0.1:8002/mcp
 ```
 
-Antes de conectar um cliente MCP externo, deve ser adicionada uma camada de autenticacao na entrada publica e configurado o proxy HTTPS. Nao exponha a porta 8002 diretamente para a internet.
+Depois do proxy HTTPS, o endpoint externo previsto e:
+
+```text
+https://mcp.asterixconsultoria.com.br/mcp
+```
+
+A configuracao de Nginx necessaria esta documentada em `docs/nginx-vps.md`.
 
 ## Semantica de campos opcionais
 
