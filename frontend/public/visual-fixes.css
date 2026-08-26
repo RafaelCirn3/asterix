@@ -1,0 +1,145 @@
+/* Correções de integração visual para sobrepor estilos legados encapsulados. */
+
+/* Logo */
+body .header__brand img {
+  width: 230px !important;
+  max-height: 58px !important;
+  height: auto !important;
+}
+body .footer__logo {
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+body .footer__logo img {
+  width: 220px !important;
+  height: auto !important;
+  filter: brightness(0) invert(1) !important;
+}
+
+/* Páginas públicas: neutraliza paddings e limites dos estilos antigos */
+body .about,
+body .partners,
+body .properties,
+body .contact-page {
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+body .about__hero,
+body .partners-hero,
+body .properties-hero,
+body .contact-hero {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  min-height: 330px !important;
+  padding: 68px max(28px, calc((100% - 1360px) / 2 + 28px)) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  background: linear-gradient(120deg, #075fc4 0%, #0a4d9e 52%, #0d3974 100%) !important;
+  color: #fff !important;
+}
+body .about__hero > p,
+body .partners-hero > p:first-child,
+body .properties-hero > p:first-child,
+body .contact-hero > p {
+  color: #dcecff !important;
+  margin: 0 0 12px !important;
+}
+body .about__hero h1,
+body .partners-hero h1,
+body .properties-hero h1,
+body .contact-hero h1 {
+  max-width: 760px !important;
+  margin: 0 !important;
+  color: #fff !important;
+  font-size: clamp(2.25rem, 4vw, 3.5rem) !important;
+  line-height: 1.06 !important;
+}
+body .about__hero > span,
+body .partners-hero .hero-description,
+body .properties-hero .hero-description,
+body .contact-hero > span {
+  max-width: 720px !important;
+  margin-top: 16px !important;
+  color: rgba(255,255,255,.9) !important;
+  line-height: 1.65 !important;
+}
+
+/* Conteúdo abaixo dos heroes */
+body .about-section,
+body .partners-list,
+body .contact-grid,
+body .location,
+body .properties-content,
+body .pagination {
+  width: min(1360px, calc(100% - 48px)) !important;
+  max-width: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+body .about-section:first-of-type,
+body .partners-list,
+body .contact-grid,
+body .properties-content {
+  margin-top: 0 !important;
+}
+
+/* Home hero */
+body .hero {
+  min-height: 500px !important;
+}
+body .hero__bg {
+  image-rendering: auto !important;
+  object-fit: cover !important;
+  object-position: center 48% !important;
+}
+body .hero__content {
+  padding-top: 62px !important;
+}
+
+/* Footer */
+body .footer {
+  background: linear-gradient(115deg, #064da5 0%, #073b7f 58%, #082f65 100%) !important;
+}
+
+@media (max-width: 900px) {
+  body .header__brand img {
+    width: 190px !important;
+    max-height: 52px !important;
+  }
+  body .about__hero,
+  body .partners-hero,
+  body .properties-hero,
+  body .contact-hero {
+    min-height: 290px !important;
+    padding: 52px 24px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  body .header__brand img {
+    width: 164px !important;
+    max-height: 46px !important;
+  }
+  body .hero {
+    min-height: 470px !important;
+  }
+  body .about__hero h1,
+  body .partners-hero h1,
+  body .properties-hero h1,
+  body .contact-hero h1 {
+    font-size: clamp(2rem, 10vw, 2.7rem) !important;
+  }
+  body .about-section,
+  body .partners-list,
+  body .contact-grid,
+  body .location,
+  body .properties-content,
+  body .pagination {
+    width: min(100% - 28px, 1360px) !important;
+  }
+}
