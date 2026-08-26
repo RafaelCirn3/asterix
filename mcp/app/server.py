@@ -1,8 +1,44 @@
+import hmac
 from typing import Any
 
 from mcp.server import MCPServer
 
 from app.client import client
+from app.config import settings
+
+
+class BearerAuthMiddleware:
+    """ASGI middleware simples para proteger toda a entrada HTTP do servidor MCP."""
+
+    def __init__(self, app: Any, token: str) -> None:
+        self.app = app
+        self.expected = f"Bearer {token}"
+
+    async def __call__(self, scope: dict[str, Any], receive: Any, send: Any) -> None:
+        if scope.get("type") != "http":
+            await self.app(scope, receive, send)
+            return
+
+        headers = {key.lower(): value for key, value in scope.get("headers", [])}
+        authorization = headers.get(b"authorization", b"").decode("utf-8")
+
+        if not hmac.compare_digest(authorization, self.expected):
+            body = b'{"detail":"MCP access token invalido"}'
+            await send(
+                {
+                    "type": "http.response.start",
+                    "status": 401,
+                    "headers": [
+                        (b"content-type", b"application/json"),
+                        (b"content-length", str(len(body)).encode("ascii")),
+                        (b"www-authenticate", b"Bearer"),
+                    ],
+                }
+            )
+            await send({"type": "http.response.body", "body": body})
+            return
+
+        await self.app(scope, receive, send)
 
 
 mcp = MCPServer(
@@ -124,4 +160,5 @@ async def editar_imovel(
     return await client.editar_imovel(imovel_id, payload)
 
 
-app = mcp.streamable_http_app()
+mcp_app = mcp.streamable_http_app()
+app = BearerAuthMiddleware(mcp_app, settings.mcp_access_token)
