@@ -41,6 +41,22 @@ services:
     networks:
       - app_internal
 
+  mcp:
+    build:
+      context: ./mcp
+    env_file:
+      - ./.env.production
+    environment:
+      ASTERIX_API_URL: http://backend:8000/api
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8002:8000"
+    restart: unless-stopped
+    networks:
+      - app_internal
+
   frontend:
     build:
       context: ./frontend
