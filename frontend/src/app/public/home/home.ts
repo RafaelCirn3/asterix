@@ -37,7 +37,7 @@ import { PropertyCard } from '../../shared/components/property-card/property-car
     RouterLink
   ],
   templateUrl: './home.html',
-  styleUrls: ['./home.scss', './home-carousel.scss']
+  styleUrls: ['./home.scss', './home-carousel.scss', './home-searchbar-fix.scss']
 })
 export class Home implements OnInit {
   private readonly fb = inject(FormBuilder);
