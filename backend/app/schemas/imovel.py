@@ -1,9 +1,13 @@
 from datetime import datetime
 from decimal import Decimal
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.schemas.imagem import ImagemRead
+
+
+TipoAnuncio = Literal["Aluguel", "Venda"]
 
 
 class ImovelBase(BaseModel):
@@ -15,6 +19,8 @@ class ImovelBase(BaseModel):
     bairro: str | None = None
     endereco: str | None = None
     tipo: str | None = None
+    tipo_anuncio: TipoAnuncio | None = None
+    numero: str | None = Field(default=None, max_length=30)
     area: int | None = Field(default=None, ge=1)
     quartos: int | None = Field(default=None, ge=0)
     banheiros: int | None = Field(default=None, ge=0)
@@ -36,6 +42,8 @@ class ImovelUpdate(BaseModel):
     bairro: str | None = None
     endereco: str | None = None
     tipo: str | None = None
+    tipo_anuncio: TipoAnuncio | None = None
+    numero: str | None = Field(default=None, max_length=30)
     area: int | None = Field(default=None, ge=1)
     quartos: int | None = Field(default=None, ge=0)
     banheiros: int | None = Field(default=None, ge=0)
