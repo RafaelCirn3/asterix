@@ -20,6 +20,9 @@ import { AuthService } from '../../core/services/auth.service';
 import { STATIC_URL } from '../../core/services/api-url';
 import { PropertyService } from '../../core/services/property.service';
 
+const MAX_IMAGES_PER_PROPERTY = 20;
+const MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024;
+
 @Component({
   selector: 'app-property-form',
   imports: [
@@ -43,6 +46,9 @@ export class PropertyForm implements OnInit {
   readonly selectedFiles = signal<File[]>([]);
   readonly saving = signal(false);
   readonly editing = computed(() => Boolean(this.property()));
+  readonly remainingImageSlots = computed(() =>
+    Math.max(0, MAX_IMAGES_PER_PROPERTY - (this.property()?.imagens?.length ?? 0)),
+  );
 
   readonly form = this.fb.group({
     nome: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(180)]],
@@ -93,6 +99,30 @@ export class PropertyForm implements OnInit {
   onFilesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const files = Array.from(input.files ?? []);
+    const available = this.remainingImageSlots();
+
+    if (files.length > available) {
+      this.clearSelectedFiles(input);
+      this.snackBar.open(
+        `Este imóvel pode ter no máximo ${MAX_IMAGES_PER_PROPERTY} imagens. Você pode adicionar mais ${available}.`,
+        'Fechar',
+        { duration: 7000 },
+      );
+      return;
+    }
+
+    const oversized = files.find((file) => file.size > MAX_IMAGE_SIZE_BYTES);
+    if (oversized) {
+      this.clearSelectedFiles(input);
+      this.snackBar.open(
+        `A imagem "${oversized.name}" excede 10 MB. Reduza o tamanho do arquivo e tente novamente.`,
+        'Fechar',
+        { duration: 7000 },
+      );
+      return;
+    }
+
+    this.revokePreviews();
     this.selectedFiles.set(files);
     this.previews.set(files.map((file) => URL.createObjectURL(file)));
   }
@@ -212,12 +242,25 @@ export class PropertyForm implements OnInit {
         this.saving.set(false);
         this.notifyError(
           error,
-          'O imóvel foi salvo, mas o upload das imagens falhou. Abra o imóvel para tentar enviar as imagens novamente.',
-          9000,
+          'O imóvel foi salvo, mas uma ou mais imagens não puderam ser enviadas. As imagens são enviadas individualmente; abra o imóvel para conferir a galeria e tentar novamente apenas as que faltaram.',
+          10000,
         );
         this.router.navigate(['/admin/imoveis', property.id, 'editar']);
       },
     });
+  }
+
+  private clearSelectedFiles(input: HTMLInputElement): void {
+    this.revokePreviews();
+    this.selectedFiles.set([]);
+    this.previews.set([]);
+    input.value = '';
+  }
+
+  private revokePreviews(): void {
+    for (const preview of this.previews()) {
+      URL.revokeObjectURL(preview);
+    }
   }
 
   private optionalText(value: string | null): string | null {
@@ -241,6 +284,8 @@ export class PropertyForm implements OnInit {
       detail = 'Sua sessão expirou ou não é válida. Faça login novamente.';
     } else if (error.status === 403) {
       detail = 'Você não tem permissão para realizar esta operação.';
+    } else if (error.status === 413) {
+      detail = 'A imagem excede o limite aceito pelo servidor. Cada imagem deve ter no máximo 10 MB.';
     } else if (error.status === 422) {
       detail = this.validationMessage(error) || 'Alguns dados enviados são inválidos. Revise o formulário.';
     } else if (error.status >= 500) {

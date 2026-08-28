@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user
@@ -8,7 +8,7 @@ from app.models.imagem import Imagem
 from app.models.imovel import Imovel
 from app.models.usuario import Usuario
 from app.schemas.imagem import ImagemRead, ImagemUpdate
-from app.services.files import delete_upload, save_upload
+from app.services.files import MAX_IMAGES_PER_PROPERTY, delete_upload, save_upload
 
 router = APIRouter(prefix="/imoveis/{imovel_id}/imagens", tags=["Imagens"], dependencies=[Depends(get_current_user)])
 
@@ -27,22 +27,48 @@ async def upload_imagens(
 ) -> list[Imagem]:
     if db.get(Imovel, imovel_id) is None:
         raise HTTPException(status_code=404, detail="Imovel nao encontrado")
-    current_count = len(db.scalars(select(Imagem).where(Imagem.imovel_id == imovel_id)).all())
-    imagens: list[Imagem] = []
-    for index, file in enumerate(files):
-        try:
-            arquivo = await save_upload(file)
-        except ValueError as exc:
-            raise HTTPException(status_code=400, detail=str(exc)) from exc
-        imagem = Imagem(
-            imovel_id=imovel_id,
-            arquivo=arquivo,
-            principal=current_count == 0 and index == 0,
-            ordem=current_count + index,
+    if not files:
+        raise HTTPException(status_code=400, detail="Nenhuma imagem foi enviada")
+
+    current_count = db.scalar(
+        select(func.count(Imagem.id)).where(Imagem.imovel_id == imovel_id)
+    ) or 0
+    if current_count + len(files) > MAX_IMAGES_PER_PROPERTY:
+        available = max(0, MAX_IMAGES_PER_PROPERTY - current_count)
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                f"Cada imovel pode ter no maximo {MAX_IMAGES_PER_PROPERTY} imagens. "
+                f"Este imovel ainda permite {available}."
+            ),
         )
-        db.add(imagem)
-        imagens.append(imagem)
-    db.commit()
+
+    imagens: list[Imagem] = []
+    saved_files: list[str] = []
+    try:
+        for index, file in enumerate(files):
+            arquivo = await save_upload(file)
+            saved_files.append(arquivo)
+            imagem = Imagem(
+                imovel_id=imovel_id,
+                arquivo=arquivo,
+                principal=current_count == 0 and index == 0,
+                ordem=current_count + index,
+            )
+            db.add(imagem)
+            imagens.append(imagem)
+        db.commit()
+    except ValueError as exc:
+        db.rollback()
+        for filename in saved_files:
+            delete_upload(filename)
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception:
+        db.rollback()
+        for filename in saved_files:
+            delete_upload(filename)
+        raise
+
     for imagem in imagens:
         db.refresh(imagem)
     return [add_url(imagem) for imagem in imagens]
@@ -76,4 +102,3 @@ def delete_imagem(imovel_id: int, imagem_id: int, db: Session = Depends(get_db))
     delete_upload(imagem.arquivo)
     db.delete(imagem)
     db.commit()
-

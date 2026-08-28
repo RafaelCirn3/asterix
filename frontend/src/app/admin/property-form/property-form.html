@@ -121,7 +121,14 @@
       </label>
       <label class="wide upload">
         Galeria de imagens
-        <input type="file" multiple accept="image/png,image/jpeg,image/webp" (change)="onFilesSelected($event)" />
+        <small>Máximo de 20 imagens por imóvel, até 10 MB por imagem. Espaços disponíveis: {{ remainingImageSlots() }}.</small>
+        <input
+          type="file"
+          multiple
+          accept="image/png,image/jpeg,image/webp"
+          [disabled]="remainingImageSlots() === 0"
+          (change)="onFilesSelected($event)"
+        />
       </label>
       @if (previews().length) {
         <div class="wide preview-grid">
