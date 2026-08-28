@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { concatMap, from, reduce } from 'rxjs';
 
 import { Property, PropertyFilters, PropertyImage, PropertyList, PropertyPayload } from '../models/property.model';
 import { API_URL } from './api-url';
@@ -35,9 +36,14 @@ export class PropertyService {
   }
 
   uploadImages(propertyId: number, files: File[]) {
-    const formData = new FormData();
-    files.forEach((file) => formData.append('files', file));
-    return this.http.post<PropertyImage[]>(`${API_URL}/imoveis/${propertyId}/imagens`, formData);
+    return from(files).pipe(
+      concatMap((file) => {
+        const formData = new FormData();
+        formData.append('files', file);
+        return this.http.post<PropertyImage[]>(`${API_URL}/imoveis/${propertyId}/imagens`, formData);
+      }),
+      reduce((images, batch) => [...images, ...batch], [] as PropertyImage[]),
+    );
   }
 
   updateImage(propertyId: number, imageId: number, payload: Partial<PropertyImage>) {
@@ -48,4 +54,3 @@ export class PropertyService {
     return this.http.delete<void>(`${API_URL}/imoveis/${propertyId}/imagens/${imageId}`);
   }
 }
-
