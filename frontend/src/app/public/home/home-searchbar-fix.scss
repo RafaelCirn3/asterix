@@ -1,0 +1,31 @@
+/* Correção isolada: mantém a barra de busca centralizada horizontalmente no hero. */
+
+@media (min-width: 769px) {
+  .hero__filterbar {
+    position: absolute;
+    left: 50%;
+    right: auto;
+    bottom: 28px;
+    width: min(1180px, calc(100% - 64px));
+    max-width: 1180px;
+    margin: 0;
+    padding: 0 18px;
+    box-sizing: border-box;
+    transform: translateX(-50%);
+    z-index: 4;
+  }
+
+  .hero__filterbar .search-form {
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hero__filterbar {
+    width: calc(100% - 48px);
+    max-width: 860px;
+    bottom: 22px;
+  }
+}
