@@ -1,5 +1,5 @@
 import hmac
-from typing import Any
+from typing import Any, Literal
 
 from mcp.server import MCPServer
 from mcp.server.transport_security import TransportSecuritySettings
@@ -48,7 +48,8 @@ mcp = MCPServer(
         "Ferramentas administrativas do Asterix para consultar, listar, criar e editar imoveis. "
         "Campos ausentes representam informacao nao fornecida. Em campos numericos, zero representa "
         "explicitamente que o imovel nao possui aquele item, enquanto null representa nao informado. "
-        "Nao ha ferramentas de exclusao neste servidor."
+        "O tipo de anuncio, quando informado, deve ser Aluguel ou Venda. O campo numero representa "
+        "o WhatsApp do corretor responsavel pelo imovel. Nao ha ferramentas de exclusao neste servidor."
     ),
 )
 
@@ -95,6 +96,8 @@ async def criar_imovel(
     bairro: str | None = None,
     endereco: str | None = None,
     tipo: str | None = None,
+    tipo_anuncio: Literal["Aluguel", "Venda"] | None = None,
+    numero: str | None = None,
     area: int | None = None,
     quartos: int | None = None,
     banheiros: int | None = None,
@@ -102,7 +105,7 @@ async def criar_imovel(
     status: str = "Disponivel",
     destacado: bool = False,
 ) -> dict[str, Any]:
-    """Cria um imovel. Use null para informacao desconhecida e 0 quando souber que nao possui o item."""
+    """Cria um imovel. numero e o WhatsApp do corretor; tipo_anuncio aceita Aluguel ou Venda."""
     payload = {
         "nome": nome,
         "descricao_curta": descricao_curta,
@@ -112,6 +115,8 @@ async def criar_imovel(
         "bairro": bairro,
         "endereco": endereco,
         "tipo": tipo,
+        "tipo_anuncio": tipo_anuncio,
+        "numero": numero,
         "area": area,
         "quartos": quartos,
         "banheiros": banheiros,
@@ -133,6 +138,8 @@ async def editar_imovel(
     bairro: str | None = None,
     endereco: str | None = None,
     tipo: str | None = None,
+    tipo_anuncio: Literal["Aluguel", "Venda"] | None = None,
+    numero: str | None = None,
     area: int | None = None,
     quartos: int | None = None,
     banheiros: int | None = None,
@@ -150,6 +157,8 @@ async def editar_imovel(
         "bairro": bairro,
         "endereco": endereco,
         "tipo": tipo,
+        "tipo_anuncio": tipo_anuncio,
+        "numero": numero,
         "area": area,
         "quartos": quartos,
         "banheiros": banheiros,

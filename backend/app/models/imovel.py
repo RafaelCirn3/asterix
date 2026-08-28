@@ -19,6 +19,8 @@ class Imovel(Base):
     bairro: Mapped[str | None] = mapped_column(String(120), index=True, nullable=True)
     endereco: Mapped[str | None] = mapped_column(String(255), nullable=True)
     tipo: Mapped[str | None] = mapped_column(String(80), index=True, nullable=True)
+    tipo_anuncio: Mapped[str | None] = mapped_column(String(20), index=True, nullable=True)
+    numero: Mapped[str | None] = mapped_column(String(30), nullable=True)
     area: Mapped[int | None] = mapped_column(Integer, nullable=True)
     quartos: Mapped[int | None] = mapped_column(Integer, nullable=True)
     banheiros: Mapped[int | None] = mapped_column(Integer, nullable=True)

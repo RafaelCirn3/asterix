@@ -16,6 +16,8 @@ import { PropertyCard } from '../../shared/components/property-card/property-car
   styleUrl: './property-detail.scss',
 })
 export class PropertyDetail implements OnInit {
+  private readonly defaultWhatsappNumber = '556181200528';
+
   readonly property = signal<Property | null>(null);
   readonly related = signal<Property[]>([]);
 
@@ -54,7 +56,28 @@ export class PropertyDetail implements OnInit {
   }
 
   whatsappLink(property: Property): string {
-    const message = encodeURIComponent(`Ola, quero mais informacoes sobre o imovel ${property.nome}.`);
-    return `https://wa.me/556181200528?text=${message}`;
+    const number = this.normalizeWhatsappNumber(property.numero) || this.defaultWhatsappNumber;
+    const anuncio = property.tipo_anuncio ? ` para ${property.tipo_anuncio.toLowerCase()}` : '';
+    const message = encodeURIComponent(
+      `Olá, quero mais informações sobre o imóvel ${property.nome}${anuncio}.`,
+    );
+    return `https://wa.me/${number}?text=${message}`;
+  }
+
+  private normalizeWhatsappNumber(value: string | null): string | null {
+    const digits = value?.replace(/\D/g, '') ?? '';
+    if (!digits) {
+      return null;
+    }
+
+    if (digits.startsWith('55')) {
+      return digits;
+    }
+
+    if (digits.length === 10 || digits.length === 11) {
+      return `55${digits}`;
+    }
+
+    return digits;
   }
 }

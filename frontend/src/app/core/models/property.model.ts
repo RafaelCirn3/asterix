@@ -1,4 +1,5 @@
 export type PropertyStatus = 'Disponivel' | 'Vendido' | 'Alugado';
+export type PropertyAdType = 'Aluguel' | 'Venda';
 
 export interface PropertyImage {
   id: number;
@@ -19,6 +20,8 @@ export interface Property {
   bairro: string | null;
   endereco: string | null;
   tipo: string | null;
+  tipo_anuncio: PropertyAdType | null;
+  numero: string | null;
   area: number | null;
   quartos: number | null;
   banheiros: number | null;
@@ -43,6 +46,7 @@ export interface PropertyFilters {
   cidade?: string;
   bairro?: string;
   tipo?: string;
+  tipo_anuncio?: PropertyAdType;
   destacado?: boolean;
   preco_min?: number;
   preco_max?: number;

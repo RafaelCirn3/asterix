@@ -9,7 +9,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { Property, PropertyImage, PropertyPayload, PropertyStatus } from '../../core/models/property.model';
+import {
+  Property,
+  PropertyAdType,
+  PropertyImage,
+  PropertyPayload,
+  PropertyStatus,
+} from '../../core/models/property.model';
 import { AuthService } from '../../core/services/auth.service';
 import { STATIC_URL } from '../../core/services/api-url';
 import { PropertyService } from '../../core/services/property.service';
@@ -45,6 +51,8 @@ export class PropertyForm implements OnInit {
     bairro: [''],
     endereco: [''],
     tipo: [''],
+    tipo_anuncio: [null as PropertyAdType | null],
+    numero: ['', Validators.maxLength(30)],
     area: [null as number | null, Validators.min(1)],
     quartos: [null as number | null, Validators.min(0)],
     banheiros: [null as number | null, Validators.min(0)],
@@ -117,6 +125,8 @@ export class PropertyForm implements OnInit {
       bairro: this.optionalText(raw.bairro),
       endereco: this.optionalText(raw.endereco),
       tipo: this.optionalText(raw.tipo),
+      tipo_anuncio: raw.tipo_anuncio as PropertyAdType | null,
+      numero: this.optionalText(raw.numero),
       area: raw.area,
       quartos: raw.quartos,
       banheiros: raw.banheiros,
