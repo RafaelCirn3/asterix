@@ -52,6 +52,21 @@
         </select>
       </label>
       <label>
+        Tipo anuncio <small>(opcional)</small>
+        <select formControlName="tipo_anuncio">
+          <option [ngValue]="null">Nao informado</option>
+          <option value="Aluguel">Aluguel</option>
+          <option value="Venda">Venda</option>
+        </select>
+      </label>
+      <label>
+        Numero do corretor <small>(WhatsApp, opcional)</small>
+        <input formControlName="numero" inputmode="tel" placeholder="Ex.: 5583999999999" />
+        @if (form.controls.numero.touched && form.controls.numero.invalid) {
+          <small>Informe no máximo 30 caracteres.</small>
+        }
+      </label>
+      <label>
         Status
         <select formControlName="status">
           <option>Disponivel</option>
