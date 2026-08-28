@@ -46,6 +46,9 @@ server {
   }
 
   location /api/ {
+    # O backend aceita imagens de até 10 MB. Mantemos uma margem para o multipart/form-data.
+    client_max_body_size 12m;
+
     proxy_pass http://127.0.0.1:8001;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
@@ -64,6 +67,8 @@ server {
   }
 }
 ```
+
+O painel envia as imagens da galeria individualmente. Cada imóvel pode ter no máximo 20 imagens, com até 10 MB por arquivo. O `client_max_body_size 12m` é necessário no Nginx do host para que uma imagem válida não seja rejeitada com HTTP `413 Payload Too Large` antes de chegar ao FastAPI.
 
 ## Subdomínio MCP
 
