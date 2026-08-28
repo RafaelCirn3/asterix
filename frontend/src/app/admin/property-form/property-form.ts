@@ -94,6 +94,11 @@ export class PropertyForm implements OnInit {
       return;
     }
 
+    const trimmedName = this.form.controls.nome.value?.trim() ?? '';
+    if (trimmedName.length < 3) {
+      this.form.controls.nome.setErrors({ ...(this.form.controls.nome.errors ?? {}), trimmedMinLength: true });
+    }
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.snackBar.open(
@@ -106,7 +111,7 @@ export class PropertyForm implements OnInit {
 
     const raw = this.form.getRawValue();
     const payload: PropertyPayload = {
-      nome: raw.nome!.trim(),
+      nome: trimmedName,
       preco: raw.preco,
       cidade: this.optionalText(raw.cidade),
       bairro: this.optionalText(raw.bairro),
@@ -218,22 +223,23 @@ export class PropertyForm implements OnInit {
   }
 
   private notifyError(error: HttpErrorResponse, fallback: string, duration = 7000): void {
-    let message = fallback;
+    let detail = '';
 
     if (error.status === 0) {
-      message = 'Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.';
+      detail = 'Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.';
     } else if (error.status === 401) {
-      message = 'Sua sessão expirou ou não é válida. Faça login novamente.';
+      detail = 'Sua sessão expirou ou não é válida. Faça login novamente.';
     } else if (error.status === 403) {
-      message = 'Você não tem permissão para realizar esta operação.';
+      detail = 'Você não tem permissão para realizar esta operação.';
     } else if (error.status === 422) {
-      message = this.validationMessage(error) || 'Alguns dados enviados são inválidos. Revise o formulário.';
+      detail = this.validationMessage(error) || 'Alguns dados enviados são inválidos. Revise o formulário.';
     } else if (error.status >= 500) {
-      message = 'O servidor encontrou um erro ao processar a solicitação. Tente novamente; se persistir, verifique os logs do backend.';
+      detail = 'O servidor encontrou um erro ao processar a solicitação. Tente novamente; se persistir, verifique os logs do backend.';
     } else if (typeof error.error?.detail === 'string' && error.error.detail.trim()) {
-      message = error.error.detail;
+      detail = error.error.detail;
     }
 
+    const message = detail ? `${fallback} ${detail}` : fallback;
     this.snackBar.open(message, 'Fechar', { duration });
   }
 
