@@ -17,10 +17,16 @@
       <label>
         Nome
         <input formControlName="nome" />
+        @if (form.controls.nome.touched && form.controls.nome.invalid) {
+          <small>Informe um nome com pelo menos 3 caracteres.</small>
+        }
       </label>
       <label>
         Preco <small>(opcional)</small>
         <input formControlName="preco" type="number" />
+        @if (form.controls.preco.touched && form.controls.preco.invalid) {
+          <small>Quando informado, o preço deve ser maior que zero.</small>
+        }
       </label>
       <label>
         Cidade <small>(opcional)</small>
@@ -59,26 +65,44 @@
       <label>
         Area <small>(opcional)</small>
         <input formControlName="area" type="number" />
+        @if (form.controls.area.touched && form.controls.area.invalid) {
+          <small>Quando informada, a área deve ser de pelo menos 1 m².</small>
+        }
       </label>
       <label>
         Quartos <small>(opcional)</small>
         <input formControlName="quartos" type="number" />
+        @if (form.controls.quartos.touched && form.controls.quartos.invalid) {
+          <small>Use zero quando o imóvel não possuir quartos.</small>
+        }
       </label>
       <label>
         Banheiros <small>(opcional)</small>
         <input formControlName="banheiros" type="number" />
+        @if (form.controls.banheiros.touched && form.controls.banheiros.invalid) {
+          <small>Use zero quando o imóvel não possuir banheiros.</small>
+        }
       </label>
       <label>
         Garagem <small>(opcional; 0 = nao possui)</small>
         <input formControlName="garagem" type="number" />
+        @if (form.controls.garagem.touched && form.controls.garagem.invalid) {
+          <small>A quantidade de vagas não pode ser negativa.</small>
+        }
       </label>
       <label class="wide">
         Descricao curta <small>(opcional)</small>
         <input formControlName="descricao_curta" />
+        @if (form.controls.descricao_curta.touched && form.controls.descricao_curta.invalid) {
+          <small>Quando preenchida, use entre 10 e 300 caracteres.</small>
+        }
       </label>
       <label class="wide">
         Descricao completa <small>(opcional)</small>
         <textarea formControlName="descricao"></textarea>
+        @if (form.controls.descricao.touched && form.controls.descricao.invalid) {
+          <small>Quando preenchida, use pelo menos 20 caracteres.</small>
+        }
       </label>
       <label class="wide upload">
         Galeria de imagens
@@ -92,7 +116,9 @@
         </div>
       }
       <div class="wide actions">
-        <button mat-flat-button color="primary" type="submit">Salvar</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="saving()">
+          {{ saving() ? 'Salvando...' : 'Salvar' }}
+        </button>
       </div>
     </form>
 
