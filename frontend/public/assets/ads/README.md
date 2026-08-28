@@ -1,0 +1,1 @@
+Assets de anúncios da home.

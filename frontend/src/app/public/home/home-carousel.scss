@@ -33,7 +33,7 @@
 .featured-carousel {
   position: relative;
   width: 100%;
-  min-height: 560px;
+  min-height: 540px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,8 +41,8 @@
 
 .featured-carousel__stage {
   position: relative;
-  width: min(1120px, 100%);
-  min-height: 540px;
+  width: min(1320px, 100%);
+  min-height: 520px;
   margin: 0 auto;
 }
 
@@ -50,11 +50,11 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(360px, 31vw);
+  width: min(350px, 27vw);
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, -50%) scale(.82);
-  filter: blur(8px);
+  transform: translate(-50%, -50%) scale(.74);
+  filter: blur(7px);
   transition:
     transform .55s cubic-bezier(.22, .8, .24, 1),
     opacity .45s ease,
@@ -67,35 +67,53 @@
   width: 100%;
 }
 
-.featured-slide.active {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translate(-50%, -50%) scale(1);
-  filter: blur(0);
-  z-index: 3;
-}
-
+/* Três imóveis legíveis permanecem em primeiro plano. */
+.featured-slide.active,
 .featured-slide.previous,
 .featured-slide.next {
-  opacity: .56;
+  opacity: 1;
   pointer-events: auto;
+  filter: none;
   cursor: pointer;
-  filter: blur(3px) saturate(.78);
-  z-index: 2;
+}
+
+.featured-slide.active {
+  transform: translate(-50%, -50%) scale(1);
+  z-index: 4;
 }
 
 .featured-slide.previous {
-  transform: translate(calc(-50% - 365px), -50%) scale(.86);
+  transform: translate(calc(-50% - 355px), -50%) scale(.9);
+  z-index: 3;
 }
 
 .featured-slide.next {
-  transform: translate(calc(-50% + 365px), -50%) scale(.86);
+  transform: translate(calc(-50% + 355px), -50%) scale(.9);
+  z-index: 3;
+}
+
+/* Quarto e quinto cards funcionam como previews desfocados das extremidades. */
+.featured-slide.previous-far,
+.featured-slide.next-far {
+  opacity: .3;
+  pointer-events: auto;
+  cursor: pointer;
+  filter: blur(5px) saturate(.72);
+  z-index: 1;
+}
+
+.featured-slide.previous-far {
+  transform: translate(calc(-50% - 650px), -50%) scale(.72);
+}
+
+.featured-slide.next-far {
+  transform: translate(calc(-50% + 650px), -50%) scale(.72);
 }
 
 .featured-slide.hidden {
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, -50%) scale(.72);
+  transform: translate(-50%, -50%) scale(.68);
   z-index: 0;
 }
 
@@ -114,7 +132,7 @@
   cursor: pointer;
   transform: translateY(-50%);
   transition: transform .25s ease, box-shadow .25s ease;
-  z-index: 5;
+  z-index: 6;
 }
 
 .carousel-control:hover {
@@ -128,11 +146,11 @@
 }
 
 .carousel-control--previous {
-  left: 10px;
+  left: 6px;
 }
 
 .carousel-control--next {
-  right: 10px;
+  right: 6px;
 }
 
 .carousel-dots {
@@ -159,29 +177,35 @@
   background: #1f5eff;
 }
 
+/* Anúncios de parceiros: propositadamente menores que a área de imóveis. */
 .partner-ads {
   width: min(720px, calc(100% - 48px));
-  margin: -10px auto 86px;
+  margin: 26px auto 88px;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
   align-items: stretch;
 }
 
-.partner-ad-card {
-  margin: 0;
+.partner-ad {
+  display: block;
   overflow: hidden;
-  aspect-ratio: 1.75 / 1;
-  border-radius: 14px;
-  border: 1px solid rgba(15, 23, 42, .08);
+  border-radius: 12px;
   background: #fff;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, .08);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, .08);
+  transition: transform .25s ease, box-shadow .25s ease;
 }
 
-.partner-ad-card img {
+.partner-ad:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(15, 23, 42, .12);
+}
+
+.partner-ad img {
   display: block;
   width: 100%;
   height: 100%;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
 }
 
@@ -190,12 +214,24 @@
     width: calc(100% - 48px);
   }
 
+  .featured-slide {
+    width: min(330px, 30vw);
+  }
+
   .featured-slide.previous {
-    transform: translate(calc(-50% - 285px), -50%) scale(.82);
+    transform: translate(calc(-50% - 300px), -50%) scale(.88);
   }
 
   .featured-slide.next {
-    transform: translate(calc(-50% + 285px), -50%) scale(.82);
+    transform: translate(calc(-50% + 300px), -50%) scale(.88);
+  }
+
+  .featured-slide.previous-far {
+    transform: translate(calc(-50% - 540px), -50%) scale(.68);
+  }
+
+  .featured-slide.next-far {
+    transform: translate(calc(-50% + 540px), -50%) scale(.68);
   }
 }
 
@@ -217,19 +253,25 @@
   }
 
   .featured-slide {
-    width: min(340px, 42vw);
+    width: min(330px, 40vw);
   }
 
   .featured-slide.previous {
     transform: translate(calc(-50% - 235px), -50%) scale(.78);
+    opacity: .52;
+    filter: blur(3px);
   }
 
   .featured-slide.next {
     transform: translate(calc(-50% + 235px), -50%) scale(.78);
+    opacity: .52;
+    filter: blur(3px);
   }
 
-  .partner-ads {
-    width: min(660px, calc(100% - 40px));
+  .featured-slide.previous-far,
+  .featured-slide.next-far {
+    opacity: 0;
+    pointer-events: none;
   }
 }
 
@@ -249,7 +291,7 @@
 
   .featured-slide.previous,
   .featured-slide.next {
-    opacity: .32;
+    opacity: .28;
     filter: blur(4px);
   }
 
@@ -275,16 +317,9 @@
   }
 
   .partner-ads {
-    width: min(560px, calc(100% - 32px));
-    margin-top: 8px;
-    gap: 12px;
-  }
-}
-
-@media (max-width: 560px) {
-  .partner-ads {
+    width: min(360px, calc(100% - 40px));
     grid-template-columns: 1fr;
-    width: min(340px, calc(100% - 32px));
+    gap: 14px;
     margin-bottom: 56px;
   }
 }
