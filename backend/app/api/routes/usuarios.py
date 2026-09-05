@@ -2,13 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user
+from app.api.deps import require_admin
 from app.core.security import get_password_hash
 from app.db.session import get_db
 from app.models.usuario import Usuario
 from app.schemas.usuario import UsuarioCreate, UsuarioRead, UsuarioUpdate
 
-router = APIRouter(prefix="/usuarios", tags=["Usuarios"], dependencies=[Depends(get_current_user)])
+router = APIRouter(prefix="/usuarios", tags=["Usuarios"], dependencies=[Depends(require_admin)])
 
 
 @router.get("", response_model=list[UsuarioRead])
@@ -25,6 +25,7 @@ def create_usuario(payload: UsuarioCreate, db: Session = Depends(get_db)) -> Usu
         email=payload.email,
         senha_hash=get_password_hash(payload.senha),
         ativo=payload.ativo,
+        role=payload.role,
     )
     db.add(usuario)
     db.commit()
@@ -38,6 +39,10 @@ def update_usuario(usuario_id: int, payload: UsuarioUpdate, db: Session = Depend
     if usuario is None:
         raise HTTPException(status_code=404, detail="Usuario nao encontrado")
     data = payload.model_dump(exclude_unset=True)
+    if "email" in data:
+        duplicate = db.scalar(select(Usuario).where(Usuario.email == data["email"], Usuario.id != usuario_id))
+        if duplicate:
+            raise HTTPException(status_code=409, detail="Email ja cadastrado")
     if "senha" in data:
         usuario.senha_hash = get_password_hash(data.pop("senha"))
     for field, value in data.items():
@@ -52,6 +57,9 @@ def delete_usuario(usuario_id: int, db: Session = Depends(get_db)) -> None:
     usuario = db.get(Usuario, usuario_id)
     if usuario is None:
         raise HTTPException(status_code=404, detail="Usuario nao encontrado")
+    if usuario.role == "admin":
+        admin_count = db.scalar(select(Usuario).where(Usuario.role == "admin", Usuario.ativo.is_(True)).count())
+        if admin_count == 1 and usuario.ativo:
+            raise HTTPException(status_code=409, detail="Nao e permitido remover o ultimo administrador ativo")
     db.delete(usuario)
     db.commit()
-
