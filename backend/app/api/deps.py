@@ -20,9 +20,25 @@ def get_current_user(
     subject = decode_access_token(credentials.credentials)
     if subject is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalido")
-    user = db.get(Usuario, int(subject))
+    try:
+        user_id = int(subject)
+    except (TypeError, ValueError) as exc:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalido") from exc
+    user = db.get(Usuario, user_id)
     if user is None or not user.ativo:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Usuario inativo ou inexistente")
+    return user
+
+
+def require_admin(user: Usuario = Depends(get_current_user)) -> Usuario:
+    if user.role != "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Permissao de administrador necessaria")
+    return user
+
+
+def require_editor(user: Usuario = Depends(get_current_user)) -> Usuario:
+    if user.role not in {"admin", "editor"}:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Permissao de edicao necessaria")
     return user
 
 
