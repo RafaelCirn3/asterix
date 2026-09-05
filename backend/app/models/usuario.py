@@ -12,4 +12,4 @@ class Usuario(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     senha_hash: Mapped[str] = mapped_column(String(255))
     ativo: Mapped[bool] = mapped_column(Boolean, default=True)
-
+    role: Mapped[str] = mapped_column(String(32), default="editor", nullable=False, index=True)
