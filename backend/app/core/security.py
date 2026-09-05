@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from typing import Any
+from uuid import uuid4
 
 import bcrypt
 from jose import JWTError, jwt
@@ -19,13 +20,22 @@ def create_access_token(subject: str | int, expires_delta: timedelta | None = No
     expire = datetime.now(timezone.utc) + (
         expires_delta or timedelta(minutes=settings.access_token_expire_minutes)
     )
-    payload: dict[str, Any] = {"sub": str(subject), "exp": expire}
+    payload: dict[str, Any] = {
+        "sub": str(subject),
+        "exp": expire,
+        "iat": datetime.now(timezone.utc),
+        "jti": uuid4().hex,
+    }
     return jwt.encode(payload, settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
 
 
-def decode_access_token(token: str) -> str | None:
+def decode_access_token_payload(token: str) -> dict[str, Any] | None:
     try:
-        payload = jwt.decode(token, settings.jwt_secret_key, algorithms=[settings.jwt_algorithm])
-        return payload.get("sub")
+        return jwt.decode(token, settings.jwt_secret_key, algorithms=[settings.jwt_algorithm])
     except JWTError:
         return None
+
+
+def decode_access_token(token: str) -> str | None:
+    payload = decode_access_token_payload(token)
+    return payload.get("sub") if payload else None

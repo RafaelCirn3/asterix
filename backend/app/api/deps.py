@@ -1,12 +1,15 @@
+from datetime import datetime, timezone
 from secrets import compare_digest
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from sqlalchemy import delete
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
-from app.core.security import decode_access_token
+from app.core.security import decode_access_token_payload
 from app.db.session import get_db
+from app.models.token_revogado import TokenRevogado
 from app.models.usuario import Usuario
 
 bearer_scheme = HTTPBearer()
@@ -17,12 +20,39 @@ def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
     db: Session = Depends(get_db),
 ) -> Usuario:
-    subject = decode_access_token(credentials.credentials)
-    if subject is None:
+    payload = decode_access_token_payload(credentials.credentials)
+    if payload is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalido")
-    user = db.get(Usuario, int(subject))
+
+    subject = payload.get("sub")
+    jti = payload.get("jti")
+    if not subject or not jti:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalido")
+
+    db.execute(delete(TokenRevogado).where(TokenRevogado.expires_at < datetime.now(timezone.utc)))
+    if db.get(TokenRevogado, jti) is not None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token revogado")
+
+    try:
+        user_id = int(subject)
+    except (TypeError, ValueError) as exc:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalido") from exc
+
+    user = db.get(Usuario, user_id)
     if user is None or not user.ativo:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Usuario inativo ou inexistente")
+    return user
+
+
+def require_admin(user: Usuario = Depends(get_current_user)) -> Usuario:
+    if user.role != "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Permissao de administrador necessaria")
+    return user
+
+
+def require_editor(user: Usuario = Depends(get_current_user)) -> Usuario:
+    if user.role not in {"admin", "editor"}:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Permissao de edicao necessaria")
     return user
 
 

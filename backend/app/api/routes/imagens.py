@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user
+from app.api.deps import require_editor
 from app.db.session import get_db
 from app.models.imagem import Imagem
 from app.models.imovel import Imovel
@@ -10,7 +10,7 @@ from app.models.usuario import Usuario
 from app.schemas.imagem import ImagemRead, ImagemUpdate
 from app.services.files import MAX_IMAGES_PER_PROPERTY, delete_upload, save_upload
 
-router = APIRouter(prefix="/imoveis/{imovel_id}/imagens", tags=["Imagens"], dependencies=[Depends(get_current_user)])
+router = APIRouter(prefix="/imoveis/{imovel_id}/imagens", tags=["Imagens"], dependencies=[Depends(require_editor)])
 
 
 def add_url(imagem: Imagem) -> Imagem:
@@ -18,12 +18,24 @@ def add_url(imagem: Imagem) -> Imagem:
     return imagem
 
 
+def normalize_images(db: Session, imovel_id: int) -> None:
+    imagens = list(
+        db.scalars(
+            select(Imagem).where(Imagem.imovel_id == imovel_id).order_by(Imagem.ordem, Imagem.id)
+        ).all()
+    )
+    for index, item in enumerate(imagens):
+        item.ordem = index
+    if imagens and not any(item.principal for item in imagens):
+        imagens[0].principal = True
+
+
 @router.post("", response_model=list[ImagemRead])
 async def upload_imagens(
     imovel_id: int,
     files: list[UploadFile] = File(...),
     db: Session = Depends(get_db),
-    _: Usuario = Depends(get_current_user),
+    _: Usuario = Depends(require_editor),
 ) -> list[Imagem]:
     if db.get(Imovel, imovel_id) is None:
         raise HTTPException(status_code=404, detail="Imovel nao encontrado")
@@ -89,6 +101,7 @@ def update_imagem(
             item.principal = False
     for field, value in payload.model_dump(exclude_unset=True).items():
         setattr(imagem, field, value)
+    normalize_images(db, imovel_id)
     db.commit()
     db.refresh(imagem)
     return add_url(imagem)
@@ -99,6 +112,14 @@ def delete_imagem(imovel_id: int, imagem_id: int, db: Session = Depends(get_db))
     imagem = db.get(Imagem, imagem_id)
     if imagem is None or imagem.imovel_id != imovel_id:
         raise HTTPException(status_code=404, detail="Imagem nao encontrada")
-    delete_upload(imagem.arquivo)
+
+    arquivo = imagem.arquivo
     db.delete(imagem)
-    db.commit()
+    db.flush()
+    normalize_images(db, imovel_id)
+    try:
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
+    delete_upload(arquivo)
