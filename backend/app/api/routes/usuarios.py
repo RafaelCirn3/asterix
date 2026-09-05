@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import require_admin
@@ -45,6 +45,14 @@ def update_usuario(usuario_id: int, payload: UsuarioUpdate, db: Session = Depend
             raise HTTPException(status_code=409, detail="Email ja cadastrado")
     if "senha" in data:
         usuario.senha_hash = get_password_hash(data.pop("senha"))
+    if usuario.role == "admin" and usuario.ativo:
+        removing_admin_access = data.get("role", "admin") != "admin" or data.get("ativo", True) is False
+        if removing_admin_access:
+            admin_count = db.scalar(
+                select(func.count(Usuario.id)).where(Usuario.role == "admin", Usuario.ativo.is_(True))
+            ) or 0
+            if admin_count <= 1:
+                raise HTTPException(status_code=409, detail="Nao e permitido desativar o ultimo administrador ativo")
     for field, value in data.items():
         setattr(usuario, field, value)
     db.commit()
@@ -57,9 +65,11 @@ def delete_usuario(usuario_id: int, db: Session = Depends(get_db)) -> None:
     usuario = db.get(Usuario, usuario_id)
     if usuario is None:
         raise HTTPException(status_code=404, detail="Usuario nao encontrado")
-    if usuario.role == "admin":
-        admin_count = db.scalar(select(Usuario).where(Usuario.role == "admin", Usuario.ativo.is_(True)).count())
-        if admin_count == 1 and usuario.ativo:
+    if usuario.role == "admin" and usuario.ativo:
+        admin_count = db.scalar(
+            select(func.count(Usuario.id)).where(Usuario.role == "admin", Usuario.ativo.is_(True))
+        ) or 0
+        if admin_count <= 1:
             raise HTTPException(status_code=409, detail="Nao e permitido remover o ultimo administrador ativo")
     db.delete(usuario)
     db.commit()
