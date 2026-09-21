@@ -1,10 +1,10 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, OnInit, computed, signal } from '@angular/core';
+import { Component, HostListener, OnInit, computed, signal } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { catchError, of, switchMap } from 'rxjs';
 
-import { Property } from '../../core/models/property.model';
+import { Property, PropertyImage } from '../../core/models/property.model';
 import { PropertyService } from '../../core/services/property.service';
 import { STATIC_URL } from '../../core/services/api-url';
 import { PropertyCard } from '../../shared/components/property-card/property-card';
@@ -17,17 +17,22 @@ import { PropertyCard } from '../../shared/components/property-card/property-car
 })
 export class PropertyDetail implements OnInit {
   private readonly defaultWhatsappNumber = '556181200528';
+  private readonly fallbackImage =
+    'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=80';
 
   readonly property = signal<Property | null>(null);
   readonly related = signal<Property[]>([]);
+  readonly selectedImageIndex = signal(0);
+  readonly lightboxOpen = signal(false);
 
-  readonly coverImage = computed(() => {
-    const item = this.property();
-    const image = item?.imagens?.find((img) => img.principal) ?? item?.imagens?.[0];
-    return image?.url
-      ? `${STATIC_URL}${image.url}`
-      : 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=80';
+  readonly galleryImages = computed(() => {
+    const images = this.property()?.imagens ?? [];
+    const principal = images.find((image) => image.principal);
+    return principal ? [principal, ...images.filter((image) => image.id !== principal.id)] : images;
   });
+
+  readonly selectedImage = computed(() => this.galleryImages()[this.selectedImageIndex()]);
+  readonly coverImage = computed(() => this.imageUrl(this.selectedImage()));
 
   readonly mapUrl = computed<SafeResourceUrl>(() => {
     const item = this.property();
@@ -52,7 +57,61 @@ export class PropertyDetail implements OnInit {
             .pipe(catchError(() => of(null))),
         ),
       )
-      .subscribe((property) => this.property.set(property));
+      .subscribe((property) => {
+        this.lightboxOpen.set(false);
+        this.selectedImageIndex.set(0);
+        this.property.set(property);
+      });
+  }
+
+  imageUrl(image?: PropertyImage): string {
+    if (!image?.url) {
+      return this.fallbackImage;
+    }
+    if (/^https?:\/\//i.test(image.url)) {
+      return image.url;
+    }
+    return `${STATIC_URL.replace(/\/$/, '')}/${image.url.replace(/^\//, '')}`;
+  }
+
+  selectImage(index: number): void {
+    if (index >= 0 && index < this.galleryImages().length) {
+      this.selectedImageIndex.set(index);
+    }
+  }
+
+  moveImage(direction: number): void {
+    const length = this.galleryImages().length;
+    if (length > 0) {
+      this.selectedImageIndex.update((index) => (index + direction + length) % length);
+    }
+  }
+
+  openLightbox(index = this.selectedImageIndex()): void {
+    if (this.galleryImages().length > 0) {
+      this.selectImage(index);
+      this.lightboxOpen.set(true);
+    }
+  }
+
+  closeLightbox(): void {
+    this.lightboxOpen.set(false);
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onKeydown(event: KeyboardEvent): void {
+    if (!this.lightboxOpen()) {
+      return;
+    }
+    if (event.key === 'Escape') {
+      this.closeLightbox();
+    } else if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      this.moveImage(1);
+    } else if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      this.moveImage(-1);
+    }
   }
 
   whatsappLink(property: Property): string {

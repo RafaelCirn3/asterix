@@ -1,12 +1,21 @@
 @if (property(); as item) {
   <main class="detail">
-    <section class="gallery">
-      <img [src]="coverImage()" [alt]="item.nome" />
-      <div>
-        @for (image of item.imagens.slice(1, 4); track image.id) {
-          <img [src]="'http://localhost:8000' + image.url" [alt]="item.nome" />
+    <section class="gallery" aria-label="Galeria de fotos do imóvel">
+      <button class="gallery-main" type="button" (click)="openLightbox()" [disabled]="galleryImages().length === 0" aria-label="Ampliar foto selecionada">
+        <img [src]="coverImage()" [alt]="item.nome" />
+        @if (galleryImages().length > 0) {
+          <span class="gallery-counter">{{ selectedImageIndex() + 1 }} / {{ galleryImages().length }}</span>
         }
-      </div>
+      </button>
+      @if (galleryImages().length > 1) {
+        <div class="gallery-thumbnails">
+          @for (image of galleryImages(); track image.id; let index = $index) {
+            <button type="button" (click)="selectImage(index)" [class.active]="selectedImageIndex() === index" [attr.aria-label]="'Selecionar foto ' + (index + 1)" [attr.aria-pressed]="selectedImageIndex() === index">
+              <img [src]="imageUrl(image)" [alt]="item.nome + ' - foto ' + (index + 1)" loading="lazy" />
+            </button>
+          }
+        </div>
+      }
     </section>
 
     <section class="content">
@@ -45,4 +54,18 @@
       </div>
     </section>
   </main>
+
+  @if (lightboxOpen()) {
+    <div class="lightbox" role="dialog" aria-modal="true" aria-label="Visualização de fotos do imóvel" (click)="closeLightbox()">
+      <button class="lightbox-close" type="button" (click)="closeLightbox()" aria-label="Fechar visualização">×</button>
+      @if (galleryImages().length > 1) {
+        <button class="lightbox-prev" type="button" (click)="$event.stopPropagation(); moveImage(-1)" aria-label="Foto anterior">‹</button>
+      }
+      <img [src]="coverImage()" [alt]="item.nome + ' - foto ' + (selectedImageIndex() + 1)" (click)="$event.stopPropagation()" />
+      @if (galleryImages().length > 1) {
+        <button class="lightbox-next" type="button" (click)="$event.stopPropagation(); moveImage(1)" aria-label="Próxima foto">›</button>
+      }
+      <span class="lightbox-counter">{{ selectedImageIndex() + 1 }} / {{ galleryImages().length }}</span>
+    </div>
+  }
 }
