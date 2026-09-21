@@ -6,21 +6,117 @@
 
 .gallery {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: minmax(0, 2fr) minmax(180px, 1fr);
   gap: 12px;
+  height: clamp(300px, 36vw, 460px);
+}
+
+.gallery-main,
+.gallery-thumbnails button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.gallery-main {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.gallery-main img,
+.gallery-thumbnails img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-counter {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  padding: 6px 12px;
+  color: #fff;
+  background: rgb(0 0 0 / 65%);
+  border-radius: 20px;
+}
+
+.gallery-thumbnails {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 10px;
+  min-height: 0;
+  overflow-y: auto;
+  align-content: start;
+
+  button {
+    min-height: 95px;
+    outline-offset: -3px;
+
+    &.active {
+      outline: 3px solid var(--primary);
+    }
+  }
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 64px;
+  background: rgb(0 0 0 / 92%);
 
   img {
-    width: 100%;
-    height: 100%;
-    min-height: 260px;
-    border-radius: 8px;
-    object-fit: cover;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
   }
 
-  div {
-    display: grid;
-    gap: 12px;
+  button {
+    position: absolute;
+    z-index: 1;
+    border: 0;
+    background: rgb(0 0 0 / 50%);
+    color: #fff;
+    cursor: pointer;
+    border-radius: 6px;
   }
+}
+
+.lightbox-close {
+  top: 16px;
+  right: 18px;
+  padding: 4px 14px;
+  font-size: 36px;
+}
+
+.lightbox-prev,
+.lightbox-next {
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 4px 12px;
+  font-size: 42px;
+}
+
+.lightbox-prev { left: 12px; }
+.lightbox-next { right: 12px; }
+
+.lightbox-counter {
+  position: absolute;
+  bottom: 18px;
+  color: #fff;
 }
 
 .content {
@@ -103,5 +199,29 @@ aside {
   .property-grid {
     grid-template-columns: 1fr;
   }
-}
 
+  .gallery {
+    height: auto;
+  }
+
+  .gallery-main {
+    height: clamp(240px, 65vw, 420px);
+  }
+
+  .gallery-thumbnails {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 3px;
+    max-width: 100%;
+
+    button {
+      flex: 0 0 110px;
+      height: 85px;
+    }
+  }
+
+  .lightbox {
+    padding: 65px 42px;
+  }
+}
