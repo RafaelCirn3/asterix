@@ -1,12 +1,19 @@
 @if (property(); as item) {
   <main class="detail">
     <section class="gallery">
-      <img [src]="coverImage()" [alt]="item.nome" />
-      <div>
-        @for (image of item.imagens.slice(1, 4); track image.id) {
-          <img [src]="'http://localhost:8000' + image.url" [alt]="item.nome" />
-        }
+      <div class="gallery__main">
+        <img [src]="coverImage()" [alt]="item.nome" />
       </div>
+      @if (item.imagens.length > 1) {
+        <div class="gallery__thumbs" aria-label="Outras imagens do imóvel">
+          @for (image of item.imagens; track image.id) {
+            <button type="button" [class.active]="selectedImage()?.id === image.id"
+              (click)="selectImage(image.id)" [attr.aria-label]="'Ver imagem ' + ($index + 1)">
+              <img [src]="imageUrl(image.url)" [alt]="item.nome + ' - imagem ' + ($index + 1)" />
+            </button>
+          }
+        </div>
+      }
     </section>
 
     <section class="content">

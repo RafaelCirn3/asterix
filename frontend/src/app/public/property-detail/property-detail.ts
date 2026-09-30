@@ -1,17 +1,17 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { catchError, of, switchMap } from 'rxjs';
 
 import { Property } from '../../core/models/property.model';
 import { PropertyService } from '../../core/services/property.service';
-import { STATIC_URL } from '../../core/services/api-url';
 import { PropertyCard } from '../../shared/components/property-card/property-card';
+import { imageUrl } from '../../core/services/image-url';
 
 @Component({
   selector: 'app-property-detail',
-  imports: [CurrencyPipe, PropertyCard, RouterLink],
+  imports: [CurrencyPipe, PropertyCard],
   templateUrl: './property-detail.html',
   styleUrl: './property-detail.scss',
 })
@@ -20,14 +20,17 @@ export class PropertyDetail implements OnInit {
 
   readonly property = signal<Property | null>(null);
   readonly related = signal<Property[]>([]);
+  readonly selectedImageId = signal<number | null>(null);
 
-  readonly coverImage = computed(() => {
+  readonly selectedImage = computed(() => {
     const item = this.property();
-    const image = item?.imagens?.find((img) => img.principal) ?? item?.imagens?.[0];
-    return image?.url
-      ? `${STATIC_URL}${image.url}`
-      : 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=80';
+    return item?.imagens?.find((img) => img.id === this.selectedImageId())
+      ?? item?.imagens?.find((img) => img.principal)
+      ?? item?.imagens?.[0]
+      ?? null;
   });
+
+  readonly coverImage = computed(() => this.imageUrl(this.selectedImage()?.url));
 
   readonly mapUrl = computed<SafeResourceUrl>(() => {
     const item = this.property();
@@ -52,7 +55,21 @@ export class PropertyDetail implements OnInit {
             .pipe(catchError(() => of(null))),
         ),
       )
-      .subscribe((property) => this.property.set(property));
+      .subscribe((property) => {
+        this.selectedImageId.set(null);
+        this.property.set(property);
+      });
+  }
+
+  imageUrl(path: string | null | undefined): string {
+    return imageUrl(
+      path,
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=80',
+    );
+  }
+
+  selectImage(id: number): void {
+    this.selectedImageId.set(id);
   }
 
   whatsappLink(property: Property): string {
