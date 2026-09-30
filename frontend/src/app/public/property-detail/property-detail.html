@@ -2,13 +2,15 @@
   <main class="detail">
     <section class="gallery">
       <div class="gallery__main">
-        <img [src]="coverImage()" [alt]="item.nome" />
+        <button type="button" class="gallery__image-button" (click)="openViewer(selectedImage()?.id ?? item.imagens[0]?.id)" aria-label="Abrir galeria de fotos">
+          <img [src]="coverImage()" [alt]="item.nome" />
+        </button>
       </div>
       @if (item.imagens.length > 1) {
-        <div class="gallery__thumbs" aria-label="Outras imagens do imóvel">
+        <div class="gallery__thumbs" aria-label="Fotos do imóvel">
           @for (image of item.imagens; track image.id) {
             <button type="button" [class.active]="selectedImage()?.id === image.id"
-              (click)="selectImage(image.id)" [attr.aria-label]="'Ver imagem ' + ($index + 1)">
+              (click)="openViewer(image.id)" [attr.aria-label]="'Abrir imagem ' + ($index + 1)">
               <img [src]="imageUrl(image.url)" [alt]="item.nome + ' - imagem ' + ($index + 1)" />
             </button>
           }
@@ -46,10 +48,40 @@
     <section class="related">
       <h2>Imóveis relacionados</h2>
       <div class="property-grid">
-        @for (item of related(); track item.id) {
-          <app-property-card [property]="item" />
+        @for (relatedItem of related(); track relatedItem.id) {
+          <app-property-card [property]="relatedItem" />
         }
       </div>
     </section>
+
+    <div class="mobile-contact-bar">
+      <a class="mobile-contact-bar__whatsapp" [href]="whatsappLink(item)" target="_blank" rel="noreferrer">WhatsApp</a>
+      <a class="mobile-contact-bar__interest" routerLink="/contato">Quero conhecer</a>
+    </div>
   </main>
+
+  @if (mediaViewerOpen() && selectedImage(); as image) {
+    <div class="media-viewer" role="dialog" aria-modal="true" aria-label="Galeria de fotos" (click)="closeViewer()">
+      <header class="media-viewer__header" (click)="$event.stopPropagation()">
+        <button type="button" class="media-viewer__back" (click)="closeViewer()" aria-label="Fechar galeria">‹</button>
+        <strong>Fotos</strong>
+        <div class="media-viewer__actions">
+          <button type="button" (click)="toggleZoom()" [attr.aria-label]="zoomed() ? 'Reduzir imagem' : 'Ampliar imagem'">{{ zoomed() ? '−' : '+' }}</button>
+          <button type="button" (click)="closeViewer()" aria-label="Fechar galeria">×</button>
+        </div>
+      </header>
+      <div class="media-viewer__stage" (click)="$event.stopPropagation()">
+        <button type="button" class="media-viewer__arrow media-viewer__arrow--left" (click)="moveImage(-1)" aria-label="Imagem anterior">‹</button>
+        <img [class.is-zoomed]="zoomed()" [src]="imageUrl(image.url)" [alt]="item.nome + ' - imagem ' + (item.imagens.indexOf(image) + 1)" />
+        <button type="button" class="media-viewer__arrow media-viewer__arrow--right" (click)="moveImage(1)" aria-label="Próxima imagem">›</button>
+      </div>
+      <div class="media-viewer__footer" (click)="$event.stopPropagation()">
+        <span>{{ item.imagens.indexOf(image) + 1 }} de {{ item.imagens.length }}</span>
+        <div class="media-viewer__contact">
+          <a class="mobile-contact-bar__whatsapp" [href]="whatsappLink(item)" target="_blank" rel="noreferrer">WhatsApp</a>
+          <a class="mobile-contact-bar__interest" routerLink="/contato">Quero conhecer</a>
+        </div>
+      </div>
+    </div>
+  }
 }

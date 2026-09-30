@@ -1,7 +1,8 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, OnInit, computed, signal } from '@angular/core';
+import { Component, HostListener, OnInit, computed, signal } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { catchError, of, switchMap } from 'rxjs';
 
 import { Property } from '../../core/models/property.model';
@@ -11,7 +12,7 @@ import { imageUrl } from '../../core/services/image-url';
 
 @Component({
   selector: 'app-property-detail',
-  imports: [CurrencyPipe, PropertyCard],
+  imports: [CurrencyPipe, RouterLink, PropertyCard],
   templateUrl: './property-detail.html',
   styleUrl: './property-detail.scss',
 })
@@ -21,6 +22,8 @@ export class PropertyDetail implements OnInit {
   readonly property = signal<Property | null>(null);
   readonly related = signal<Property[]>([]);
   readonly selectedImageId = signal<number | null>(null);
+  readonly mediaViewerOpen = signal(false);
+  readonly zoomed = signal(false);
 
   readonly selectedImage = computed(() => {
     const item = this.property();
@@ -57,6 +60,8 @@ export class PropertyDetail implements OnInit {
       )
       .subscribe((property) => {
         this.selectedImageId.set(null);
+        this.mediaViewerOpen.set(false);
+        this.zoomed.set(false);
         this.property.set(property);
       });
   }
@@ -70,6 +75,57 @@ export class PropertyDetail implements OnInit {
 
   selectImage(id: number): void {
     this.selectedImageId.set(id);
+  }
+
+  openViewer(id: number | undefined): void {
+    if (id === undefined) {
+      return;
+    }
+    this.selectImage(id);
+    this.zoomed.set(false);
+    this.mediaViewerOpen.set(true);
+  }
+
+  closeViewer(): void {
+    this.mediaViewerOpen.set(false);
+    this.zoomed.set(false);
+  }
+
+  toggleZoom(): void {
+    this.zoomed.update((value) => !value);
+  }
+
+  moveImage(direction: 1 | -1): void {
+    const images = this.property()?.imagens ?? [];
+    if (images.length < 2) {
+      return;
+    }
+
+    const currentIndex = Math.max(0, images.findIndex((image) => image.id === this.selectedImage()?.id));
+    const nextIndex = (currentIndex + direction + images.length) % images.length;
+    this.selectImage(images[nextIndex].id);
+    this.zoomed.set(false);
+  }
+
+  @HostListener('document:keydown.escape')
+  handleEscape(): void {
+    if (this.mediaViewerOpen()) {
+      this.closeViewer();
+    }
+  }
+
+  @HostListener('document:keydown.arrowright')
+  handleNext(): void {
+    if (this.mediaViewerOpen()) {
+      this.moveImage(1);
+    }
+  }
+
+  @HostListener('document:keydown.arrowleft')
+  handlePrevious(): void {
+    if (this.mediaViewerOpen()) {
+      this.moveImage(-1);
+    }
   }
 
   whatsappLink(property: Property): string {
