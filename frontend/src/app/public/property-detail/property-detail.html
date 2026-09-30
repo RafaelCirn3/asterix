@@ -1,6 +1,6 @@
 @if (property(); as item) {
   <main class="detail">
-    <section class="gallery">
+    <section class="gallery" [class.gallery--single]="item.imagens.length <= 1">
       <div class="gallery__main">
         <button type="button" class="gallery__image-button" (click)="openViewer(selectedImage()?.id ?? item.imagens[0]?.id)" aria-label="Abrir galeria de fotos">
           <img [src]="coverImage()" [alt]="item.nome" />
@@ -8,10 +8,13 @@
       </div>
       @if (item.imagens.length > 1) {
         <div class="gallery__thumbs" aria-label="Fotos do imóvel">
-          @for (image of item.imagens; track image.id) {
+          @for (image of item.imagens.slice(1, 5); track image.id; let index = $index) {
             <button type="button" [class.active]="selectedImage()?.id === image.id"
-              (click)="openViewer(image.id)" [attr.aria-label]="'Abrir imagem ' + ($index + 1)">
-              <img [src]="imageUrl(image.url)" [alt]="item.nome + ' - imagem ' + ($index + 1)" />
+              (click)="openViewer(image.id)" [attr.aria-label]="'Abrir imagem ' + (index + 2)">
+              <img [src]="imageUrl(image.url)" [alt]="item.nome + ' - imagem ' + (index + 2)" />
+              @if (index === 3 && item.imagens.length > 5) {
+                <span class="gallery__more">Ver todas as fotos <b>+{{ item.imagens.length - 5 }}</b></span>
+              }
             </button>
           }
         </div>

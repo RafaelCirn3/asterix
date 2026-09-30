@@ -179,7 +179,7 @@
 
 /* Anúncios de parceiros: propositadamente menores que a área de imóveis. */
 .partner-ads {
-  width: min(720px, calc(100% - 48px));
+  width: min(960px, calc(100% - 48px));
   margin: 26px auto 88px;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -189,22 +189,25 @@
 
 .partner-ad {
   display: block;
+  min-width: 0;
   overflow: hidden;
-  border-radius: 12px;
+  border: 1px solid #d8e6f7;
+  border-radius: 16px;
   background: #fff;
-  box-shadow: 0 10px 28px rgba(15, 23, 42, .08);
-  transition: transform .25s ease, box-shadow .25s ease;
+  box-shadow: 0 10px 28px rgba(17, 35, 63, .08);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
 
 .partner-ad:hover {
   transform: translateY(-3px);
-  box-shadow: 0 16px 36px rgba(15, 23, 42, .12);
+  border-color: #86b8f3;
+  box-shadow: 0 16px 36px rgba(8, 103, 215, .16);
 }
 
 .partner-ad img {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
   aspect-ratio: 1 / 1;
   object-fit: cover;
 }
